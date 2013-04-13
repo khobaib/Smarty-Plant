@@ -1,0 +1,10 @@
+
+public class ApiConnector {
+	
+	private static ApiConnector instance = new ApiConnector();
+	
+	public static ApiConnector getInstance(){
+		return instance;
+	}
+
+}

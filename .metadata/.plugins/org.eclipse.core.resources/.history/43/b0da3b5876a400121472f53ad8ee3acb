@@ -1,0 +1,26 @@
+import java.io.File;
+
+
+public class ApiConnector {
+	
+	private static ApiConnector instance = new ApiConnector();
+	
+	public static ApiConnector getInstance(){
+		if (instance != null)
+			return instance;
+		else
+			return new ApiConnector();
+	}
+	
+	
+	public boolean uploadImage(File image){
+		
+	}
+	
+	public File downloadImage(String url){
+		
+	}
+	
+	
+
+}
