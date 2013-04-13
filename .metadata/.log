@@ -168,3 +168,6 @@ org.eclipse.core.runtime.CoreException: The file does not exist.
 
 !ENTRY org.eclipse.ui 2 2 2013-04-13 21:35:21.964
 !MESSAGE Invalid property category path: ValidationPropertiesPage (bundle: org.eclipse.wst.xml.ui, propertyPage: org.eclipse.wst.xml.ui.propertyPage.project.validation)
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2013-04-13 22:43:24.550
+!MESSAGE Failed to load properties file for project 'SmartyPlant'
