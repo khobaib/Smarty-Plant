@@ -67,6 +67,7 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
+                    android:layout_marginLeft="100dp"
                      />
             </LinearLayout>
 
@@ -87,7 +88,8 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
-                    android:password="true" />
+                    android:password="true"
+                    android:layout_marginLeft="100dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -100,6 +102,7 @@
             
             
             <CheckBox
+                android:text="remember me"
                 android:id="@+id/remember_me"
                 android:layout_alignParentLeft="true"
                 android:layout_margin="20dp"
