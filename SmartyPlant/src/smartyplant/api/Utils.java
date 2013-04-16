@@ -7,6 +7,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -35,6 +41,23 @@ public class Utils {
 		return decodedImage;
 	}
 	
+	
+	public Bitmap downloadImage(String url) throws Exception{
+		String result = "";
+		HttpClient httpclient = new DefaultHttpClient();
+	    HttpGet httpget = new HttpGet(url);
+	    
+	    HttpResponse response = httpclient.execute(httpget);
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+            InputStream instream = entity.getContent();
+            result= Utils.getInstance().convertStreamToString(instream);
+            instream.close();
+        }
+	    
+        return Utils.getInstance().decodeImage(result);
+		
+	}
 	
 	public String convertStreamToString(InputStream is) {
 	    /*
