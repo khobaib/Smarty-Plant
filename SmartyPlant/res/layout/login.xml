@@ -26,7 +26,7 @@
             android:id="@+id/form1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/form_cell"
+            android:background="@drawable/form1"
             android:gravity="center"
             android:text="SIGN IN"
             android:textColor="@android:color/black"
@@ -96,7 +96,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/form_cell"
-            android:paddingBottom="70dp" >
+             >
             
             
             <CheckBox
@@ -114,17 +114,21 @@
                 android:layout_height="wrap_content"
                 android:text="Forgot Password"/>
             
-            <Button 
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/form_end">
+        	 <Button 
                 android:id="@+id/sign_in"
                 android:background="@drawable/sign_in"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/remember_me"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_margin="20dp"
                 />
-            
         </RelativeLayout>
+        
     </LinearLayout>
 
 </LinearLayout>
