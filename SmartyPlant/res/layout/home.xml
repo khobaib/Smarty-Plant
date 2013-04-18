@@ -5,12 +5,10 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/action_bar"
+    	
+    
+     <TextView
+        android:id="@+id/text"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/actionbar" >
-    </RelativeLayout>
-    
-    
+        android:layout_height="wrap_content" />
 </LinearLayout>

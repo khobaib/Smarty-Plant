@@ -5,12 +5,24 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/action_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        
+        <RelativeLayout
         android:id="@+id/action_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/actionbar" >
-    </RelativeLayout>
+        android:background="@drawable/actionbar" />
+        
+        <TextView
+       		android:background="@drawable/logo"
+       		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:gravity="start"
+        />
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/form"
