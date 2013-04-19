@@ -19,9 +19,7 @@ public class HomeScreen extends SherlockActivity implements ActionBar.TabListene
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	
-        SubMenu subMenu1 = menu.addSubMenu("Action Item");
-        
-        
+        SubMenu subMenu1 = menu.addSubMenu("");
         subMenu1.add("Sample");
         subMenu1.add("Menu");
         subMenu1.add("Items");
@@ -55,7 +53,7 @@ public class HomeScreen extends SherlockActivity implements ActionBar.TabListene
             
             bar.setIcon(R.drawable.logo);
             bar.setDisplayShowTitleEnabled(false);
-
+            
 	        
 	    }
 
