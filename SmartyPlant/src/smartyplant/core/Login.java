@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.LayoutParams;
@@ -21,6 +22,10 @@ import com.actionbarsherlock.view.SubMenu;
 
 public class Login extends SherlockActivity  {
 	
+	EditText user_name_field;
+	EditText password_field;
+    ApiConnector connector = ApiConnector.getInstance();
+
 	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,19 +55,22 @@ public class Login extends SherlockActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_Sherlock);
         setContentView(R.layout.login);
 
+        user_name_field = (EditText)findViewById(R.id.user_name_field);
+        password_field = (EditText)findViewById(R.id.password_field);
         
         // retrieve Connector Instance
-        ApiConnector connector = ApiConnector.getInstance();
         
         Button login = (Button)findViewById(R.id.sign_in);
         login.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				Intent intent = new Intent(getApplicationContext(), HomeScreen.class);
-				startActivity(intent);
-				finish();
+				String user_name = user_name_field.getEditableText().toString();
+				String password = password_field.getEditableText().toString();
+				connector.API_login(user_name, password);
+				
 			}
 		});
         

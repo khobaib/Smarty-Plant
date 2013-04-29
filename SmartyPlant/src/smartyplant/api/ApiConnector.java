@@ -22,13 +22,15 @@ import org.json.JSONObject;
 import smartyplant.modules.Plant;
 
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 
 
 public class ApiConnector {
 	
 	// Using Singleton Design Pattern
 	private static ApiConnector instance = new ApiConnector();
-	private String API_URL = "";
+	private static HttpConnector httpConnector = instance.new HttpConnector();
+	private String API_URL = "http://api.mistersmartyplants.com/api/";
 	
 	public static ApiConnector getInstance(){
 		if (instance != null)
@@ -93,14 +95,21 @@ public class ApiConnector {
 	
 	
 	
-	public boolean loginIn(String username, String password) throws Exception{
+	
+	public void API_login(String username, String password){
+		 httpConnector.execute(new Object[]{1,username, password});
+		 
+	}
+	private String loginIn(String username, String password) throws Exception{
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
 	    HttpPost httppost = new HttpPost(API_URL+"//login");
-	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
 	    nameValuePairs.add(new BasicNameValuePair("user_name", username));
 	    nameValuePairs.add(new BasicNameValuePair("password", password));
 	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	    //httppost.setHeader("Authorization-Token", "");
+	    
 	    HttpResponse response = httpclient.execute(httppost);
 	    HttpEntity entity = response.getEntity();
         if (entity != null) {
@@ -109,19 +118,25 @@ public class ApiConnector {
             instream.close();
         }
 	    JSONObject object = new JSONObject(result);
-	    if(object.get("uid") != null)
-	    	return true;
+	    if(object.get("uid") != null){
+	    	Utils.getInstance().API_TOKEN = object.getString("token");
+	    	return Utils.getInstance().API_TOKEN;
+	    }
+	    	
 	    else
-	    	return false;
+	    	return "NULL";
 	}
 	
 	
+	public void API_reg(String user_name, String email, String password){
+		httpConnector.execute(new Object[]{2,user_name,email, password});
+	}
 	
-	public boolean register(String user_name, String email, String password) throws Exception{
+	public String register(String user_name, String email, String password) throws Exception{
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
 	    HttpPost httppost = new HttpPost(API_URL+"//registration");
-	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
 	    nameValuePairs.add(new BasicNameValuePair("user_name", user_name));
 	    nameValuePairs.add(new BasicNameValuePair("email", email));
 	    nameValuePairs.add(new BasicNameValuePair("password", password));
@@ -136,11 +151,49 @@ public class ApiConnector {
         }
 	    JSONObject object = new JSONObject(result);
 	    if(object.get("uid") != null)
-	    	return true;
+	    	return "YES";
 	    else
-	    	return false;
+	    	return "NULL";
 	}
 	
+	
+	private class HttpConnector extends AsyncTask<Object, Void, String>{
+
+		@Override
+		protected String doInBackground(Object... params) {
+			
+			int functionID = (Integer)params[0];
+			String param1 = (String)params[1];
+			String param2 = (String)params[2];
+			
+			switch (functionID) {
+			case 1:
+				//Login
+				try {
+					return loginIn(param1, param2);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+
+			case 2:
+				//Register
+				try {
+					return register(param1, param2, (String)params[3]);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				break;
+				
+			default:
+				break;
+			}
+			
+			return null;
+		}
+		
+	}
 	
 
 }

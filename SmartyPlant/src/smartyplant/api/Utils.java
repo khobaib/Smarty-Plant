@@ -20,7 +20,7 @@ import android.util.Base64;
 public class Utils {
 	
 	private static Utils instance = new Utils();
-	
+	public String API_TOKEN="";
 	public static Utils getInstance(){
 		return instance;
 	}
