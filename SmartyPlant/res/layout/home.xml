@@ -5,10 +5,64 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
-    	
-    
-     <TextView
-        android:id="@+id/text"
+    <FrameLayout
+        android:id="@+id/action_bar_1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@android:color/white" >
+
+        <RelativeLayout
+            android:id="@+id/action_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="41dp"
+            android:background="@drawable/actionbar" >
+
+            <Button
+                android:id="@+id/settings"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/ic_action_info" />
+
+            
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="115dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="start"
+            android:src="@drawable/logo" />
+    </FrameLayout>
+
+    <TabHost
+        android:id="@android:id/tabhost"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:showDividers="middle"
+                 >
+                
+            </TabWidget>
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@android:id/tabs" />
+
+         
+        </RelativeLayout>
+    </TabHost>
+
 </LinearLayout>

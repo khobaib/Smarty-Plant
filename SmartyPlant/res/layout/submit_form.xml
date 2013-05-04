@@ -1,0 +1,145 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/background_light"
+    android:padding="10dp" >
+
+    <RelativeLayout
+        android:id="@+id/image_l"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rounded" >
+
+        <TextView
+            android:id="@+id/image"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/pic_1" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_l"
+        android:layout_marginTop="20dp" >
+
+        <RelativeLayout
+            android:id="@+id/form_fields"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/country_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_l"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="20dp"
+                android:text="Country :"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/country_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/country_label"
+                android:layout_toRightOf="@+id/country_label"
+                android:background="@drawable/rounded_text"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/state_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/country_label"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="40dp"
+                android:text="State/Province :"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/state_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/state_label"
+                android:layout_alignLeft="@+id/country_field"
+                android:layout_toRightOf="@+id/country_label"
+                android:background="@drawable/rounded_text"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/city_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/state_label"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
+                android:text="Nearest City :"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/city_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/city_label"
+                android:layout_alignLeft="@+id/country_field"
+                android:layout_toRightOf="@+id/city_label"
+                android:background="@drawable/rounded_text"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/region_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/city_label"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
+                android:text="Region :"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/region_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/region_label"
+                android:layout_alignLeft="@+id/country_field"
+                android:layout_toRightOf="@+id/region_label"
+                android:background="@drawable/rounded_text"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/desc_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/region_label"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
+                android:text="Description :"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/desc_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/desc_label"
+                android:layout_alignLeft="@+id/country_field"
+                android:layout_toRightOf="@+id/desc_label"
+                android:background="@drawable/rounded_text"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc_label"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/submit"
+                android:layout_marginBottom="10dp" />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

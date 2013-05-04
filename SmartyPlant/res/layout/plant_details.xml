@@ -1,6 +1,91 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:padding="10dp" >
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
+        android:layout_marginBottom="5dp"
+        android:id="@+id/button_group"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="wrap_content" >
 
+        <Button
+            android:id="@+id/prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/prev_plant"
+            android:layout_alignParentLeft="true" />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/next_plant"
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
+    
+    <TextView 
+        android:id="@+id/image_view"
+        android:layout_below="@+id/button_group"
+        android:layout_width="fill_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/pic_1"/>
+    
+    <TextView
+        android:id="@+id/label1"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="USERNAME "
+        android:textColor="@android:color/black"/>
+  
+    <TextView
+        android:id="@+id/label2"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/label1"
+        android:layout_alignBaseline="@+id/label1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" called this "
+        android:textColor="@android:color/black"/>
+    
+     <TextView
+        android:id="@+id/label3"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/label2"
+        android:layout_alignBaseline="@+id/label1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLANT NAME"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"/>
+     
+     
+     <TextView
+        android:id="@+id/label4"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/label1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="76% named"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"/>
+     
+     <ProgressBar
+            style="@style/CustomProgressBar"
+            android:progress="50" 
+            android:layout_alignBottom="@+id/label4"
+            android:layout_toLeftOf="@+id/label4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"/>
+     
+     
+     
+    
+       
+
+</RelativeLayout>

@@ -1,87 +1,161 @@
 package smartyplant.core;
 
-import smartyplant.api.ApiConnector;
+import smartyplant.Network.DataConnector;
+import smartyplant.Utils.GlobalState;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.LayoutParams;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
-import com.actionbarsherlock.view.SubMenu;
-
-
-
-
-public class Login extends SherlockActivity  {
-	
+public class Login extends Activity {
+	String user_name = "";
+	String password = "";
 	EditText user_name_field;
 	EditText password_field;
-    ApiConnector connector = ApiConnector.getInstance();
+	CheckBox remember_me;
+	Context mContext = this;
 
-	
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	
-        SubMenu subMenu1 = menu.addSubMenu("");
-        subMenu1.add("Register");
-        
-        MenuItem subMenu1Item = subMenu1.getItem();
-        subMenu1Item.setIcon(R.drawable.abs__ic_menu_moreoverflow_holo_dark);
-        subMenu1Item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-        
-        MenuItem item = subMenu1.getItem(0);
-        
-        item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				Intent intent = new Intent(getApplicationContext(), Register.class);
-				startActivity(intent);
-				return false;
+	GlobalState globalState = GlobalState.getInstance();
+	DataConnector dataConnector = DataConnector.getInstance();
+	SharedPreferences prefs;
+	public static final String PREFS_NAME = "MyPrefsFile";
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.login);
+		user_name_field = (EditText) findViewById(R.id.user_name_field);
+		password_field = (EditText) findViewById(R.id.password_field);
+		remember_me = (CheckBox) findViewById(R.id.remember_me);
+		prefs = getSharedPreferences(PREFS_NAME, 0);
+
+		if (prefs.getBoolean("remember_me", false)) {
+			remember_me.setChecked(true);
+			user_name_field.setText(prefs.getString("user_name", ""));
+			password_field.setText(prefs.getString("password", ""));
+		}
+
+		final Button settings = (Button) findViewById(R.id.settings);
+		settings.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+
+				registerForContextMenu(v);
+				openContextMenu(v);
+				unregisterForContextMenu(v);
 			}
 		});
-        
-        return super.onCreateOptionsMenu(menu);
-    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setTheme(R.style.Theme_Sherlock);
-        setContentView(R.layout.login);
+		final ImageView sign_in = (ImageView) findViewById(R.id.sign_in);
+		sign_in.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				user_name = user_name_field.getEditableText().toString();
+				password = password_field.getEditableText().toString();
 
-        user_name_field = (EditText)findViewById(R.id.user_name_field);
-        password_field = (EditText)findViewById(R.id.password_field);
-        
-        // retrieve Connector Instance
-        
-        Button login = (Button)findViewById(R.id.sign_in);
-        login.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				String user_name = user_name_field.getEditableText().toString();
-				String password = password_field.getEditableText().toString();
-				connector.API_login(user_name, password);
-				
+				if (remember_me.isChecked()) {
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putString("user_name", user_name);
+					editor.putString("password", password);
+					editor.putBoolean("remember_me", true);
+					editor.commit();
+
+				}
+				else
+				{
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putString("user_name", "");
+					editor.putString("password", "");
+					editor.putBoolean("remember_me", false);
+					editor.commit();
+				}
+
+				LoginTask task = new LoginTask();
+				task.execute();
+
 			}
 		});
-        
-        
-        ActionBar bar = getSupportActionBar();
-        BitmapDrawable bg = (BitmapDrawable)getResources().getDrawable(R.drawable.actionbar);
-        bar.setBackgroundDrawable(bg);
-        bar.setIcon(R.drawable.logo);
-        
-        bar.setDisplayShowTitleEnabled(false);
-    }
 
-    
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+
+		menu.setHeaderTitle("Options ... ");
+		menu.add(0, v.getId(), 0, "Register");
+		menu.add(0, v.getId(), 0, "Quit");
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		if (item.getTitle() == "Register") {
+			Intent intent = new Intent(getApplicationContext(), Register.class);
+			startActivity(intent);
+		}
+
+		else if (item.getTitle() == "Quit") {
+			this.finish();
+		}
+
+		return true;
+	}
+
+	private class LoginTask extends AsyncTask<Void, Void, Void> {
+
+		boolean result;
+		ProgressDialog dialog = null;
+
+		@Override
+		protected void onPreExecute() {
+			dialog = new ProgressDialog(mContext);
+			dialog.setTitle("Smarty Plants");
+			dialog.setIcon(R.drawable.logo);
+			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			dialog.setCancelable(false);
+			dialog.setMessage("Logging In");
+			dialog.show();
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+
+			try {
+				result = dataConnector.loginIn(user_name, password);
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+			return null;
+
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			dialog.dismiss();
+
+			if (this.result) {
+				finish();
+				startActivity(new Intent(mContext, Home.class));
+			} else {
+				Toast.makeText(mContext, "Username or Password Incorrect", 3000)
+						.show();
+			}
+		}
+
+	}
+
 }

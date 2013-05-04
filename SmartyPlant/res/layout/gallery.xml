@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <RelativeLayout
+        android:id="@+id/button_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+         >
+
+        <Button
+            android:id="@+id/take_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Take Picture"
+            android:layout_alignTop="@+id/select_gallery"
+            android:layout_alignBottom="@+id/select_gallery"
+            android:drawableLeft="@android:drawable/ic_menu_camera" />
+
+        <Button
+            android:id="@+id/select_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/take_picture"
+            android:text="Select From Gallaery"
+            android:textColor="#ff0000" />
+    </RelativeLayout>
+    
+    
+    <GridView 
+	    android:id="@+id/grid_view"
+	    android:layout_below="@+id/button_group"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:numColumns="auto_fit"
+	    android:columnWidth="200dp"
+	    android:horizontalSpacing="10dp"
+	    android:verticalSpacing="10dp"
+	    android:gravity="center"
+	    android:stretchMode="columnWidth"
+	    android:layout_marginBottom="55dp"
+	   />
+    
+    <Button 
+        android:layout_marginTop="-50dp"
+        android:id="@+id/done"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@+id/grid_view"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

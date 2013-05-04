@@ -5,6 +5,40 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
+   
+    <FrameLayout
+        android:id="@+id/action_bar_1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white" >
+        
+        <RelativeLayout
+            android:id="@+id/action_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="41dp"
+            android:background="@drawable/actionbar" >
+
+            <Button
+                android:id="@+id/settings"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/ic_action_info" 
+                />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="115dp"
+            android:layout_height="56dp"
+            android:gravity="start"
+            android:src="@drawable/logo" 
+            android:layout_marginLeft="10dp"/>
+
+    </FrameLayout>
+    
+
     <LinearLayout
         android:id="@+id/form"
         android:layout_width="fill_parent"
@@ -18,7 +52,7 @@
         <TextView
             android:id="@+id/form1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:background="@drawable/form1"
             android:gravity="center"
             android:text="ACCOUNT INFORMATION"
@@ -34,100 +68,107 @@
             android:visibility="gone" >
         </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/form3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/form_cell"
             android:orientation="vertical"
-            android:padding="20dp" >
-
-            <RelativeLayout
+            android:padding="15dp" >
+            
+            <TextView 
+                android:id="@+id/user_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="5dp"
+                android:text="Username :"
+                android:textColor="@android:color/black"/>
+            
+            <EditText 
+                android:id="@+id/user_name_field"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/user_name_label"
+                android:layout_alignBaseline="@+id/user_name_label"
+                android:layout_alignLeft="@+id/confirm_password_field"
+                android:background="@drawable/rounded_text"
+                android:singleLine="true"
+                />
+            
+            
+                <TextView 
+                android:id="@+id/email_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
                 android:layout_marginBottom="20dp"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:text="Username"
-                    android:textColor="@android:color/black" />
-
-                <EditText
-                    android:id="@+id/user_name_field"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="150dp"
-                    android:background="@android:color/white" />
-            </RelativeLayout>
-
-            <RelativeLayout
+                android:layout_below="@+id/user_name_label"
+                android:text="Email :"
+                android:textColor="@android:color/black"/>
+            
+            <EditText 
+                android:id="@+id/email_field"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/email_label"
+                android:layout_alignBaseline="@+id/email_label"
+                android:layout_alignLeft="@+id/confirm_password_field"
+                android:background="@drawable/rounded_text"
+                android:singleLine="true"
+                />
+            
+               <TextView 
+                android:id="@+id/password_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:text="Email"
-                    android:textColor="@android:color/black" />
-
-                <EditText
-                    android:id="@+id/email_field"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="150dp"
-                    android:background="@android:color/white" />
-            </RelativeLayout>
-
-            <RelativeLayout
+                android:layout_below="@+id/email_label"
+                android:text="Password :"
+                android:textColor="@android:color/black"/>
+            
+            <EditText 
+                android:id="@+id/password_field"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:text="Password"
-                    android:textColor="@android:color/black" />
-
-                <EditText
-                    android:id="@+id/password_field"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="150dp"
-                    android:background="@android:color/white"
-                    android:password="true" />
-            </RelativeLayout>
-
-            <RelativeLayout
+                android:layout_toRightOf="@+id/password_label"
+                android:layout_alignBaseline="@+id/password_label"
+                android:layout_alignLeft="@+id/confirm_password_field"
+                android:background="@drawable/rounded_text"
+                android:password="true"
+                android:singleLine="true"
+                />
+            
+               <TextView 
+                android:id="@+id/confirm_password_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_below="@+id/password_label"
+                android:text="Confrim Password :"
+                android:textColor="@android:color/black"/>
+            
+            <EditText 
+                android:id="@+id/confirm_password_field"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:orientation="horizontal" >
+                android:layout_toRightOf="@+id/confirm_password_label"
+                android:layout_alignBaseline="@+id/confirm_password_label"
+                android:background="@drawable/rounded_text"
+                android:password="true"
+                android:singleLine="true"
+                android:layout_marginBottom="10dp"
+                />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <TextView 
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:text="Confirm password"
-                    android:textColor="@android:color/black" />
-
-                <EditText
-                    android:id="@+id/confirm_password_field"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="150dp"
-                    android:background="@android:color/white"
-                    android:password="true" />
-            </RelativeLayout>
-        </LinearLayout>
+                    android:layout_below="@+id/confirm_password_label"/>
+            
+        
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/form4"
@@ -135,13 +176,15 @@
             android:layout_height="wrap_content"
             android:background="@drawable/form_end" >
 
-            <Button
+            <ImageView
                 android:id="@+id/create"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:layout_margin="20dp"
                 android:background="@drawable/create" />
+
         </RelativeLayout>
     </LinearLayout>
 

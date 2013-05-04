@@ -1,56 +1,123 @@
 package smartyplant.core;
 
-import smartyplant.api.ApiConnector;
+import smartyplant.Network.DataConnector;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
+public class Register extends Activity {
 
-public class Register extends SherlockActivity {
-
-	EditText user_name_field;
-	EditText email_field;
+	String username;
+	String password;
+	String email;
+	EditText username_field;
 	EditText password_field;
-	EditText confirm_password_field;
+	EditText confirm_field;
+	EditText email_field;
+	Context mContext = this;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.Theme_Sherlock);
-
         setContentView(R.layout.register);
-        ActionBar bar = getSupportActionBar();
-        BitmapDrawable bg = (BitmapDrawable)getResources().getDrawable(R.drawable.actionbar);
-        bar.setBackgroundDrawable(bg);
-        bar.setIcon(R.drawable.logo);
-        bar.setDisplayShowTitleEnabled(false);
         
-        user_name_field = (EditText)findViewById(R.id.user_name_field);
+        username_field = (EditText)findViewById(R.id.user_name_field);
         email_field = (EditText)findViewById(R.id.email_field);
         password_field = (EditText)findViewById(R.id.password_field);
-        confirm_password_field = (EditText)findViewById(R.id.confirm_password_field);
+        confirm_field = (EditText)findViewById(R.id.confirm_password_field);
         
-    }
-	
-	private void setClickListener(){
-		Button reg = (Button)findViewById(R.id.create);
-		reg.setOnClickListener(new OnClickListener() {
+        ImageView create = (ImageView)findViewById(R.id.create);
+        create.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View arg0) {
-				String user_name = user_name_field.getEditableText().toString();
-				String email = email_field.getEditableText().toString();
-				String password = password_field.getEditableText().toString();
-				String confirm_password = confirm_password_field.getEditableText().toString();
+			public void onClick(View v) {
+				username = username_field.getEditableText().toString();
+				email = email_field.getEditableText().toString();
+				password = password_field.getEditableText().toString();
+				String confirm = confirm_field.getEditableText().toString();
 				
-				
+				if(!password.equals(confirm)){
+					Toast.makeText(mContext,"Password & Confirmation do no match, please retype password", 3000).show();
+				}
+				else{
+					try {
+						RegTask task = new RegTask();
+						task.execute();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		});
-	}
+        
+        
+
+    }
+	
+	
+	 private class RegTask extends AsyncTask<Void, Void, Void>
+	 {
+
+		int result ;
+    	ProgressDialog dialog = null;
+
+		
+		
+		@Override
+    	protected void onPreExecute() {
+    		dialog = new ProgressDialog(mContext);			
+			dialog.setTitle("Smarty Plants");
+			dialog.setIcon(R.drawable.logo);
+			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			dialog.setCancelable(false);
+			dialog.setMessage("Registering ...");
+			dialog.show();
+    	}
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			
+			try 
+			{
+				result = DataConnector.getInstance().register(username, email, password);
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}
+			
+			return null;
+			
+		}
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			dialog.dismiss();
+			
+			if(this.result == 1){
+				Toast.makeText(mContext, "Registered Successfully", 3000).show();
+
+			finish();
+			startActivity(new Intent(mContext, Login.class));
+			}
+			
+			else if(this.result == 2){
+				Toast.makeText(mContext, "User already exists", 3000).show();
+			}
+			
+			else
+				Toast.makeText(mContext, "Problem With Registration", 3000).show();
+
+		}
+		 
+	 }
 	
 }
