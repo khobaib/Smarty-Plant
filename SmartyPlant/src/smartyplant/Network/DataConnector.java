@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -139,14 +139,27 @@ public class DataConnector {
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
 	    HttpPost httppost = new HttpPost(API_URL+"//plant");
-	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(6);
-	    nameValuePairs.add(new BasicNameValuePair("base64String", base64.replaceAll("\n", "")));
-	    nameValuePairs.add(new BasicNameValuePair("description", desc));
-	    nameValuePairs.add(new BasicNameValuePair("country", country));
-	    nameValuePairs.add(new BasicNameValuePair("state", state));
-	    nameValuePairs.add(new BasicNameValuePair("city", city));
-	    nameValuePairs.add(new BasicNameValuePair("region", region));
-	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	   
+//	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(6);
+//	    nameValuePairs.add(new BasicNameValuePair("base64String", base64.replaceAll("\n", "")));
+//	    nameValuePairs.add(new BasicNameValuePair("description", desc));
+//	    nameValuePairs.add(new BasicNameValuePair("country", country));
+//	    nameValuePairs.add(new BasicNameValuePair("state", state));
+//	    nameValuePairs.add(new BasicNameValuePair("city", city));
+//	    nameValuePairs.add(new BasicNameValuePair("region", region));
+//	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	    
+	    JSONObject json = new JSONObject();
+	    json.put("base64String", base64.replaceAll("\n", ""));
+	    json.put("description", desc);
+	    json.put("country", country);
+	    json.put("state", state);
+	    json.put("city", city);
+	    json.put("region", region);
+        StringEntity se = new StringEntity(json.toString()); 
+        httppost.setEntity(se);
+	    
+
 	    
 	    httppost.setHeader("Authorization-Token", GlobalState.getInstance().API_TOKEN);	    
 	    httppost.setHeader("Content-Type", "application/json");

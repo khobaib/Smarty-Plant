@@ -50,9 +50,18 @@
             android:name="Submit_PlantsActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="GalleryView"></activity>
-        <activity android:name="Submit"></activity>
-        <activity android:name="PlantDetails"></activity>
+        <activity
+            android:name="GalleryView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="Submit"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="PlantDetails"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
