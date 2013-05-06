@@ -56,15 +56,7 @@ public class Home extends TabActivity {
 //			tv.setTextSize(10);
 //		}
 
-		final Button settings = (Button) findViewById(R.id.settings);
-		settings.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-
-				registerForContextMenu(v);
-				openContextMenu(v);
-				unregisterForContextMenu(v);
-			}
-		});
+		
 
 	}
 
