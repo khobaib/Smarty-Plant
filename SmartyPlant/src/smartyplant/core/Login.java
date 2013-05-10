@@ -2,25 +2,28 @@ package smartyplant.core;
 
 import smartyplant.Network.DataConnector;
 import smartyplant.Utils.GlobalState;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class Login extends Activity {
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.SubMenu;
+
+public class Login extends SherlockActivity {
 	String user_name = "";
 	String password = "";
 	EditText user_name_field;
@@ -36,7 +39,28 @@ public class Login extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setTheme(R.style.Theme_Sherlock);
 		setContentView(R.layout.login);
+
+		ActionBar bar = getSupportActionBar();
+		
+		bar.setDisplayHomeAsUpEnabled(false);
+		bar.setDisplayShowHomeEnabled(true);
+		bar.setDisplayShowTitleEnabled(false);
+		bar.setDisplayUseLogoEnabled(false);
+		
+//		bar.setDisplayShowCustomEnabled(true);
+//		bar.setCustomView(R.layout.bar);
+
+		Bitmap b0 = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
+		BitmapDrawable d0 = new BitmapDrawable(b0);
+		bar.setBackgroundDrawable(d0);
+
+		
+		Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.actionbar_bg);
+		BitmapDrawable d = new BitmapDrawable(b);
+		bar.setBackgroundDrawable(d);
+		
 		user_name_field = (EditText) findViewById(R.id.user_name_field);
 		password_field = (EditText) findViewById(R.id.password_field);
 		remember_me = (CheckBox) findViewById(R.id.remember_me);
@@ -44,19 +68,12 @@ public class Login extends Activity {
 
 		if (prefs.getBoolean("remember_me", false)) {
 			remember_me.setChecked(true);
-			user_name_field.setText(prefs.getString("user_name", ""));
-			password_field.setText(prefs.getString("password", ""));
+			user_name = prefs.getString("user_name", "");
+			password = prefs.getString("password", "");
+
+			LoginTask task = new LoginTask();
+			task.execute();
 		}
-
-		final Button settings = (Button) findViewById(R.id.settings);
-		settings.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-
-				registerForContextMenu(v);
-				openContextMenu(v);
-				unregisterForContextMenu(v);
-			}
-		});
 
 		final ImageView sign_in = (ImageView) findViewById(R.id.sign_in);
 		sign_in.setOnClickListener(new View.OnClickListener() {
@@ -71,9 +88,7 @@ public class Login extends Activity {
 					editor.putBoolean("remember_me", true);
 					editor.commit();
 
-				}
-				else
-				{
+				} else {
 					SharedPreferences.Editor editor = prefs.edit();
 					editor.putString("user_name", "");
 					editor.putString("password", "");
@@ -89,30 +104,9 @@ public class Login extends Activity {
 
 	}
 
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
+	
 
-		menu.setHeaderTitle("Options ... ");
-		menu.add(0, v.getId(), 0, "Register");
-		menu.add(0, v.getId(), 0, "Quit");
-	}
-
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		if (item.getTitle() == "Register") {
-			Intent intent = new Intent(getApplicationContext(), Register.class);
-			startActivity(intent);
-		}
-
-		else if (item.getTitle() == "Quit") {
-			this.finish();
-		}
-
-		return true;
-	}
-
+	
 	private class LoginTask extends AsyncTask<Void, Void, Void> {
 
 		boolean result;
@@ -121,7 +115,7 @@ public class Login extends Activity {
 		@Override
 		protected void onPreExecute() {
 			dialog = new ProgressDialog(mContext);
-			dialog.setTitle("Smarty Plants");
+			dialog.setTitle("Mister Smarty Plants");
 			dialog.setIcon(R.drawable.logo);
 			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			dialog.setCancelable(false);
@@ -157,5 +151,29 @@ public class Login extends Activity {
 		}
 
 	}
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+    	
+        SubMenu subMenu1 = menu.addSubMenu("Register");
+        
+        subMenu1.setIcon(R.drawable.actionbar);
+    	com.actionbarsherlock.view.MenuItem subMenu1Item = subMenu1.getItem();
+        subMenu1Item.setIcon(R.drawable.actionbar);
+        subMenu1Item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW); 
+        
+     //   getSupportMenuInflater().inflate(R.menu.menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(
+    		com.actionbarsherlock.view.MenuItem item) {
+    	startActivity(new Intent(mContext, Register.class));
+    	return super.onOptionsItemSelected(item);
+    }
+    
 
 }

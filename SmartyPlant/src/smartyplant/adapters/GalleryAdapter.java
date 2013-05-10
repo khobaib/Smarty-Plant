@@ -1,6 +1,9 @@
-package smartyplant.core;
+package smartyplant.adapters;
 
 import java.io.File;
+
+import smartyplant.core.R;
+import smartyplant.core.R.layout;
 
 import android.content.Context;
 import android.graphics.Bitmap;

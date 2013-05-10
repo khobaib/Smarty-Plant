@@ -1,6 +1,8 @@
-package smartyplant.core;
+package smartyplant.adapters;
 
 import smartyplant.Utils.GlobalState;
+import smartyplant.core.R;
+import smartyplant.core.R.layout;
 import smartyplant.modules.Plant;
 import android.content.Context;
 import android.view.LayoutInflater;

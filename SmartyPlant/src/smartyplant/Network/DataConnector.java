@@ -41,11 +41,20 @@ public class DataConnector {
 	public boolean loginIn(String username, String password) throws Exception{
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
-	    HttpPost httppost = new HttpPost(API_URL+"//login");
-	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-	    nameValuePairs.add(new BasicNameValuePair("user_name", username));
-	    nameValuePairs.add(new BasicNameValuePair("password", password));
-	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	    HttpPost httppost = new HttpPost(API_URL+"/login");
+//	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+//	    nameValuePairs.add(new BasicNameValuePair("user_name", username));
+//	    nameValuePairs.add(new BasicNameValuePair("password", password));
+//	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	    
+	    JSONObject json = new JSONObject();
+	    json.put("user_name", username);
+	    json.put("password", password);
+
+        StringEntity se = new StringEntity(json.toString()); 
+        httppost.setEntity(se);
+	    httppost.setHeader("Content-Type", "application/json");
+
 	    
 	    HttpResponse response = httpclient.execute(httppost);
 	    HttpEntity entity = response.getEntity();

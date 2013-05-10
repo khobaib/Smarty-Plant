@@ -5,34 +5,6 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
-    <FrameLayout
-        android:id="@+id/action_bar_1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white" >
-
-        <RelativeLayout
-            android:id="@+id/action_bar"
-            android:layout_width="fill_parent"
-            android:layout_height="41dp"
-            android:background="@drawable/actionbar" >
-
-            <Button
-                android:id="@+id/settings"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/ic_action_info" />
-        </RelativeLayout>
-
-        <ImageView
-            android:layout_width="115dp"
-            android:layout_height="56dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="start"
-            android:src="@drawable/logo" />
-    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/form"
@@ -90,6 +62,7 @@
                     android:layout_width="fill_parent"
                     android:background="@drawable/rounded_text"
                     android:singleLine="true"
+                    android:textColor="@android:color/black"
                      />
 
 
@@ -116,6 +89,7 @@
                     android:background="@drawable/rounded_text"
                     android:password="true"
                     android:singleLine="true"
+                    android:textColor="@android:color/black"
                     />
                 <TextView 
                     android:layout_width="fill_parent"
