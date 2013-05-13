@@ -18,6 +18,7 @@ import java.util.concurrent.Executors;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.widget.ImageView;
 
@@ -39,8 +40,11 @@ public class ImageLoader {
     {
         imageViews.put(imageView, url);
         Bitmap bitmap=memoryCache.get(url);
+        BitmapDrawable d= new BitmapDrawable(bitmap);
+        
         if(bitmap!=null)
             imageView.setImageBitmap(bitmap);
+        
         else
         {
             queuePhoto(url, imageView);

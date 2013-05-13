@@ -1,6 +1,7 @@
 package smartyplant.core;
 
 import smartyplant.Utils.GlobalState;
+import smartyplant.lazylist.ImageLoader;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -70,8 +72,10 @@ public class PlantDetails extends Activity{
 		TextView label4 = (TextView)findViewById(R.id.label4);
 		label4.setText(globalState.currentPlant.plant_name_agree_prc + "% agreed");
 		
-		TextView image = (TextView)findViewById(R.id.image_view);
-		image.setBackgroundDrawable(globalState.currentPlant.image_drawable);
+		ImageView image = (ImageView)findViewById(R.id.image_view);
+	    new ImageLoader(this).DisplayImage(globalState.currentPlant.image_url, image);
+
+//		image.setBackgroundDrawable(globalState.currentPlant.image_drawable);
 		
 		ProgressBar bar = (ProgressBar)findViewById(R.id.agree_prc_bar);
 		bar.setProgress(globalState.currentPlant.plant_name_agree_prc);

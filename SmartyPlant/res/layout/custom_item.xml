@@ -8,13 +8,13 @@
         android:layout_width="fill_parent"
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
-        android:background="@android:color/transparent" >
+        android:background="@android:color/white" >
 		
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/plant_image"
-            android:background="@android:color/transparent"
+            android:background="@drawable/rounded_text"
             />
         
         <RelativeLayout
@@ -29,7 +29,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@drawable/rounded_text"
-                android:src="@drawable/pic_1" />
+                 />
             
             <TextView 
                 android:id="@+id/identifier_name"
@@ -38,7 +38,7 @@
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 android:text="ID Name"
-                android:textSize="18dp"
+                android:textSize="15dp"
                 android:layout_toRightOf="@+id/identifier_picture"
                 android:layout_marginLeft="10dp"/>
             
@@ -46,10 +46,10 @@
                 android:id="@+id/identifier_name_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/darker_gray"
                 android:textStyle="bold"
                 android:text="ID Name"
-                android:textSize="18dp"
+                android:textSize="15dp"
                 android:layout_toRightOf="@+id/identifier_picture"
                 android:layout_below="@+id/identifier_name"
                 android:layout_marginLeft="10dp"/>
