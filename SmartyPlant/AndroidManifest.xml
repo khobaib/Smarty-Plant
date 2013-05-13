@@ -35,19 +35,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="Home"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name="HomeScreen"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name="My_PlantsActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name="Submit_PlantsActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity

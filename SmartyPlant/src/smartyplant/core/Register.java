@@ -1,6 +1,9 @@
 package smartyplant.core;
 
+import com.actionbarsherlock.app.SherlockActivity;
+
 import smartyplant.Network.DataConnector;
+import smartyplant.Utils.GlobalState;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -14,7 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class Register extends Activity {
+public class Register extends SherlockActivity {
 
 	String username;
 	String password;
@@ -28,7 +31,7 @@ public class Register extends Activity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register);
+        GlobalState.getInstance().initActionBar(mContext, R.layout.register);
         
         username_field = (EditText)findViewById(R.id.user_name_field);
         email_field = (EditText)findViewById(R.id.email_field);

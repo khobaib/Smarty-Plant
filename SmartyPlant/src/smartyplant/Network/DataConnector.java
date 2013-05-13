@@ -124,7 +124,7 @@ public class DataConnector {
 			
 			p.identifier_name = obj.getString("identifier_name");
 			p.identifier_twitter_url = obj.getString("identifier_twitter_url");
-			p.identifier_picture_url = "http://mistersmartyplants.com/"+obj.getString("identifier_picture_url").replaceAll("~", "");
+			p.identifier_picture_url = "http://mistersmartyplants.com/"+obj.getString("identifier_picture_url").replaceAll("..", "");
 			//p.identifier_picture_drawable = drawableFromUrl(p.identifier_picture_url);
 			String num = obj.getString("plant_name_agree_percentage").replaceAll("%", "");
 			
