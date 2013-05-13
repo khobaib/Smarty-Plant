@@ -44,8 +44,8 @@ public class ImageLoader {
         BitmapDrawable d = new BitmapDrawable(bitmap);
         
         if(bitmap!=null){
-//            imageView.setImageBitmap(bitmap);
-        	imageView.setBackgroundDrawable(d);
+            imageView.setImageBitmap(bitmap);
+        	//imageView.setBackgroundDrawable(d);
         }
         else
         {
