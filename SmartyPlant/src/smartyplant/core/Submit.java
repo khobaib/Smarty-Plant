@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -100,7 +101,10 @@ public class Submit extends Activity{
 		protected void onPostExecute(Void result) {
 			dialog.dismiss();
 			Toast.makeText(mContext, this.result, 3000).show();
-			
+			if(this.result.equalsIgnoreCase("Success")){
+				finish();
+				startActivity(new Intent(mContext, HomeScreen.class));
+			}
 		};
 	}
 

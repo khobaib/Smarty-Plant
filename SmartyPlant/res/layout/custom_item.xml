@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/rounded" >
+    android:background="@android:color/transparent" >
 
     <FrameLayout
         android:id="@+id/photo_frame"
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
-            android:text="60% Agree"
+            android:text=""
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:textSize="10dp" />

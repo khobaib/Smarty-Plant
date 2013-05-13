@@ -86,8 +86,7 @@ public class ImageAdapter extends BaseAdapter {
 		TextView plant_name = (TextView)footer.getChildAt(0);
 		plant_name.setText(p.plant_name);
 		
-		TextView plant_prc = (TextView)footer.getChildAt(1);
-		plant_prc.setText(p.plant_name_agree_prc + "% agree");
+		
 		
 		ProgressBar bar = (ProgressBar)footer.getChildAt(2);
 		bar.setProgress(p.plant_name_agree_prc);

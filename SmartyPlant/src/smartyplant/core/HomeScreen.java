@@ -131,7 +131,7 @@ public class HomeScreen extends SherlockActivity implements
 		@Override
 		protected void onPreExecute() {
 			dialog = new ProgressDialog(mContext);
-			dialog.setTitle("Smarty Plants");
+			dialog.setTitle(" ");
 			dialog.setIcon(R.drawable.logo);
 			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			dialog.setCancelable(false);
@@ -189,19 +189,24 @@ public class HomeScreen extends SherlockActivity implements
 
 	private void setGallerySelectMode() {
 		mode = 2;
-		setContentView(R.layout.gallery);
-		setClickListners();
-
-		String[] projection = { MediaStore.Images.Thumbnails._ID };
-		cursor = managedQuery(
-				MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
-				null, null, MediaStore.Images.Thumbnails.IMAGE_ID);
-		columnIndex = cursor
-				.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
-
-		GridView gridView = (GridView) findViewById(R.id.grid_view);
-		gridView.setColumnWidth(getColumnWidth());
-		gridView.setAdapter(new GAdapter(mContext, cursor));
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);//
+		startActivityForResult(Intent.createChooser(intent, "Select Picture"),columnIndex);
+		
+//		setContentView(R.layout.gallery);
+//		setClickListners();
+//
+//		String[] projection = { MediaStore.Images.Thumbnails._ID };
+//		cursor = managedQuery(
+//				MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
+//				null, null, MediaStore.Images.Thumbnails.DEFAULT_SORT_ORDER);
+//	
+//		columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
+//
+//		GridView gridView = (GridView) findViewById(R.id.grid_view);
+//		gridView.setColumnWidth(getColumnWidth());
+//		gridView.setAdapter(new GAdapter(mContext, cursor));
 	}
 
 	private void setClickListners() {
