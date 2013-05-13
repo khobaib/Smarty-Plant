@@ -69,6 +69,7 @@ public class Submit_PlantsActivity extends Activity {
 		setMode1();
 		switch (resultCode) {
 		case 0:
+			setMode1();
 			break;
 
 		case -1:

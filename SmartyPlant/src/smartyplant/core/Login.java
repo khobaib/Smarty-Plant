@@ -11,11 +11,15 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -39,27 +43,7 @@ public class Login extends SherlockActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTheme(R.style.Theme_Sherlock);
-		setContentView(R.layout.login);
-
-		ActionBar bar = getSupportActionBar();
-		
-		bar.setDisplayHomeAsUpEnabled(false);
-		bar.setDisplayShowHomeEnabled(true);
-		bar.setDisplayShowTitleEnabled(false);
-		bar.setDisplayUseLogoEnabled(false);
-		
-//		bar.setDisplayShowCustomEnabled(true);
-//		bar.setCustomView(R.layout.bar);
-
-		Bitmap b0 = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
-		BitmapDrawable d0 = new BitmapDrawable(b0);
-		bar.setBackgroundDrawable(d0);
-
-		
-		Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.actionbar_bg);
-		BitmapDrawable d = new BitmapDrawable(b);
-		bar.setBackgroundDrawable(d);
+		globalState.initActionBar(this, R.layout.login);
 		
 		user_name_field = (EditText) findViewById(R.id.user_name_field);
 		password_field = (EditText) findViewById(R.id.password_field);
@@ -143,7 +127,7 @@ public class Login extends SherlockActivity {
 
 			if (this.result) {
 				finish();
-				startActivity(new Intent(mContext, Home.class));
+				startActivity(new Intent(mContext, HomeScreen.class));
 			} else {
 				Toast.makeText(mContext, "Username or Password Incorrect", 3000)
 						.show();

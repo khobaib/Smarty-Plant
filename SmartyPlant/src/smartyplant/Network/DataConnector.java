@@ -42,14 +42,11 @@ public class DataConnector {
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
 	    HttpPost httppost = new HttpPost(API_URL+"/login");
-//	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-//	    nameValuePairs.add(new BasicNameValuePair("user_name", username));
-//	    nameValuePairs.add(new BasicNameValuePair("password", password));
-//	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	    
 	    JSONObject json = new JSONObject();
 	    json.put("user_name", username);
 	    json.put("password", password);
+	    json.put("social_token", null);
 
         StringEntity se = new StringEntity(json.toString()); 
         httppost.setEntity(se);
@@ -107,9 +104,6 @@ public class DataConnector {
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
 	    HttpGet httpget = new HttpGet(API_URL+"//plant/allmine");
-// use this for testing
-//	    HttpGet httpget = new HttpGet(API_URL+"//plant/all");
-	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
 	  
 	    httpget.setHeader("Authorization-Token", GlobalState.getInstance().API_TOKEN);	    
 	    HttpResponse response = httpclient.execute(httpget);
@@ -120,7 +114,6 @@ public class DataConnector {
             instream.close();
         }
 	    JSONArray arr = new JSONArray(result);
-//	    for(int i = 0 ; i < 3 ; i ++){ use this for testing
 	    for (int i = 0 ; i < arr.length() ; i ++){
 			JSONObject obj = arr.getJSONObject(i);
 			Plant p = new Plant();
@@ -131,8 +124,10 @@ public class DataConnector {
 			
 			p.identifier_name = obj.getString("identifier_name");
 			p.identifier_twitter_url = obj.getString("identifier_twitter_url");
-			p.identifier_picture_url = obj.getString("identifier_picture_url");
+			p.identifier_picture_url = "http://mistersmartyplants.com/"+obj.getString("identifier_picture_url").replaceAll("~", "");
+			p.identifier_picture_drawable = drawableFromUrl(p.identifier_picture_url);
 			String num = obj.getString("plant_name_agree_percentage").replaceAll("%", "");
+			
 			int prc = Integer.parseInt(num);
 			p.plant_name_agree_prc = prc;
 			plants.add(p);

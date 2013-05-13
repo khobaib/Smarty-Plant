@@ -10,6 +10,7 @@ public class Plant {
 	public String identifier_name;
 	public String identifier_twitter_url;
 	public String identifier_picture_url;
+	public Drawable identifier_picture_drawable;
 	public Drawable identifier_picute_drawable;
 	public int plant_name_agree_prc;
 

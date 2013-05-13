@@ -93,7 +93,7 @@ public class My_PlantsActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			gridView.setAdapter(new smartyplant.adapters.ImageAdapter(mContext));
+			gridView.setAdapter(new smartyplant.adapters.ImageAdapter(mContext, getColumnWidth(), getColumnWidth()));
 			dialog.dismiss();
 		}
 

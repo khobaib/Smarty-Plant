@@ -8,22 +8,29 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ImageAdapter extends BaseAdapter {
 	private Context context;
-
-	public Plant[] plants = new Plant[GlobalState.getInstance().all_plants.size()];
 	
+	public Plant[] plants = new Plant[GlobalState.getInstance().all_plants.size()];
+	int width;
+	int height;
 	
 	
 	// Constructor
-	public ImageAdapter(Context c){
+	public ImageAdapter(Context c, int width, int height){
 		context = c;
+		this.width = width;
+		this.height = height;
 		for (int i = 0 ; i < GlobalState.getInstance().all_plants.size() ; i ++){
 			plants[i] = GlobalState.getInstance().all_plants.get(i);
 		}
@@ -55,6 +62,17 @@ public class ImageAdapter extends BaseAdapter {
 		FrameLayout imageFrame = (FrameLayout)l.getChildAt(0);
 		imageFrame.setBackgroundDrawable(p.image_drawable);
 		// setBackGroudImage
+	
+		RelativeLayout identifier_info = (RelativeLayout)imageFrame.getChildAt(0);
+		ImageView identifier_image = (ImageView)identifier_info.getChildAt(0);
+		identifier_image.setImageDrawable(p.identifier_picture_drawable);
+		
+		TextView identifier_name = (TextView)identifier_info.getChildAt(1);
+		identifier_name.setText(p.identifier_name);
+		
+		
+		TextView identifier_name2 = (TextView)identifier_info.getChildAt(2);
+		identifier_name2.setText("@"+p.identifier_name);
 		
 		RelativeLayout footer = (RelativeLayout)l.getChildAt(1);
 		TextView plant_name = (TextView)footer.getChildAt(0);
@@ -65,6 +83,8 @@ public class ImageAdapter extends BaseAdapter {
 		
 		ProgressBar bar = (ProgressBar)footer.getChildAt(2);
 		bar.setProgress(p.plant_name_agree_prc);
+		
+		v.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.FILL_PARENT, GridView.LayoutParams.FILL_PARENT));
 		
 		return v;
 	}

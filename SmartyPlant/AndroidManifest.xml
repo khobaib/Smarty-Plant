@@ -39,6 +39,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="HomeScreen"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="My_PlantsActivity"
             android:screenOrientation="portrait" >
         </activity>
