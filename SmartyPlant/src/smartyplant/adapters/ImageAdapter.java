@@ -3,6 +3,7 @@ package smartyplant.adapters;
 import smartyplant.Utils.GlobalState;
 import smartyplant.core.R;
 import smartyplant.core.R.layout;
+import smartyplant.lazylist.ImageLoader;
 import smartyplant.modules.Plant;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -20,7 +21,8 @@ import android.widget.TextView;
 
 public class ImageAdapter extends BaseAdapter {
 	private Context context;
-	
+	private ImageLoader imageLoader;
+
 	public Plant[] plants = new Plant[GlobalState.getInstance().all_plants.size()];
 	int width;
 	int height;
@@ -34,6 +36,9 @@ public class ImageAdapter extends BaseAdapter {
 		for (int i = 0 ; i < GlobalState.getInstance().all_plants.size() ; i ++){
 			plants[i] = GlobalState.getInstance().all_plants.get(i);
 		}
+		
+	    imageLoader=new ImageLoader(context);
+
 	}
 
 	@Override
@@ -60,12 +65,15 @@ public class ImageAdapter extends BaseAdapter {
 		View v = inflater.inflate(R.layout.custom_item	, null);
 		RelativeLayout l = (RelativeLayout)v;
 		FrameLayout imageFrame = (FrameLayout)l.getChildAt(0);
-		imageFrame.setBackgroundDrawable(p.image_drawable);
-		// setBackGroudImage
-	
-		RelativeLayout identifier_info = (RelativeLayout)imageFrame.getChildAt(0);
+		//imageFrame.setBackgroundDrawable(p.image_drawable);
+		
+		ImageView plant_image = (ImageView)imageFrame.getChildAt(0);
+		imageLoader.DisplayImage(p.image_url, plant_image);
+		
+		RelativeLayout identifier_info = (RelativeLayout)imageFrame.getChildAt(1);
 		ImageView identifier_image = (ImageView)identifier_info.getChildAt(0);
-		identifier_image.setImageDrawable(p.identifier_picture_drawable);
+		imageLoader.DisplayImage(p.identifier_picture_url, identifier_image);
+//		identifier_image.setImageDrawable(p.identifier_picture_drawable);
 		
 		TextView identifier_name = (TextView)identifier_info.getChildAt(1);
 		identifier_name.setText(p.identifier_name);

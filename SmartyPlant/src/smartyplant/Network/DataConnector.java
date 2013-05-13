@@ -120,12 +120,12 @@ public class DataConnector {
 			p.plant_id = obj.getInt("plant_id");
 			p.plant_name = obj.getString("plant_name");
 			p.image_url = "http://mistersmartyplants.com/"+obj.getString("image_url").replaceAll("~", "");
-			p.image_drawable = drawableFromUrl(p.image_url);
+			//p.image_drawable = drawableFromUrl(p.image_url);
 			
 			p.identifier_name = obj.getString("identifier_name");
 			p.identifier_twitter_url = obj.getString("identifier_twitter_url");
 			p.identifier_picture_url = "http://mistersmartyplants.com/"+obj.getString("identifier_picture_url").replaceAll("~", "");
-			p.identifier_picture_drawable = drawableFromUrl(p.identifier_picture_url);
+			//p.identifier_picture_drawable = drawableFromUrl(p.identifier_picture_url);
 			String num = obj.getString("plant_name_agree_percentage").replaceAll("%", "");
 			
 			int prc = Integer.parseInt(num);

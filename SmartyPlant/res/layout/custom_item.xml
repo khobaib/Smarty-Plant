@@ -8,8 +8,15 @@
         android:layout_width="fill_parent"
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/pic_1" >
-
+        android:background="@android:color/transparent" >
+		
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/plant_image"
+            android:background="@android:color/transparent"
+            />
+        
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
