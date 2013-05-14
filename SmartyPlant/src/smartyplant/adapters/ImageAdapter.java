@@ -70,19 +70,21 @@ public class ImageAdapter extends BaseAdapter {
 		ImageView plant_image = (ImageView)imageFrame.getChildAt(0);
 		imageLoader.DisplayImage(p.image_url, plant_image);
 		
-		RelativeLayout identifier_info = (RelativeLayout)imageFrame.getChildAt(1);
+		
+		
+		RelativeLayout identifier_info = (RelativeLayout) imageFrame.getChildAt(1);
+		
 		ImageView identifier_image = (ImageView)identifier_info.getChildAt(0);
 		imageLoader.DisplayImage(p.identifier_picture_url, identifier_image);
-//		identifier_image.setImageDrawable(p.identifier_picture_drawable);
 		
 		TextView identifier_name = (TextView)identifier_info.getChildAt(1);
 		identifier_name.setText(p.identifier_name);
 		
-		
 		TextView identifier_name2 = (TextView)identifier_info.getChildAt(2);
 		identifier_name2.setText("@"+p.identifier_name);
 		
-		RelativeLayout footer = (RelativeLayout)l.getChildAt(1);
+		RelativeLayout footer_parent = (RelativeLayout)l.getChildAt(1);
+		RelativeLayout footer = (RelativeLayout)footer_parent.getChildAt(0);
 		TextView plant_name = (TextView)footer.getChildAt(0);
 		plant_name.setText(p.plant_name);
 		
