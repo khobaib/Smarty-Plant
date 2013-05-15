@@ -48,7 +48,7 @@ public class GlobalState {
 	}
 	
 	public void initActionBar(Context context, int layoutRes){
-		context.setTheme(R.style.Theme_Sherlock);
+		context.setTheme(R.style.Theme_Sherlock_Light);
 		((SherlockActivity) context).setContentView(layoutRes);
 		ActionBar bar = ((SherlockActivity) context).getSupportActionBar();	
 		bar.setDisplayHomeAsUpEnabled(false);

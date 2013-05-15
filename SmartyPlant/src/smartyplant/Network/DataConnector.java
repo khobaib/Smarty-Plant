@@ -76,13 +76,14 @@ public class DataConnector {
 	public int register(String user_name, String email, String password) throws Exception{
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
-	    HttpPost httppost = new HttpPost(API_URL+"//registration");
-	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-	    nameValuePairs.add(new BasicNameValuePair("user_name", user_name));
-	    nameValuePairs.add(new BasicNameValuePair("email", email));
-	    nameValuePairs.add(new BasicNameValuePair("password", password));
-	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-	    
+	    HttpPost httppost = new HttpPost(API_URL+"registration");
+	    JSONObject json = new JSONObject();
+	    json.put("user_name", user_name);
+	    json.put("email", email);
+	    json.put("password", password);	    
+	    httppost.setEntity(new StringEntity(json.toString()));
+	    httppost.setHeader("Content-Type", "application/json");
+
 	    HttpResponse response = httpclient.execute(httppost);
 	    HttpEntity entity = response.getEntity();
 	    if (entity != null) {

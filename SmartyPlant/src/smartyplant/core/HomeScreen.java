@@ -47,7 +47,6 @@ public class HomeScreen extends SherlockActivity implements
 		ActionBar.TabListener {
 	GridView gridView;
 	Context mContext = this;
-	private Cursor cursor;
 	private int columnIndex;
 	int mode = 1;
 	String PhotoPath = Environment.getExternalStorageDirectory()
@@ -55,7 +54,7 @@ public class HomeScreen extends SherlockActivity implements
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		setTheme(R.style.Theme_Sherlock);
+		setTheme(R.style.Theme_Sherlock_Light);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_screen);
 		ActionBar bar = getSupportActionBar();
@@ -125,7 +124,6 @@ public class HomeScreen extends SherlockActivity implements
 
 		GlobalState globalState = GlobalState.getInstance();
 		DataConnector dataConnector = DataConnector.getInstance();
-
 		ProgressDialog dialog = null;
 
 		@Override
