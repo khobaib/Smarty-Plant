@@ -14,7 +14,7 @@
             android:id="@+id/plant_image"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/rounded_text" />
+            android:background="@drawable/rounded_gray" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -48,8 +48,9 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/identifier_picture"
                 android:text="ID Name"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="15dp" />
+                android:textColor="@android:color/white"
+                android:textSize="15dp"
+                android:textStyle="bold" />
         </RelativeLayout>
     </FrameLayout>
 

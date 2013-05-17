@@ -3,18 +3,22 @@ package smartyplant.core;
 import smartyplant.Network.DataConnector;
 import smartyplant.Utils.GlobalState;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,14 +74,19 @@ public class Submit extends Activity{
 		});
 	}
 	
+	
+	
+	
+	//============= Background Task ========
 	class UploadTask extends AsyncTask<Void, Void, Void>{
 		String result ;
     	ProgressDialog dialog = null;
-
+    	// alertDialog = null;
+    	
 		@Override
 		protected void onPreExecute() {
 			dialog = new ProgressDialog(mContext);			
-			dialog.setTitle("Smarty Plants");
+			dialog.setTitle(" ");
 			dialog.setIcon(R.drawable.logo);
 			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			dialog.setCancelable(false);
@@ -100,7 +109,21 @@ public class Submit extends Activity{
 		
 		protected void onPostExecute(Void result) {
 			dialog.dismiss();
-			Toast.makeText(mContext, this.result, 3000).show();
+			
+			AlertDialog.Builder alertdialog= new AlertDialog.Builder(mContext);	
+			alertdialog.setIcon(R.drawable.logo);
+			alertdialog.setTitle(" ");
+			alertdialog.setMessage(this.result);
+			alertdialog.setPositiveButton("Ok",
+				    new DialogInterface.OnClickListener() {
+				        public void onClick(DialogInterface dialog, int which) {
+				        	dialog.dismiss();
+				        	finish();
+				        }
+				    });
+			alertdialog.setCancelable(true);
+			alertdialog.create().show();
+			
 			if(this.result.equalsIgnoreCase("Success")){
 				finish();
 				startActivity(new Intent(mContext, HomeScreen.class));

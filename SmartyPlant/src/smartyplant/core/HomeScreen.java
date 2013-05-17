@@ -4,15 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 
 import smartyplant.Network.DataConnector;
 import smartyplant.Utils.GlobalState;
-import smartyplant.adapters.GAdapter;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -57,6 +56,7 @@ public class HomeScreen extends SherlockActivity implements
 		setTheme(R.style.Theme_Sherlock_Light);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_screen);
+
 		ActionBar bar = getSupportActionBar();
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		bar.setDisplayShowTitleEnabled(false);
@@ -93,7 +93,6 @@ public class HomeScreen extends SherlockActivity implements
 			setContentView(R.layout.my_plants_layout);
 			gridView = (GridView) findViewById(R.id.grid_view);
 			gridView.setColumnWidth(getColumnWidth());
-
 			gridView.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
@@ -108,7 +107,7 @@ public class HomeScreen extends SherlockActivity implements
 			task.execute();
 
 		} else {
-			
+
 			setPhotoCaptureMode();
 		}
 	}
@@ -116,8 +115,6 @@ public class HomeScreen extends SherlockActivity implements
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction transaction) {
 	}
-	
-	
 
 	private class PlantsTask extends AsyncTask<Void, Void, Void> implements
 			DialogInterface.OnCancelListener {
@@ -181,30 +178,7 @@ public class HomeScreen extends SherlockActivity implements
 	// ========================== Submit Plants Functions =============
 	private void setPhotoCaptureMode() {
 		setContentView(R.layout.submit_plants_layout);
-		mode = 1;
 		setClickListners();
-	}
-
-	private void setGallerySelectMode() {
-		mode = 2;
-		Intent intent = new Intent();
-		intent.setType("image/*");
-		intent.setAction(Intent.ACTION_GET_CONTENT);//
-		startActivityForResult(Intent.createChooser(intent, "Select Picture"),columnIndex);
-		
-//		setContentView(R.layout.gallery);
-//		setClickListners();
-//
-//		String[] projection = { MediaStore.Images.Thumbnails._ID };
-//		cursor = managedQuery(
-//				MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
-//				null, null, MediaStore.Images.Thumbnails.DEFAULT_SORT_ORDER);
-//	
-//		columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
-//
-//		GridView gridView = (GridView) findViewById(R.id.grid_view);
-//		gridView.setColumnWidth(getColumnWidth());
-//		gridView.setAdapter(new GAdapter(mContext, cursor));
 	}
 
 	private void setClickListners() {
@@ -244,6 +218,7 @@ public class HomeScreen extends SherlockActivity implements
 	}
 
 	protected void startCameraActivity() {
+		mode = 1;
 		File file = new File(PhotoPath);
 		Uri outputFileUri = Uri.fromFile(file);
 		Intent intent = new Intent(
@@ -252,18 +227,44 @@ public class HomeScreen extends SherlockActivity implements
 		startActivityForResult(intent, 0);
 	}
 
+	private void setGallerySelectMode() {
+		mode = 2;
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+				0);
+
+	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		setPhotoCaptureMode();
+		Button done = (Button) findViewById(R.id.done);
 
 		switch (resultCode) {
 		case 0:
-
+			done.setVisibility(Button.INVISIBLE);
 			break;
 
 		case -1:
 			try {
-				Drawable d = onPhotoTaken();
+				Drawable d;
+				if (mode == 1)
+					d = onPhotoTaken();
+				else {
+					if (resultCode == RESULT_OK) {
+						Uri selectedImage = data.getData();
+						InputStream imageStream = getContentResolver()
+								.openInputStream(selectedImage);
+						Bitmap selectedBitmap = BitmapFactory
+								.decodeStream(imageStream);
+						GlobalState.getInstance().currentBitmap = selectedBitmap;
+						d = new BitmapDrawable(selectedBitmap);
+					}
+					else
+						d = null;
+				}
 				TextView t = (TextView) findViewById(R.id.image_view);
 				t.setBackgroundDrawable(d);
 				Display display = getWindowManager().getDefaultDisplay();
@@ -274,6 +275,7 @@ public class HomeScreen extends SherlockActivity implements
 						.getLayoutParams();
 				params.addRule(RelativeLayout.CENTER_HORIZONTAL);
 				t.setLayoutParams(params);
+				done.setVisibility(Button.VISIBLE);
 
 			} catch (Exception e) {
 				e.printStackTrace();
