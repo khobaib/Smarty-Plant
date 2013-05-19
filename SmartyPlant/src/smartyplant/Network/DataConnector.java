@@ -100,11 +100,11 @@ public class DataConnector {
 	}
 	
 	
-	public ArrayList<Plant> getAllMyPlants() throws Exception{
+	public ArrayList<Plant> getPlants(String type) throws Exception{
 		ArrayList<Plant> plants = new ArrayList<Plant>();
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
-	    HttpGet httpget = new HttpGet(API_URL+"//plant/allmine");
+	    HttpGet httpget = new HttpGet(API_URL+"//plant/"+type);
 	  
 	    httpget.setHeader("Authorization-Token", GlobalState.getInstance().API_TOKEN);	    
 	    HttpResponse response = httpclient.execute(httpget);

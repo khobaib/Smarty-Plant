@@ -108,7 +108,12 @@ public class Submit extends Activity{
 		}
 		
 		protected void onPostExecute(Void result) {
+			try{
 			dialog.dismiss();
+			}
+			catch(Exception e){
+				
+			}
 			
 			AlertDialog.Builder alertdialog= new AlertDialog.Builder(mContext);	
 			alertdialog.setIcon(R.drawable.logo);

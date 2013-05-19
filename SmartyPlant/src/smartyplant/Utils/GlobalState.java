@@ -32,6 +32,8 @@ public class GlobalState {
 	public Plant currentPlant;
 	public int currentIndex;
 	
+	public static String PLANTS_ALL_MINE = "allmine";
+	public static String PLANTS_ALL = "all";
 	
 	public ArrayList<Plant> all_plants = new ArrayList<Plant>();
 	

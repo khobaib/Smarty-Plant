@@ -124,8 +124,13 @@ public class Login extends SherlockActivity {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			dialog.dismiss();
-
+			
+			try{
+				dialog.dismiss();
+			}
+			catch(Exception e){
+				
+			}
 			if (this.result) {
 				finish();
 				startActivity(new Intent(mContext, HomeScreen.class));

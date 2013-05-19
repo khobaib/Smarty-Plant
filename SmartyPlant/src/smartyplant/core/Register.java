@@ -103,8 +103,12 @@ public class Register extends SherlockActivity {
 		
 		@Override
 		protected void onPostExecute(Void result) {
+			try{
 			dialog.dismiss();
-			
+			}
+			catch(Exception e){
+				
+			}
 			if(this.result == 1){
 				Toast.makeText(mContext, "Registered Successfully", 3000).show();
 

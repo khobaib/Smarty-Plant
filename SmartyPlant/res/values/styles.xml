@@ -1,9 +1,5 @@
 <resources>
 
-    <!--
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-    -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
@@ -13,9 +9,17 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    <style name="SmartyPlantsTheme" parent="@style/Sherlock.__Theme.Light">
+        <item name="actionBarTabStyle">@style/Smarty.TabView</item>
     </style>
+
+    <style name="Smarty.TabView" parent="Widget.Sherlock.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_bg_selector</item>
+        <item name="android:paddingLeft">6dp</item>
+        <item name="android:paddingRight">6dp</item>
+    </style>
+
+
 
     <style name="CustomProgressBar" parent="android:Widget.ProgressBar.Horizontal">
         <item name="android:indeterminateOnly">false</item>
@@ -23,7 +27,5 @@
         <item name="android:minHeight">10dip</item>
         <item name="android:maxHeight">20dip</item>
     </style>
-
-    <style name="AppTheme2" parent="android:Theme.Light" />
 
 </resources>
