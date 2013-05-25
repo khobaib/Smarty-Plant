@@ -2,6 +2,7 @@ package smartyplant.core;
 
 import smartyplant.Network.DataConnector;
 import smartyplant.Utils.GlobalState;
+import smartyplant.adapters.GalleryAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Gallery;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,10 +52,9 @@ public class Submit extends Activity{
 		regionField = (EditText)findViewById(R.id.region_field);
 		descField = (EditText)findViewById(R.id.desc_field);
 		
-		
-		TextView image = (TextView)findViewById(R.id.image);
-		Drawable d = new BitmapDrawable(GlobalState.getInstance().currentBitmap);
-		image.setBackgroundDrawable(d);
+		Gallery gallery = (Gallery)findViewById(R.id.gallery_view);
+		GalleryAdapter gAdapter = new GalleryAdapter(mContext,2);
+		gallery.setAdapter(gAdapter);
 		
 		Button submit = (Button)findViewById(R.id.submit);
 		submit.setOnClickListener(new OnClickListener() {
@@ -65,11 +66,9 @@ public class Submit extends Activity{
 				state = stateField.getEditableText().toString();
 				city = cityField.getEditableText().toString();
 				region = regionField.getEditableText().toString();
-				desc = descField.getEditableText().toString();
-				
+				desc = descField.getEditableText().toString();			
 				UploadTask task = new UploadTask();
 				task.execute();
-				
 			}
 		});
 	}
@@ -97,9 +96,8 @@ public class Submit extends Activity{
 		@Override
 		protected Void doInBackground(Void... params) {
 			try {
-				result = DataConnector.getInstance().uploadImage(GlobalState.getInstance().base64, country, state, city, region, desc);
+				result = DataConnector.getInstance().uploadImage( country, state, city, region, desc);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				result = "Error Uploading Image";
 			}

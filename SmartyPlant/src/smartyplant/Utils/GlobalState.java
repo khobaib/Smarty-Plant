@@ -28,7 +28,7 @@ public class GlobalState {
 	
 	public String API_TOKEN = "";
 	public String base64 = "";
-	public Bitmap currentBitmap;
+	public ArrayList<Bitmap> currentBitmaps = new ArrayList<Bitmap>();
 	public Plant currentPlant;
 	public int currentIndex;
 	
@@ -41,7 +41,7 @@ public class GlobalState {
 		return instance;
 	}
 	
-	public boolean bitmapToBase64(){
+	public boolean bitmapToBase64(Bitmap currentBitmap){
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();  
 		currentBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object   
 		byte[] b = baos.toByteArray();
@@ -70,6 +70,15 @@ public class GlobalState {
 		ViewGroup decorViewGroup = (ViewGroup) ((SherlockActivity) context).getWindow().getDecorView();
 		decorViewGroup.addView(logoView);
 	}
+	
+	public void removeBitmap(int pos){
+		currentBitmaps.remove(pos);
+	}
+	
+	public void addBitmap(Bitmap bitmap){
+		currentBitmaps.add(bitmap);
+	}
+	
 	
 	
 

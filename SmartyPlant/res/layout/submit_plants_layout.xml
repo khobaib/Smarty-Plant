@@ -15,19 +15,18 @@
             android:id="@+id/take_picture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Take Picture"
-            android:layout_alignTop="@+id/select_gallery"
             android:layout_alignBottom="@+id/select_gallery"
-            android:drawableLeft="@android:drawable/ic_menu_camera" />
+            android:layout_alignTop="@+id/select_gallery"
+            android:drawableLeft="@android:drawable/ic_menu_camera"
+            android:text="Take Picture" />
 
         <Button
-            android:visibility="visible"
             android:id="@+id/select_gallery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/take_picture"
-            
-            android:text="Select From Gallery" />
+            android:text="Select From Gallery"
+            android:visibility="visible" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -37,22 +36,23 @@
         android:layout_below="@+id/button_group"
         android:padding="10dp" >
 
-        <TextView
-            android:id="@+id/image_view"
+        <Gallery
+            android:id="@+id/gallery_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp" />
-
+            android:layout_marginBottom="30dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal" />
+        
         <Button
-            android:layout_marginTop="20dp"
             android:id="@+id/done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/image_view"
+            android:layout_below="@+id/gallery_view"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
             android:background="@drawable/done"
             android:visibility="invisible" />
-        
     </RelativeLayout>
 
 </RelativeLayout>

@@ -57,10 +57,10 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="40dp"
-        android:layout_below="@+id/photo_frame"
-        android:background="@drawable/rounded_gray"
         android:layout_alignLeft="@+id/photo_frame"
-        android:layout_alignRight="@+id/photo_frame" >
+        android:layout_alignRight="@+id/photo_frame"
+        android:layout_below="@+id/photo_frame"
+        android:background="@drawable/rounded_gray" >
 
         <RelativeLayout
             android:layout_width="fill_parent"

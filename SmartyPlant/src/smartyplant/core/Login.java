@@ -113,6 +113,7 @@ public class Login extends SherlockActivity {
 
 			try {
 				result = dataConnector.loginIn(user_name, password);
+				//result =true;
 			} catch (Exception e) {
 
 				e.printStackTrace();
