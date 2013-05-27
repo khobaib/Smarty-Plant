@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import smartyplant.Utils.GlobalState;
+import smartyplant.adapters.PaginationController;
 import smartyplant.modules.Plant;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -134,10 +135,55 @@ public class DataConnector {
 			p.plant_name_agree_prc = prc;
 			plants.add(p);
 		}
-
 		return plants;
 	}
+	
 
+	public ArrayList<Plant> getPlantsPartial(String type) throws Exception {
+		PaginationController pController = PaginationController.getInstance();
+		
+		ArrayList<Plant> plants = new ArrayList<Plant>();
+		String result = "";
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpGet httpget = new HttpGet(API_URL + "//plant/" + type);
+
+		httpget.setHeader("Authorization-Token",
+				GlobalState.getInstance().API_TOKEN);
+		HttpResponse response = httpclient.execute(httpget);
+		HttpEntity entity = response.getEntity();
+		if (entity != null) {
+			InputStream instream = entity.getContent();
+			result = convertStreamToString(instream);
+			instream.close();
+		}
+		JSONArray arr = new JSONArray(result);
+		pController.orginalArray = arr;
+		for (int i = 0; i < pController.INITIAL_LOAD_COUNT; i++) {
+			JSONObject obj = arr.getJSONObject(i);
+			Plant p = new Plant();
+			p.plant_id = obj.getInt("plant_id");
+			p.plant_name = obj.getString("plant_name");
+			p.image_url = "http://mistersmartyplants.com"
+					+ obj.getString("image_url").replaceAll("~", "");
+			// p.image_drawable = drawableFromUrl(p.image_url);
+
+			p.identifier_name = obj.getString("identifier_name");
+			p.identifier_twitter_url = obj.getString("identifier_twitter_url");
+			p.identifier_picture_url = "http://mistersmartyplants.com"
+					+ obj.getString("identifier_picture_url").substring(2);
+			// p.identifier_picture_drawable =
+			// drawableFromUrl(p.identifier_picture_url);
+			String num = obj.getString("plant_name_agree_percentage")
+					.replaceAll("%", "");
+
+			int prc = Integer.parseInt(num);
+			p.plant_name_agree_prc = prc;
+			plants.add(p);
+		}
+		return plants;
+	}
+	
+	
 	public String uploadImage(String country, String state,
 			String city, String region, String desc) throws Exception {
 

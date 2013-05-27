@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
-   
-  <!-- Screen Design for  My_Plants -->
-  <GridView 
-	    android:id="@+id/grid_view"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:numColumns="auto_fit"
-	    android:layout_margin="10dp"
-	    android:columnWidth="200dp"
-	    android:horizontalSpacing="5dp"
-	    android:verticalSpacing="5dp"
-	    android:gravity="center"
-	    
-	     >
-	
-	</GridView>
-	
-	
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <!-- Screen Design for  My_Plants -->
+
+    <GridView
+        android:id="@+id/grid_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/load_more_button"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:columnWidth="200dp"
+        android:gravity="center"
+        android:horizontalSpacing="5dp"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="5dp" >
+    </GridView>
+
+    <Button
+        android:id="@+id/load_more_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/load_more"
+        android:visibility="gone" >
+    </Button>
+
+</RelativeLayout>

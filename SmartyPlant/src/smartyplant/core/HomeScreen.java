@@ -9,6 +9,7 @@ import java.io.InputStream;
 import smartyplant.Network.DataConnector;
 import smartyplant.Utils.GlobalState;
 import smartyplant.adapters.GalleryAdapter;
+import smartyplant.adapters.PaginationController;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -56,6 +57,8 @@ public class HomeScreen extends SherlockActivity implements
 	String PhotoPath = Environment.getExternalStorageDirectory()
 			+ "//smarty_plant.jpg";
 
+	PaginationController pController = PaginationController.getInstance();
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setTheme(R.style.Theme_Sherlock_Light);
@@ -102,7 +105,40 @@ public class HomeScreen extends SherlockActivity implements
 	public void onTabSelected(Tab tab, FragmentTransaction transaction) {
 
 		currentTab = tab.getPosition();
-		if (tab.getPosition() <= 1) {
+		if (tab.getPosition() == 0) {
+			setContentView(R.layout.my_plants_layout);
+			Button loadMore = (Button) findViewById(R.id.load_more_button);
+			loadMore.setVisibility(Button.VISIBLE);
+			loadMore.setOnClickListener(new OnClickListener() {	
+				@Override
+				public void onClick(View arg0) {
+					try {
+						pController.extraLoad();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					gridView.setAdapter(pController.adapter);
+				}
+			});
+			
+			
+			gridView = (GridView) findViewById(R.id.grid_view);
+			gridView.setColumnWidth(getColumnWidth());
+			gridView.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					GlobalState.getInstance().currentPlant = GlobalState
+							.getInstance().all_plants.get(arg2);
+					GlobalState.getInstance().currentIndex = arg2;
+					startActivity(new Intent(mContext, PlantDetails.class));
+				}
+			});
+			PlantsTask task = new PlantsTask();
+			task.execute();
+
+		} else if (tab.getPosition() == 1) {
 			setContentView(R.layout.my_plants_layout);
 			gridView = (GridView) findViewById(R.id.grid_view);
 			gridView.setColumnWidth(getColumnWidth());
@@ -151,7 +187,7 @@ public class HomeScreen extends SherlockActivity implements
 			try {
 				if (currentTab == 0)
 					globalState.all_plants = dataConnector
-							.getPlants(GlobalState.PLANTS_ALL_MINE);
+							.getPlantsPartial(GlobalState.PLANTS_UNSOLVED);
 				else
 					globalState.all_plants = dataConnector
 							.getPlants(GlobalState.PLANTS_ALL_MINE);
@@ -165,18 +201,21 @@ public class HomeScreen extends SherlockActivity implements
 
 		@Override
 		protected void onPostExecute(Void result) {
-			gridView.setAdapter(new smartyplant.adapters.ImageAdapter(mContext,
-					getColumnWidth(), getColumnHeight()));
-			try {
-				dialog.dismiss();
-			} catch (Exception e) {
-
+			if (currentTab == 0) {
+				pController.initialLoad(mContext, getColumnWidth(), getColumnHeight());
+				gridView.setAdapter(pController.adapter);
+				
+			} else {
+				gridView.setAdapter(new smartyplant.adapters.ImageAdapter(
+						mContext, getColumnWidth(), getColumnHeight(),
+						globalState.all_plants));
 			}
+			dialog.dismiss();
+
 		}
 
 		@Override
 		public void onCancel(DialogInterface arg0) {
-			// TODO Auto-generated method stub
 
 		}
 

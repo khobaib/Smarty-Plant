@@ -109,19 +109,21 @@ public class PlantDetails extends Activity {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 				LayoutInflater inflater = getLayoutInflater();
-				final View view = inflater.inflate(R.layout.custom_vote_dialog, null);
-				
+				final View view = inflater.inflate(R.layout.custom_vote_dialog,
+						null);
+
 				builder.setView(view).setPositiveButton("Ok",
 						new DialogInterface.OnClickListener() {
 							@Override
-							public void onClick(DialogInterface dialog, int id) {			
-								TextView tv = (TextView)view.findViewById(R.id.voted_named);
+							public void onClick(DialogInterface dialog, int id) {
+								TextView tv = (TextView) view
+										.findViewById(R.id.voted_named);
 								voted_name = tv.getEditableText().toString();
 								VoteTask task = new VoteTask();
 								task.execute();
 							}
 						});
-				
+
 				builder.setCancelable(true);
 				builder.create().show();
 			}
@@ -133,8 +135,10 @@ public class PlantDetails extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, 
-						Uri.parse("http://www.google.com/search?q="+globalState.currentPlant.plant_name.replaceAll(" ", "+")+"&tbm=isch"));
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
+						.parse("http://www.google.com/search?q="
+								+ globalState.currentPlant.plant_name
+										.replaceAll(" ", "+") + "&tbm=isch"));
 				startActivity(browserIntent);
 			}
 		});

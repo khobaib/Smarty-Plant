@@ -116,7 +116,11 @@ public class Submit extends Activity{
 			AlertDialog.Builder alertdialog= new AlertDialog.Builder(mContext);	
 			alertdialog.setIcon(R.drawable.logo);
 			alertdialog.setTitle(" ");
-			alertdialog.setMessage(this.result);
+			if (this.result.contains("uccess"))
+				alertdialog.setMessage("Plant Submitted Successfully");
+			else
+				alertdialog.setMessage("Failed to Submit Plant");
+				
 			alertdialog.setPositiveButton("Ok",
 				    new DialogInterface.OnClickListener() {
 				        public void onClick(DialogInterface dialog, int which) {

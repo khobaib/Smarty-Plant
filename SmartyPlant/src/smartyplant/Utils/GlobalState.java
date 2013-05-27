@@ -34,6 +34,8 @@ public class GlobalState {
 	
 	public static String PLANTS_ALL_MINE = "allmine";
 	public static String PLANTS_ALL = "all";
+	public static String PLANTS_UNSOLVED = "unsolved";
+	
 	
 	public ArrayList<Plant> all_plants = new ArrayList<Plant>();
 	
