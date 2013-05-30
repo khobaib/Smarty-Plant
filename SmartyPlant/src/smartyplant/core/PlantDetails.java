@@ -5,6 +5,7 @@ import smartyplant.Utils.GlobalState;
 import smartyplant.lazylist.ImageLoader;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -107,25 +108,46 @@ public class PlantDetails extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+//				AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+//				LayoutInflater inflater = getLayoutInflater();
+//				final View view = inflater.inflate(R.layout.custom_vote_dialog,
+//						null);
+//				
+//				builder.setView(view).setPositiveButton("Ok",
+//						new DialogInterface.OnClickListener() {
+//							@Override
+//							public void onClick(DialogInterface dialog, int id) {
+//								TextView tv = (TextView) view
+//										.findViewById(R.id.voted_named);
+//								voted_name = tv.getEditableText().toString();
+//								VoteTask task = new VoteTask();
+//								task.execute();
+//							}
+//						});
+//
+//				builder.setCancelable(true);
+//				builder.create().show();
+				
+				
+				final Dialog dialog = new Dialog(mContext);
+				dialog.setTitle("Mister Smarty Plants");
+				
 				LayoutInflater inflater = getLayoutInflater();
-				final View view = inflater.inflate(R.layout.custom_vote_dialog,
-						null);
-
-				builder.setView(view).setPositiveButton("Ok",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
-								TextView tv = (TextView) view
-										.findViewById(R.id.voted_named);
-								voted_name = tv.getEditableText().toString();
-								VoteTask task = new VoteTask();
-								task.execute();
-							}
-						});
-
-				builder.setCancelable(true);
-				builder.create().show();
+				final View view = inflater.inflate(R.layout.custom_vote_dialog,null);
+				dialog.setContentView(view);
+				View ok = view.findViewById(R.id.ok);
+				ok.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						TextView tv = (TextView) view.findViewById(R.id.voted_named);
+						voted_name = tv.getEditableText().toString();
+						VoteTask task = new VoteTask();
+						task.execute();
+						dialog.dismiss();
+					}
+				});
+				
+				dialog.show();
 			}
 		});
 

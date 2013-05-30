@@ -109,7 +109,7 @@ public class HomeScreen extends SherlockActivity implements
 			setContentView(R.layout.my_plants_layout);
 			Button loadMore = (Button) findViewById(R.id.load_more_button);
 			loadMore.setVisibility(Button.VISIBLE);
-			loadMore.setOnClickListener(new OnClickListener() {	
+			loadMore.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
 					try {
@@ -121,8 +121,7 @@ public class HomeScreen extends SherlockActivity implements
 					gridView.setAdapter(pController.adapter);
 				}
 			});
-			
-			
+
 			gridView = (GridView) findViewById(R.id.grid_view);
 			gridView.setColumnWidth(getColumnWidth());
 			gridView.setOnItemClickListener(new OnItemClickListener() {
@@ -202,9 +201,10 @@ public class HomeScreen extends SherlockActivity implements
 		@Override
 		protected void onPostExecute(Void result) {
 			if (currentTab == 0) {
-				pController.initialLoad(mContext, getColumnWidth(), getColumnHeight());
+				pController.initialLoad(mContext, getColumnWidth(),
+						getColumnHeight());
 				gridView.setAdapter(pController.adapter);
-				
+
 			} else {
 				gridView.setAdapter(new smartyplant.adapters.ImageAdapter(
 						mContext, getColumnWidth(), getColumnHeight(),
@@ -327,8 +327,10 @@ public class HomeScreen extends SherlockActivity implements
 						Uri selectedImage = data.getData();
 						InputStream imageStream = getContentResolver()
 								.openInputStream(selectedImage);
+
 						Bitmap selectedBitmap = BitmapFactory
 								.decodeStream(imageStream);
+						imageStream.close();
 						GlobalState.getInstance().addBitmap(selectedBitmap);
 						GalleryAdapter adapter = (GalleryAdapter) this.gallery
 								.getAdapter();

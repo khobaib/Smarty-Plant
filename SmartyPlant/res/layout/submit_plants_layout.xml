@@ -1,58 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
     <RelativeLayout
-        android:id="@+id/button_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/take_picture"
+        <RelativeLayout
+            android:id="@+id/button_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/select_gallery"
-            android:layout_alignTop="@+id/select_gallery"
-            android:drawableLeft="@android:drawable/ic_menu_camera"
-            android:text="Take Picture" />
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp" >
 
-        <Button
-            android:id="@+id/select_gallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/take_picture"
-            android:text="Select From Gallery"
-            android:visibility="visible" />
-    </RelativeLayout>
+            <Button
+                android:id="@+id/take_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/select_gallery"
+                android:layout_alignTop="@+id/select_gallery"
+                android:drawableLeft="@android:drawable/ic_menu_camera"
+                android:text="Take Picture" />
 
-    <RelativeLayout
-        android:id="@+id/form"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button_group"
-        android:padding="10dp" >
+            <Button
+                android:id="@+id/select_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/take_picture"
+                android:text="Select From Gallery"
+                android:visibility="visible" />
+        </RelativeLayout>
 
-        <Gallery
-            android:id="@+id/gallery_view"
+        <RelativeLayout
+            android:id="@+id/form"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:layout_centerHorizontal="true"
-            android:gravity="center_horizontal" />
-        
-        <Button
-            android:id="@+id/done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/gallery_view"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/done"
-            android:visibility="invisible" />
+            android:layout_below="@+id/button_group"
+            android:padding="10dp" >
+
+            <Gallery
+                android:id="@+id/gallery_view"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="30dp"
+                android:gravity="center_horizontal" />
+
+            <Button
+                android:id="@+id/done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/gallery_view"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/done"
+                android:visibility="invisible" />
+        </RelativeLayout>
     </RelativeLayout>
 
-</RelativeLayout>
+</ScrollView>

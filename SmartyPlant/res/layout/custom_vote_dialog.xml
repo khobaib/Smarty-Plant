@@ -22,4 +22,14 @@
         android:layout_margin="20dp" >
     </EditText>
 
+    <Button
+        android:id="@+id/ok"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/voted_named"
+        android:layout_centerHorizontal="true"
+        android:padding="5dp"
+        android:text="Ok"
+        android:textStyle="bold" />
+
 </RelativeLayout>

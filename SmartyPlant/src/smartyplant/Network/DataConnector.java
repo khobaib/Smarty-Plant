@@ -137,11 +137,10 @@ public class DataConnector {
 		}
 		return plants;
 	}
-	
 
 	public ArrayList<Plant> getPlantsPartial(String type) throws Exception {
 		PaginationController pController = PaginationController.getInstance();
-		
+
 		ArrayList<Plant> plants = new ArrayList<Plant>();
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
@@ -182,10 +181,9 @@ public class DataConnector {
 		}
 		return plants;
 	}
-	
-	
-	public String uploadImage(String country, String state,
-			String city, String region, String desc) throws Exception {
+
+	public String uploadImage(String country, String state, String city,
+			String region, String desc) throws Exception {
 
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
@@ -194,10 +192,14 @@ public class DataConnector {
 		JSONArray arr = new JSONArray();
 		for (int i = 0; i < GlobalState.getInstance().currentBitmaps.size(); i++) {
 			JSONObject json = new JSONObject();
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();  
-			Bitmap bm = GlobalState.getInstance().currentBitmaps.get(i);	
-			bm.compress(Bitmap.CompressFormat.PNG, 90, baos); 
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			Bitmap bm = GlobalState.getInstance().currentBitmaps.get(i);
+			bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+			//bm.recycle();
 			byte[] b = baos.toByteArray();
+			baos.close();
+			baos = null;
+
 			String base64 = Base64.encodeToString(b, Base64.DEFAULT);
 			json.put("base64String", base64.replaceAll("\n", ""));
 			json.put("description", desc);
@@ -225,17 +227,16 @@ public class DataConnector {
 
 	}
 
-	
-	public String voteForPlant(String name, int id) throws Exception{
+	public String voteForPlant(String name, int id) throws Exception {
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(API_URL + "vote");
 
-			JSONObject json = new JSONObject();
-			json.put("plant_id", id);
-			json.put("plant_name", name);
-			json.put("ip_address", "127.0.0.1");
-		
+		JSONObject json = new JSONObject();
+		json.put("plant_id", id);
+		json.put("plant_name", name);
+		json.put("ip_address", "127.0.0.1");
+
 		StringEntity se = new StringEntity(json.toString());
 		httppost.setEntity(se);
 
@@ -253,6 +254,7 @@ public class DataConnector {
 		return result;
 
 	}
+
 	// ====
 	public String convertStreamToString(InputStream is) {
 
@@ -290,7 +292,5 @@ public class DataConnector {
 			return null;
 		}
 	}
-	
-	
 
 }
