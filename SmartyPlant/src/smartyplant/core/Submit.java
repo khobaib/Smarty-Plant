@@ -24,67 +24,66 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Submit extends Activity{
+public class Submit extends Activity {
 	Context mContext = this;
 	String country;
 	EditText countryField;
-	
+
 	String state;
 	EditText stateField;
-	
+
 	String city;
 	EditText cityField;
-	
+
 	String region;
 	EditText regionField;
-	
+
 	String desc;
 	EditText descField;
 	ProgressDialog dialog = null;
+	boolean requestResult = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.submit_form);
-		countryField = (EditText)findViewById(R.id.country_field);
-		stateField = (EditText)findViewById(R.id.state_field);
-		cityField = (EditText)findViewById(R.id.city_field);
-		regionField = (EditText)findViewById(R.id.region_field);
-		descField = (EditText)findViewById(R.id.desc_field);
-		
-		Gallery gallery = (Gallery)findViewById(R.id.gallery_view);
-		GalleryAdapter gAdapter = new GalleryAdapter(mContext,2);
+		countryField = (EditText) findViewById(R.id.country_field);
+		stateField = (EditText) findViewById(R.id.state_field);
+		cityField = (EditText) findViewById(R.id.city_field);
+		regionField = (EditText) findViewById(R.id.region_field);
+		descField = (EditText) findViewById(R.id.desc_field);
+
+		Gallery gallery = (Gallery) findViewById(R.id.gallery_view);
+		GalleryAdapter gAdapter = new GalleryAdapter(mContext, 2);
 		gallery.setAdapter(gAdapter);
-		
-		Button submit = (Button)findViewById(R.id.submit);
+
+		Button submit = (Button) findViewById(R.id.submit);
 		submit.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
-				
+
 				country = countryField.getEditableText().toString();
 				state = stateField.getEditableText().toString();
 				city = cityField.getEditableText().toString();
 				region = regionField.getEditableText().toString();
-				desc = descField.getEditableText().toString();			
+				desc = descField.getEditableText().toString();
 				UploadTask task = new UploadTask();
 				task.execute();
 			}
 		});
 	}
-	
-	
-	
-	
-	//============= Background Task ========
-	class UploadTask extends AsyncTask<Void, Void, Void>{
-		String result ;
-    	ProgressDialog dialog = null;
-    	// alertDialog = null;
-    	
+
+	// ============= Background Task ========
+	class UploadTask extends AsyncTask<Void, Void, Void> {
+		String result;
+		ProgressDialog dialog = null;
+
+		// alertDialog = null;
+
 		@Override
 		protected void onPreExecute() {
-			dialog = new ProgressDialog(mContext);			
+			dialog = new ProgressDialog(mContext);
 			dialog.setTitle(" ");
 			dialog.setIcon(R.drawable.logo);
 			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -92,11 +91,12 @@ public class Submit extends Activity{
 			dialog.setMessage("Uploading Image ...");
 			dialog.show();
 		}
-		
+
 		@Override
 		protected Void doInBackground(Void... params) {
 			try {
-				result = DataConnector.getInstance().uploadImage( country, state, city, region, desc);
+				result = DataConnector.getInstance().uploadImage(country,
+						state, city, region, desc);
 			} catch (Exception e) {
 				e.printStackTrace();
 				result = "Error Uploading Image";
@@ -104,34 +104,42 @@ public class Submit extends Activity{
 			return null;
 
 		}
-		
+
 		protected void onPostExecute(Void result) {
-			try{
-			dialog.dismiss();
+			try {
+				dialog.dismiss();
+			} catch (Exception e) {
+
 			}
-			catch(Exception e){
-				
-			}
-			
-			AlertDialog.Builder alertdialog= new AlertDialog.Builder(mContext);	
+
+			AlertDialog.Builder alertdialog = new AlertDialog.Builder(mContext);
 			alertdialog.setIcon(R.drawable.logo);
 			alertdialog.setTitle(" ");
-			if (this.result.contains("uccess"))
+			if (this.result.contains("uccess")) {
 				alertdialog.setMessage("Plant Submitted Successfully");
-			else
+				requestResult = true;
+			}
+
+			else {
+
 				alertdialog.setMessage("Failed to Submit Plant");
-				
+				requestResult = false;
+			}
 			alertdialog.setPositiveButton("Ok",
-				    new DialogInterface.OnClickListener() {
-				        public void onClick(DialogInterface dialog, int which) {
-				        	dialog.dismiss();
-				        	finish();
-				        }
-				    });
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							finish();
+							if (requestResult) {
+								
+								startActivity(new Intent(mContext, HomeScreen.class));
+							}
+						}
+					});
 			alertdialog.setCancelable(true);
 			alertdialog.create().show();
-			
-			if(this.result.equalsIgnoreCase("Success")){
+
+			if (this.result.equalsIgnoreCase("Success")) {
 				finish();
 				startActivity(new Intent(mContext, HomeScreen.class));
 			}

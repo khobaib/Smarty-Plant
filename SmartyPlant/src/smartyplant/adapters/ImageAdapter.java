@@ -94,10 +94,10 @@ public class ImageAdapter extends BaseAdapter {
 		imageLoader.DisplayImage(p.identifier_picture_url, identifier_image);
 
 		TextView identifier_name = (TextView) identifier_info.getChildAt(1);
-		identifier_name.setText(p.identifier_name);
+		identifier_name.setText("");
 
 		TextView identifier_name2 = (TextView) identifier_info.getChildAt(2);
-		identifier_name2.setText("@" + p.identifier_name);
+		identifier_name2.setText("");
 
 		RelativeLayout footer_parent = (RelativeLayout) l.getChildAt(1);
 		RelativeLayout footer = (RelativeLayout) footer_parent.getChildAt(0);
