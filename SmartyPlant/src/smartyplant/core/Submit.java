@@ -64,12 +64,17 @@ public class Submit extends Activity {
 			public void onClick(View arg0) {
 
 				country = countryField.getEditableText().toString();
-				state = stateField.getEditableText().toString();
-				city = cityField.getEditableText().toString();
-				region = regionField.getEditableText().toString();
-				desc = descField.getEditableText().toString();
-				UploadTask task = new UploadTask();
-				task.execute();
+				if (country.equalsIgnoreCase("") || country == null) {
+					Toast.makeText(mContext,
+							"Country field can not be left empty", 3000).show();
+				} else {
+					state = stateField.getEditableText().toString();
+					city = cityField.getEditableText().toString();
+					region = regionField.getEditableText().toString();
+					desc = descField.getEditableText().toString();
+					UploadTask task = new UploadTask();
+					task.execute();
+				}
 			}
 		});
 	}
@@ -131,8 +136,9 @@ public class Submit extends Activity {
 							dialog.dismiss();
 							finish();
 							if (requestResult) {
-								
-								startActivity(new Intent(mContext, HomeScreen.class));
+
+								startActivity(new Intent(mContext,
+										HomeScreen.class));
 							}
 						}
 					});
