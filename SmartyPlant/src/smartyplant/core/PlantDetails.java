@@ -3,6 +3,8 @@ package smartyplant.core;
 import smartyplant.Network.DataConnector;
 import smartyplant.Utils.GlobalState;
 import smartyplant.lazylist.ImageLoader;
+import smartyplant.modules.BriefedPlant;
+import smartyplant.modules.DetailedPlant;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,6 +20,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,12 +30,16 @@ public class PlantDetails extends Activity {
 	Context mContext = this;
 	GlobalState globalState = GlobalState.getInstance();
 	String voted_name = "";
+	DetailedPlant detailedPlant;
+	ImageLoader lazyLoader;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.plant_details);
+		lazyLoader = new ImageLoader(mContext);
+		LoadDataTask loadData = new LoadDataTask();
+		loadData.execute();
 
 		Button prev = (Button) findViewById(R.id.prev);
 		prev.setOnClickListener(new OnClickListener() {
@@ -43,6 +51,8 @@ public class PlantDetails extends Activity {
 							.get(globalState.currentIndex);
 					finish();
 					startActivity(new Intent(mContext, PlantDetails.class));
+					overridePendingTransition(android.R.anim.slide_in_left,
+							android.R.anim.slide_out_right);
 				} else {
 					globalState.currentIndex = globalState.all_plants.size() - 1;
 					globalState.currentPlant = globalState.all_plants
@@ -72,24 +82,62 @@ public class PlantDetails extends Activity {
 				}
 			}
 		});
+
+	}
+
+	private void initUI() {
 		TextView label1 = (TextView) findViewById(R.id.label1);
-		label1.setText(GlobalState.getInstance().currentPlant.identifier_name);
+		label1.setText(detailedPlant.identifier_name);
 		TextView label3 = (TextView) findViewById(R.id.label3);
-		label3.setText(GlobalState.getInstance().currentPlant.plant_name);
+		label3.setText(detailedPlant.plant_name);
 
 		TextView label4 = (TextView) findViewById(R.id.label4);
-		label4.setText(globalState.currentPlant.plant_name_agree_prc
-				+ "% agreed");
+		label4.setText(detailedPlant.plant_name_agree_prc + "% agreed");
 
 		ImageView image = (ImageView) findViewById(R.id.image_view);
-		new ImageLoader(this).DisplayImage(globalState.currentPlant.image_url,
-				image);
+		lazyLoader.DisplayImage(detailedPlant.imageUrls.get(0), image);
 
 		ProgressBar bar = (ProgressBar) findViewById(R.id.agree_prc_bar);
 		bar.setProgress(globalState.currentPlant.plant_name_agree_prc);
 
 		initVotePanel();
+		initMiniGallery();
+	}
 
+	private void initMiniGallery() {
+		LinearLayout miniGallery = (LinearLayout) findViewById(R.id.mini_gallery);
+		for (int i = 0; i < detailedPlant.imageUrls.size(); i++) {
+
+			ImageView imgV = new ImageView(mContext);
+			LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT,
+					LayoutParams.WRAP_CONTENT);
+			params.setMargins(5, 5, 5, 5);
+			imgV.setLayoutParams(params);
+
+			if (i == 0)
+				imgV.setBackgroundResource(R.drawable.rounded_text);
+			else
+				imgV.setBackgroundResource(R.drawable.rounded_gray);
+			lazyLoader.DisplayImage(detailedPlant.imageUrls.get(i), imgV);
+			imgV.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					ImageView miniItem = (ImageView) v;
+					ImageView mainImageView = (ImageView) findViewById(R.id.image_view);
+					mainImageView.setImageDrawable(miniItem.getDrawable());
+
+					LinearLayout miniGallery = (LinearLayout) findViewById(R.id.mini_gallery);
+
+					for (int j = 0; j < miniGallery.getChildCount(); j++) {
+						ImageView view = (ImageView) miniGallery.getChildAt(j);
+						view.setBackgroundResource(R.drawable.rounded_gray);
+					}
+					miniItem.setBackgroundResource(R.drawable.rounded_text);
+
+				}
+			});
+			miniGallery.addView(imgV);
+		}
 	}
 
 	private void initVotePanel() {
@@ -125,7 +173,9 @@ public class PlantDetails extends Activity {
 						voted_name = tv.getEditableText().toString();
 						if (voted_name.equals("") || voted_name == null) {
 							dialog.dismiss();
-							Toast.makeText(mContext, "Plant name can not be emtpy !", 5000).show();
+							Toast.makeText(mContext,
+									"Plant name can not be emtpy !", 5000)
+									.show();
 						} else {
 							VoteTask task = new VoteTask();
 							task.execute();
@@ -228,6 +278,48 @@ public class PlantDetails extends Activity {
 				startActivity(new Intent(mContext, HomeScreen.class));
 			}
 		};
+	}
+
+	// ====== LoadDataTask ===============
+	private class LoadDataTask extends AsyncTask<Void, Void, Void> {
+		ProgressDialog dialog = null;
+
+		@Override
+		protected void onPreExecute() {
+			dialog = new ProgressDialog(mContext);
+			dialog.setTitle(" ");
+			dialog.setIcon(R.drawable.logo);
+			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			dialog.setCancelable(false);
+			dialog.setMessage("Loading Plant Info ...");
+			dialog.show();
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+
+			boolean isNamed = false;
+			if (globalState.currentPlant.plant_name_agree_prc > 66)
+				isNamed = true;
+
+			try {
+				detailedPlant = DataConnector.getInstance()
+						.downloadSinglePlant(globalState.currentPlant.plant_id,
+								isNamed);
+				globalState.currentPlant = detailedPlant;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			dialog.dismiss();
+			initUI();
+		}
 	}
 
 }

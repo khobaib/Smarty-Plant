@@ -1,9 +1,6 @@
 package smartyplant.core;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import smartyplant.Network.DataConnector;
@@ -16,31 +13,28 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Base64;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.GridView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -249,24 +243,35 @@ public class HomeScreen extends SherlockActivity implements
 	}
 
 	private void setClickListners() {
-		Button takePic = (Button) findViewById(R.id.take_picture);
-		takePic.setOnClickListener(new OnClickListener() {
+//		Button takePic = (Button) findViewById(R.id.take_picture);
+//		takePic.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View arg0) {
+//				// GlobalState.getInstance().currentBitmap = null;
+//				startCameraActivity();
+//			}
+//		});
+//
+//		Button gallery = (Button) findViewById(R.id.select_gallery);
+//		gallery.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View arg0) {
+//				// GlobalState.getInstance().currentBitmap = null;
+//				setGallerySelectMode();
+//			}
+//		});
+
+		Button menu_button = (Button)findViewById(R.id.upload_image);
+		menu_button.setOnClickListener(new OnClickListener() {
+			
 			@Override
-			public void onClick(View arg0) {
-				// GlobalState.getInstance().currentBitmap = null;
-				startCameraActivity();
+			public void onClick(View v) {
+				registerForContextMenu(v);
+				openContextMenu(v);
+				unregisterForContextMenu(v);
 			}
 		});
-
-		Button gallery = (Button) findViewById(R.id.select_gallery);
-		gallery.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				// GlobalState.getInstance().currentBitmap = null;
-				setGallerySelectMode();
-			}
-		});
-
+		
 		Button done = (Button) findViewById(R.id.done);
 		done.setOnClickListener(new OnClickListener() {
 			@Override
@@ -320,8 +325,13 @@ public class HomeScreen extends SherlockActivity implements
 		case -1:
 
 			try {
-				if (mode == 1)
+				if (mode == 1){
 					onPhotoTaken();
+					if (GlobalState.getInstance().currentBitmaps.size() > 0)
+						done.setVisibility(Button.VISIBLE);
+					else
+						done.setVisibility(Button.INVISIBLE);
+				}
 				else {
 					if (resultCode == RESULT_OK) {
 						Uri selectedImage = data.getData();
@@ -361,4 +371,27 @@ public class HomeScreen extends SherlockActivity implements
 		adapter.notifyDataSetChanged();
 	}
 
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.upload_image_menu, menu);
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	    switch (item.getItemId()) {
+	        case R.id.capture_image:
+	        	startCameraActivity();
+	            return true;
+	        case R.id.gallery_image:
+	        	setGallerySelectMode();
+	            return true;
+	        default:
+	            return super.onContextItemSelected(item);
+	    }
+	}
 }

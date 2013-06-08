@@ -56,7 +56,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_alignLeft="@+id/photo_frame"
         android:layout_alignRight="@+id/photo_frame"
         android:layout_below="@+id/photo_frame"
@@ -74,7 +74,7 @@
                 android:layout_margin="5dp"
                 android:text="Plant Name"
                 android:textColor="@android:color/black"
-                android:textSize="12dp"
+                android:textSize="10dp"
                 android:textStyle="bold" />
 
             <TextView

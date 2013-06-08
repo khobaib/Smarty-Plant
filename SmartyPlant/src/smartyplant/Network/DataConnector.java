@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -22,7 +23,8 @@ import org.json.JSONObject;
 
 import smartyplant.Utils.GlobalState;
 import smartyplant.adapters.PaginationController;
-import smartyplant.modules.Plant;
+import smartyplant.modules.BriefedPlant;
+import smartyplant.modules.DetailedPlant;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -97,8 +99,8 @@ public class DataConnector {
 			return 3;
 	}
 
-	public ArrayList<Plant> getPlants(String type) throws Exception {
-		ArrayList<Plant> plants = new ArrayList<Plant>();
+	public ArrayList<BriefedPlant> getPlants(String type) throws Exception {
+		ArrayList<BriefedPlant> plants = new ArrayList<BriefedPlant>();
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(API_URL + "//plant/" + type);
@@ -115,7 +117,7 @@ public class DataConnector {
 		JSONArray arr = new JSONArray(result);
 		for (int i = 0; i < arr.length(); i++) {
 			JSONObject obj = arr.getJSONObject(i);
-			Plant p = new Plant();
+			BriefedPlant p = new BriefedPlant();
 			p.plant_id = obj.getInt("plant_id");
 			p.plant_name = obj.getString("plant_name");
 			p.image_url = "http://mistersmartyplants.com"
@@ -138,10 +140,10 @@ public class DataConnector {
 		return plants;
 	}
 
-	public ArrayList<Plant> getPlantsPartial(String type) throws Exception {
+	public ArrayList<BriefedPlant> getPlantsPartial(String type) throws Exception {
 		PaginationController pController = PaginationController.getInstance();
 
-		ArrayList<Plant> plants = new ArrayList<Plant>();
+		ArrayList<BriefedPlant> plants = new ArrayList<BriefedPlant>();
 		String result = "";
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(API_URL + "//plant/" + type);
@@ -159,7 +161,7 @@ public class DataConnector {
 		pController.orginalArray = arr;
 		for (int i = 0; i < pController.INITIAL_LOAD_COUNT; i++) {
 			JSONObject obj = arr.getJSONObject(i);
-			Plant p = new Plant();
+			BriefedPlant p = new BriefedPlant();
 			p.plant_id = obj.getInt("plant_id");
 			p.plant_name = obj.getString("plant_name");
 			p.image_url = "http://mistersmartyplants.com"
@@ -195,7 +197,7 @@ public class DataConnector {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			Bitmap bm = GlobalState.getInstance().currentBitmaps.get(i);
 			bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-			//bm.recycle();
+			// bm.recycle();
 			byte[] b = baos.toByteArray();
 			baos.close();
 			baos = null;
@@ -253,6 +255,48 @@ public class DataConnector {
 		}
 		return result;
 
+	}
+
+	public DetailedPlant downloadSinglePlant(int id, boolean isNamed) throws Exception {
+		String result = "";
+
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpGet httpget = new HttpGet(API_URL + "singleplant?id=" + id);
+
+		httpget.setHeader("Authorization-Token",
+				GlobalState.getInstance().API_TOKEN);
+		httpget.setHeader("Content-Type", "application/json");
+
+		HttpResponse response = httpclient.execute(httpget);
+		HttpEntity entity = response.getEntity();
+		if (entity != null) {
+			InputStream instream = entity.getContent();
+			result = convertStreamToString(instream);
+			instream.close();
+
+			JSONObject obj = new JSONObject(result);
+			DetailedPlant p = new DetailedPlant();
+			p.plant_id = obj.optInt("plant_id");
+			p.identifier_name = obj.optString("uploaded_by");
+			p.country = obj.optString("country");
+			p.state = obj.optString("state");
+			p.region = obj.optString("region");
+			p.city = obj.optString("city");
+			p.description = obj.getString("description");
+			p.group_id = obj.optString("group_id");
+
+			JSONArray images = obj.optJSONArray("image_url");
+			for (int i = 0; i < images.length(); i++) {
+				p.imageUrls.add("http://mistersmartyplants.com"
+						+ images.getString(i).replaceAll("~", ""));
+			}
+
+			p.plant_name = GlobalState.getInstance().currentPlant.plant_name;
+			p.plant_name_agree_prc = GlobalState.getInstance().currentPlant.plant_name_agree_prc;
+
+			return p;
+		}
+		return null;
 	}
 
 	// ====

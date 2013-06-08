@@ -6,7 +6,7 @@ import smartyplant.Utils.GlobalState;
 import smartyplant.core.R;
 import smartyplant.core.R.layout;
 import smartyplant.lazylist.ImageLoader;
-import smartyplant.modules.Plant;
+import smartyplant.modules.BriefedPlant;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,17 +25,17 @@ public class ImageAdapter extends BaseAdapter {
 	private Context context;
 	private ImageLoader imageLoader;
 
-	public Plant[] plants;
+	public BriefedPlant[] plants;
 	int width;
 	int height;
 
 	// Constructor
 	public ImageAdapter(Context c, int width, int height,
-			ArrayList<Plant> plants) {
+			ArrayList<BriefedPlant> plants) {
 		context = c;
 		this.width = width;
 		this.height = height;
-		this.plants = new Plant[plants.size()];
+		this.plants = new BriefedPlant[plants.size()];
 		for (int i = 0; i < plants.size(); i++) {
 			this.plants[i] = plants.get(i);
 		}
@@ -50,8 +50,8 @@ public class ImageAdapter extends BaseAdapter {
 	}
 	
 
-	public void updatePlants(ArrayList<Plant> plants) {
-		this.plants = new Plant[plants.size()];
+	public void updatePlants(ArrayList<BriefedPlant> plants) {
+		this.plants = new BriefedPlant[plants.size()];
 		for (int i = 0; i < plants.size(); i++) {
 			this.plants[i] = plants.get(i);
 		}
@@ -76,7 +76,7 @@ public class ImageAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		Plant p = plants[position];
+		BriefedPlant p = plants[position];
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View v = inflater.inflate(R.layout.custom_item, null);
@@ -103,6 +103,9 @@ public class ImageAdapter extends BaseAdapter {
 		RelativeLayout footer = (RelativeLayout) footer_parent.getChildAt(0);
 		TextView plant_name = (TextView) footer.getChildAt(0);
 		plant_name.setText(p.plant_name);
+
+		TextView plant_agree = (TextView) footer.getChildAt(1);
+		plant_agree.setText(p.plant_name_agree_prc+"% agree");
 
 		ProgressBar bar = (ProgressBar) footer.getChildAt(2);
 		bar.setProgress(p.plant_name_agree_prc);

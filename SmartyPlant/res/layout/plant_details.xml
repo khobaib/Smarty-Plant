@@ -34,18 +34,33 @@
                     android:background="@drawable/next_plant" />
             </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/image_view"
+            <FrameLayout
+                android:id="@+id/image_frame"
                 android:layout_width="fill_parent"
                 android:layout_height="300dp"
-                android:layout_below="@+id/button_group"
-                android:background="@android:color/white" />
+                android:layout_below="@+id/button_group" >
+
+                <ImageView
+                    android:id="@+id/image_view"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:background="@android:color/white" />
+
+                <LinearLayout
+                    android:id="@+id/mini_gallery"
+                    android:layout_width="fill_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="bottom"
+                    android:background="@android:color/transparent" >
+                </LinearLayout>
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/label1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/image_view"
+                android:layout_below="@+id/image_frame"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:text="USERNAME "

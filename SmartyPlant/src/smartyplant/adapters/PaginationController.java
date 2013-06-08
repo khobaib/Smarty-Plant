@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import smartyplant.Utils.GlobalState;
-import smartyplant.modules.Plant;
+import smartyplant.modules.BriefedPlant;
 import android.content.Context;
 
 public class PaginationController {
@@ -19,7 +19,7 @@ public class PaginationController {
 	private int currentIndex;
 	public ImageAdapter adapter;
 	GlobalState globalState = GlobalState.getInstance();
-	ArrayList<Plant> plants = new ArrayList<Plant>();
+	ArrayList<BriefedPlant> plants = new ArrayList<BriefedPlant>();
 	private static PaginationController instance = new PaginationController();
 
 	public static PaginationController getInstance() {
@@ -27,7 +27,7 @@ public class PaginationController {
 	}
 
 	public void initialLoad(Context c,int  width,int height) {
-		plants = new ArrayList<Plant>();
+		plants = new ArrayList<BriefedPlant>();
 		if (globalState.all_plants.size() > INITIAL_LOAD_COUNT) {
 			for (int i = 0; i < INITIAL_LOAD_COUNT; i++) {
 				plants.add(globalState.all_plants.get(i));
@@ -45,7 +45,7 @@ public class PaginationController {
 		if ((orginalArray.length() - currentIndex) > EXTRA_LOAD_COUNT) {
 			for (int i = currentIndex; i < (currentIndex + EXTRA_LOAD_COUNT); i++) {
 				JSONObject obj = orginalArray.getJSONObject(i);
-				Plant p = new Plant();
+				BriefedPlant p = new BriefedPlant();
 				p.plant_id = obj.getInt("plant_id");
 				p.plant_name = obj.getString("plant_name");
 				p.image_url = "http://mistersmartyplants.com"

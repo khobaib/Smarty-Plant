@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import smartyplant.core.R;
+import smartyplant.modules.BriefedPlant;
 import smartyplant.modules.Plant;
 import android.app.Activity;
 import android.content.Context;
@@ -35,7 +36,7 @@ public class GlobalState {
 	public static String PLANTS_ALL = "all";
 	public static String PLANTS_UNSOLVED = "unsolved";
 
-	public ArrayList<Plant> all_plants = new ArrayList<Plant>();
+	public ArrayList<BriefedPlant> all_plants = new ArrayList<BriefedPlant>();
 
 	public static GlobalState getInstance() {
 		return instance;
