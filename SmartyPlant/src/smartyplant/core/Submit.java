@@ -136,7 +136,7 @@ public class Submit extends Activity {
 							dialog.dismiss();
 							finish();
 							if (requestResult) {
-
+								GlobalState.getInstance().currentBitmaps.clear();	
 								startActivity(new Intent(mContext,
 										HomeScreen.class));
 							}
@@ -146,6 +146,7 @@ public class Submit extends Activity {
 			alertdialog.create().show();
 
 			if (this.result.equalsIgnoreCase("Success")) {
+				GlobalState.getInstance().currentBitmaps.clear();
 				finish();
 				startActivity(new Intent(mContext, HomeScreen.class));
 			}

@@ -149,7 +149,9 @@ public class HomeScreen extends SherlockActivity implements
 			task.execute();
 
 		} else {
+			//GlobalState.getInstance().currentBitmaps.clear();
 			setPhotoCaptureMode();
+			
 		}
 	}
 
