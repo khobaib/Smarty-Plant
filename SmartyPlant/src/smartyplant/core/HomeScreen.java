@@ -1,6 +1,7 @@
 package smartyplant.core;
 
 import java.io.File;
+import java.util.Date;
 
 import smartyplant.Network.DataConnector;
 import smartyplant.Utils.GlobalState;
@@ -48,9 +49,11 @@ public class HomeScreen extends SherlockActivity implements
 	Context mContext = this;
 	int currentTab = -1;
 	int mode = 1;
-	String PhotoPath = Environment.getExternalStorageDirectory()
-			+ "//smarty_plant.jpg";
-
+	File PhotoDir = new File(Environment.getExternalStorageDirectory()
+			+ "//smarty_plant_uploads");
+	String currentImagePath = "";
+	
+	
 	PaginationController pController = PaginationController.getInstance();
 
 	@Override
@@ -59,6 +62,7 @@ public class HomeScreen extends SherlockActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_screen);
 
+		PhotoDir.mkdirs();
 		ActionBar bar = getSupportActionBar();
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		bar.setDisplayShowTitleEnabled(false);
@@ -293,7 +297,11 @@ public class HomeScreen extends SherlockActivity implements
 
 	protected void startCameraActivity() {
 		mode = 1;
-		File file = new File(PhotoPath);
+		//File file = new File(PhotoDir, "image_"+new Date().getTime()+".jpg");
+		String timetamp = new Date().getTime()+"";
+		File file = new File(Environment.getExternalStorageDirectory()+ "//smarty/img"+timetamp+".jpeg");
+		file.mkdirs();
+		currentImagePath = file.getPath();
 		Uri outputFileUri = Uri.fromFile(file);
 		Intent intent = new Intent(
 				android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -371,7 +379,7 @@ public class HomeScreen extends SherlockActivity implements
 //
 //		GlobalState.getInstance().addBitmap(bitmap);
 		
-		GlobalState.getInstance().addBitmap(PhotoPath);
+		GlobalState.getInstance().addBitmap(currentImagePath);
 		GalleryAdapter adapter = (GalleryAdapter) this.gallery.getAdapter();
 		adapter.notifyDataSetChanged();
 	}

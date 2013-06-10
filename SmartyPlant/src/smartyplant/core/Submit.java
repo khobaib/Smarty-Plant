@@ -93,7 +93,7 @@ public class Submit extends Activity {
 			dialog.setIcon(R.drawable.logo);
 			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			dialog.setCancelable(false);
-			dialog.setMessage("Uploading Image ...");
+			dialog.setMessage("Uploading Mystery Plant");
 			dialog.show();
 		}
 

@@ -44,7 +44,7 @@ public class Login extends SherlockActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		globalState.initActionBar(this, R.layout.login);
-		
+
 		user_name_field = (EditText) findViewById(R.id.user_name_field);
 		password_field = (EditText) findViewById(R.id.password_field);
 		remember_me = (CheckBox) findViewById(R.id.remember_me);
@@ -86,11 +86,18 @@ public class Login extends SherlockActivity {
 			}
 		});
 
+		ImageView reg = (ImageView) findViewById(R.id.register);
+		reg.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				startActivity(new Intent(mContext, Register.class));
+
+			}
+		});
+
 	}
 
-	
-
-	
 	private class LoginTask extends AsyncTask<Void, Void, Void> {
 
 		boolean result;
@@ -100,7 +107,7 @@ public class Login extends SherlockActivity {
 		protected void onPreExecute() {
 			dialog = new ProgressDialog(mContext);
 			dialog.setTitle(" ");
-			
+
 			dialog.setIcon(R.drawable.logo);
 			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			dialog.setCancelable(false);
@@ -113,7 +120,7 @@ public class Login extends SherlockActivity {
 
 			try {
 				result = dataConnector.loginIn(user_name, password);
-				//result =true;
+				// result =true;
 			} catch (Exception e) {
 
 				e.printStackTrace();
@@ -125,12 +132,11 @@ public class Login extends SherlockActivity {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			
-			try{
+
+			try {
 				dialog.dismiss();
-			}
-			catch(Exception e){
-				
+			} catch (Exception e) {
+
 			}
 			if (this.result) {
 				finish();
@@ -143,28 +149,27 @@ public class Login extends SherlockActivity {
 
 	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
 
-    	
-        SubMenu subMenu1 = menu.addSubMenu("Register");
-        
-        subMenu1.setIcon(R.drawable.actionbar);
-    	com.actionbarsherlock.view.MenuItem subMenu1Item = subMenu1.getItem();
-        subMenu1Item.setIcon(R.drawable.actionbar);
-        subMenu1Item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW); 
-        
-     //   getSupportMenuInflater().inflate(R.menu.menu, menu);
+		SubMenu subMenu1 = menu.addSubMenu("Register");
 
-        return super.onCreateOptionsMenu(menu);
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(
-    		com.actionbarsherlock.view.MenuItem item) {
-    	startActivity(new Intent(mContext, Register.class));
-    	return super.onOptionsItemSelected(item);
-    }
-    
+		subMenu1.setIcon(R.drawable.actionbar);
+		com.actionbarsherlock.view.MenuItem subMenu1Item = subMenu1.getItem();
+		subMenu1Item.setIcon(R.drawable.actionbar);
+		subMenu1Item
+				.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+
+		// getSupportMenuInflater().inflate(R.menu.menu, menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(
+			com.actionbarsherlock.view.MenuItem item) {
+		startActivity(new Intent(mContext, Register.class));
+		return super.onOptionsItemSelected(item);
+	}
 
 }
