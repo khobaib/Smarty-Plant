@@ -49,8 +49,7 @@ public class HomeScreen extends SherlockActivity implements
 	Context mContext = this;
 	int currentTab = -1;
 	int mode = 1;
-	File PhotoDir = new File(Environment.getExternalStorageDirectory()
-			+ "//smarty_plant_uploads");
+	File PhotoDir = new File(Environment.getExternalStorageDirectory(), "smarty_plant_uploads");
 	String currentImagePath = "";
 	
 	
@@ -299,8 +298,9 @@ public class HomeScreen extends SherlockActivity implements
 		mode = 1;
 		//File file = new File(PhotoDir, "image_"+new Date().getTime()+".jpg");
 		String timetamp = new Date().getTime()+"";
-		File file = new File(Environment.getExternalStorageDirectory()+ "//smarty/img"+timetamp+".jpeg");
-		file.mkdirs();
+		
+		File file = new File(PhotoDir, "//img"+timetamp+".jpeg");
+		//file.mkdirs();
 		currentImagePath = file.getPath();
 		Uri outputFileUri = Uri.fromFile(file);
 		Intent intent = new Intent(
