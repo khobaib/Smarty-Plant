@@ -28,7 +28,7 @@ public class GlobalState {
 
 	public String API_TOKEN = "";
 	public String base64 = "";
-	public ArrayList<Bitmap> currentBitmaps = new ArrayList<Bitmap>();
+	public ArrayList<String> currentBitmaps = new ArrayList<String>();
 	public Plant currentPlant;
 	public int currentIndex;
 
@@ -78,7 +78,7 @@ public class GlobalState {
 		currentBitmaps.remove(pos);
 	}
 
-	public void addBitmap(Bitmap bitmap) {
+	public void addBitmap(String bitmap) {
 		currentBitmaps.add(bitmap);
 	}
 
@@ -124,6 +124,13 @@ public class GlobalState {
 		}
 
 		return inSampleSize;
+	}
+	
+	public Bitmap bitmapFromPath(String path){
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inSampleSize = 4;
+		Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+		return bitmap;
 	}
 
 }

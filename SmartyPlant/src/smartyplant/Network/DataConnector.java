@@ -195,7 +195,9 @@ public class DataConnector {
 		for (int i = 0; i < GlobalState.getInstance().currentBitmaps.size(); i++) {
 			JSONObject json = new JSONObject();
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			Bitmap bm = GlobalState.getInstance().currentBitmaps.get(i);
+			
+			String path = GlobalState.getInstance().currentBitmaps.get(i);
+			Bitmap bm = GlobalState.getInstance().bitmapFromPath(path);
 			bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
 			// bm.recycle();
 			byte[] b = baos.toByteArray();

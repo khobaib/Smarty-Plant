@@ -78,7 +78,7 @@ public class Register extends SherlockActivity {
 		@Override
     	protected void onPreExecute() {
     		dialog = new ProgressDialog(mContext);			
-			dialog.setTitle("Smarty Plants");
+			dialog.setTitle(" ");
 			dialog.setIcon(R.drawable.logo);
 			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			dialog.setCancelable(false);

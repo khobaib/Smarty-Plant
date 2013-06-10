@@ -4,6 +4,7 @@ import smartyplant.Utils.GlobalState;
 import smartyplant.core.R;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -42,7 +43,9 @@ public class GalleryAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int pos, View view, ViewGroup parent) {
-		Bitmap bitmap = globalState.currentBitmaps.get(pos);
+		String path = globalState.currentBitmaps.get(pos);
+		Bitmap bitmap = globalState.bitmapFromPath(path);
+		
 		LayoutInflater inflater = (LayoutInflater) mContext
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View v = inflater.inflate(R.layout.custom_gallery_item, null);

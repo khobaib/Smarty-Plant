@@ -1,7 +1,6 @@
 package smartyplant.core;
 
 import java.io.File;
-import java.io.InputStream;
 
 import smartyplant.Network.DataConnector;
 import smartyplant.Utils.GlobalState;
@@ -11,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -85,7 +85,7 @@ public class HomeScreen extends SherlockActivity implements
 		getSupportActionBar().addTab(tab1);
 
 		ActionBar.Tab tab2 = getSupportActionBar().newTab();
-		tab2.setText("Submit Plant");
+		tab2.setText("Upload Mystery Plant");
 		tab2.setTabListener(this);
 		getSupportActionBar().addTab(tab2);
 
@@ -313,7 +313,7 @@ public class HomeScreen extends SherlockActivity implements
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		setPhotoCaptureMode();
+		//setPhotoCaptureMode();
 		Button done = (Button) findViewById(R.id.done);
 
 		switch (resultCode) {
@@ -337,13 +337,14 @@ public class HomeScreen extends SherlockActivity implements
 				else {
 					if (resultCode == RESULT_OK) {
 						Uri selectedImage = data.getData();
-						InputStream imageStream = getContentResolver()
-								.openInputStream(selectedImage);
-
-						Bitmap selectedBitmap = BitmapFactory
-								.decodeStream(imageStream);
-						imageStream.close();
-						GlobalState.getInstance().addBitmap(selectedBitmap);
+//						InputStream imageStream = getContentResolver()
+//								.openInputStream(selectedImage);
+//
+//						Bitmap selectedBitmap = BitmapFactory
+//								.decodeStream(imageStream);
+//						imageStream.close();
+						
+						GlobalState.getInstance().addBitmap(pathFromUri(selectedImage));
 						GalleryAdapter adapter = (GalleryAdapter) this.gallery
 								.getAdapter();
 						adapter.notifyDataSetChanged();
@@ -364,11 +365,13 @@ public class HomeScreen extends SherlockActivity implements
 
 	protected void onPhotoTaken() throws Exception {
 
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inSampleSize = 4;
-		Bitmap bitmap = BitmapFactory.decodeFile(PhotoPath, options);
-
-		GlobalState.getInstance().addBitmap(bitmap);
+//		BitmapFactory.Options options = new BitmapFactory.Options();
+//		options.inSampleSize = 4;
+//		Bitmap bitmap = BitmapFactory.decodeFile(PhotoPath, options);
+//
+//		GlobalState.getInstance().addBitmap(bitmap);
+		
+		GlobalState.getInstance().addBitmap(PhotoPath);
 		GalleryAdapter adapter = (GalleryAdapter) this.gallery.getAdapter();
 		adapter.notifyDataSetChanged();
 	}
@@ -395,5 +398,13 @@ public class HomeScreen extends SherlockActivity implements
 	        default:
 	            return super.onContextItemSelected(item);
 	    }
+	}
+	
+	public String pathFromUri(Uri uri){
+		 String[] proj = { MediaStore.Images.Media.DATA };
+	        Cursor cursor = managedQuery(uri, proj, null, null, null);
+	        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	        cursor.moveToFirst();
+	        return cursor.getString(column_index);
 	}
 }
