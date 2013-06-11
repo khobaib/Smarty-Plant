@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/camera1"
-                android:text="Upload Image"
+                android:text="Upload Mystery Plant"
                 android:textStyle="bold"
                 android:background="@drawable/rounded_gray" />
 

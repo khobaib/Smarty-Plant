@@ -88,7 +88,7 @@ public class HomeScreen extends SherlockActivity implements
 		getSupportActionBar().addTab(tab1);
 
 		ActionBar.Tab tab2 = getSupportActionBar().newTab();
-		tab2.setText("Upload Mystery Plant");
+		tab2.setText("Submit Plant");
 		tab2.setTabListener(this);
 		getSupportActionBar().addTab(tab2);
 
