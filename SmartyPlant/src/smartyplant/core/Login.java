@@ -26,6 +26,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.SubMenu;
+import com.bugsense.trace.BugSenseHandler;
 
 public class Login extends SherlockActivity {
 	String user_name = "";
@@ -42,6 +43,7 @@ public class Login extends SherlockActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
 		super.onCreate(savedInstanceState);
 		globalState.initActionBar(this, R.layout.login);
 
@@ -170,6 +172,15 @@ public class Login extends SherlockActivity {
 			com.actionbarsherlock.view.MenuItem item) {
 		startActivity(new Intent(mContext, Register.class));
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		BugSenseHandler.closeSession(mContext);
+
+
 	}
 
 }

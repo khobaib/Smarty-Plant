@@ -41,6 +41,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.bugsense.trace.BugSenseHandler;
 
 public class HomeScreen extends SherlockActivity implements
 		ActionBar.TabListener {
@@ -57,6 +58,7 @@ public class HomeScreen extends SherlockActivity implements
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
 		setTheme(R.style.Theme_Sherlock_Light);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_screen);
@@ -414,5 +416,14 @@ public class HomeScreen extends SherlockActivity implements
 	        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 	        cursor.moveToFirst();
 	        return cursor.getString(column_index);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		BugSenseHandler.closeSession(mContext);
+
+
 	}
 }

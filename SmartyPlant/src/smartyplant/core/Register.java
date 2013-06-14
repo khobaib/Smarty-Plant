@@ -1,6 +1,7 @@
 package smartyplant.core;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.bugsense.trace.BugSenseHandler;
 
 import smartyplant.Network.DataConnector;
 import smartyplant.Utils.GlobalState;
@@ -30,6 +31,8 @@ public class Register extends SherlockActivity {
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
+		BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
+
         super.onCreate(savedInstanceState);
         GlobalState.getInstance().initActionBar(mContext, R.layout.register);
         

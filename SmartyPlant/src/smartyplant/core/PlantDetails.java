@@ -1,5 +1,7 @@
 package smartyplant.core;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import smartyplant.Network.DataConnector;
 import smartyplant.Utils.GlobalState;
 import smartyplant.lazylist.ImageLoader;
@@ -35,6 +37,8 @@ public class PlantDetails extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.plant_details);
 		lazyLoader = new ImageLoader(mContext);
