@@ -11,5 +11,6 @@ public class DetailedPlant extends Plant {
 	public String state;
 	public String description;
 	public String group_id;
+	public ArrayList<Vote> votes = new ArrayList<Vote>();
 
 }

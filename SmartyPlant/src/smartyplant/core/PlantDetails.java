@@ -1,12 +1,14 @@
 package smartyplant.core;
 
-import com.bugsense.trace.BugSenseHandler;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import smartyplant.Network.DataConnector;
 import smartyplant.Utils.GlobalState;
 import smartyplant.lazylist.ImageLoader;
-import smartyplant.modules.BriefedPlant;
 import smartyplant.modules.DetailedPlant;
+import smartyplant.modules.User;
+import smartyplant.modules.Vote;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,6 +17,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,8 +28,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bugsense.trace.BugSenseHandler;
 
 public class PlantDetails extends Activity {
 	Context mContext = this;
@@ -90,19 +96,9 @@ public class PlantDetails extends Activity {
 	}
 
 	private void initUI() {
-		TextView label1 = (TextView) findViewById(R.id.label1);
-		label1.setText(detailedPlant.identifier_name);
-		TextView label3 = (TextView) findViewById(R.id.label3);
-		label3.setText(detailedPlant.plant_name);
-
-		TextView label4 = (TextView) findViewById(R.id.label4);
-		label4.setText(detailedPlant.plant_name_agree_prc + "% agreed");
 
 		ImageView image = (ImageView) findViewById(R.id.image_view);
 		lazyLoader.DisplayImage(detailedPlant.imageUrls.get(0), image);
-
-		ProgressBar bar = (ProgressBar) findViewById(R.id.agree_prc_bar);
-		bar.setProgress(globalState.currentPlant.plant_name_agree_prc);
 
 		initVotePanel();
 		initMiniGallery();
@@ -144,26 +140,68 @@ public class PlantDetails extends Activity {
 		}
 	}
 
-	private void initVotePanel() {
-		Button agree = (Button) findViewById(R.id.agree_button);
-		agree.setOnClickListener(new OnClickListener() {
+	private RelativeLayout setUpSingleVotePanel(String userName,
+			String plantName, int prc, String googleURL, int visibility) {
+		LayoutInflater inflater = LayoutInflater.from(mContext);
+		RelativeLayout votePanel = (RelativeLayout) inflater.inflate(
+				R.layout.cusotm_vote_panel, null);
+
+		TextView userNameLabel = (TextView) votePanel.getChildAt(0);
+		userNameLabel.setText(userName);
+		userNameLabel.setVisibility(visibility);
+		
+		TextView calledThis = (TextView) votePanel.getChildAt(1);
+		calledThis.setVisibility(visibility);
+		
+		TextView plantNameLabel = (TextView) votePanel.getChildAt(2);
+		plantNameLabel.setText(plantName);
+		plantNameLabel.setVisibility(visibility);
+		
+		TextView percentLabel = (TextView) votePanel.getChildAt(3);
+		percentLabel.setText(prc + "% agreed");
+
+		ProgressBar progressBar = (ProgressBar) votePanel.getChildAt(4);
+		progressBar.setProgress(prc);
+
+		RelativeLayout buttonGroup = (RelativeLayout) votePanel.getChildAt(5);
+
+		Button agreeButton = (Button) buttonGroup.getChildAt(0);
+		agreeButton.setVisibility(visibility);
+
+		Button disAgreeButton = (Button) buttonGroup.getChildAt(1);
+		if (visibility == Button.GONE)
+			disAgreeButton.setText("Name It");
+		final String votedName = plantName;
+
+		agreeButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View arg0) {
-				voted_name = globalState.currentPlant.plant_name;
+			public void onClick(View v) {
+				voted_name = votedName;
 				VoteTask task = new VoteTask();
 				task.execute();
-
 			}
 		});
 
-		Button disagree = (Button) findViewById(R.id.disagree_button);
-		disagree.setOnClickListener(new OnClickListener() {
+		// more details -- Google Search on Plant
+		TextView moreDetails = (TextView) buttonGroup.getChildAt(3);
 
+		moreDetails.setText(plantName);
+		final String url = googleURL;
+
+		moreDetails.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
+						.parse(url));
+				startActivity(browserIntent);
+			}
+		});
+
+		disAgreeButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				final Dialog dialog = new Dialog(mContext);
 				dialog.setTitle("Mister Smarty Plants");
-
 				LayoutInflater inflater = getLayoutInflater();
 				final View view = inflater.inflate(R.layout.custom_vote_dialog,
 						null);
@@ -176,59 +214,55 @@ public class PlantDetails extends Activity {
 								.findViewById(R.id.voted_named);
 						voted_name = tv.getEditableText().toString();
 						if (voted_name.equals("") || voted_name == null) {
-							dialog.dismiss();
+							try {
+								dialog.dismiss();
+							} catch (Exception e) {
+
+							}
 							Toast.makeText(mContext,
-									"Plant name can not be emtpy !", 5000)
-									.show();
+									"Plant name can not be emtpy !",
+									Toast.LENGTH_LONG).show();
 						} else {
 							VoteTask task = new VoteTask();
 							task.execute();
-							dialog.dismiss();
+							try {
+								dialog.dismiss();
+							} catch (Exception e) {
+
+							}
 						}
 					}
 				});
-
 				dialog.show();
 			}
 		});
+		return votePanel;
+	}
 
-		TextView plant_more_url = (TextView) findViewById(R.id.plant_more_url);
-		plant_more_url.setText(globalState.currentPlant.plant_name);
-		plant_more_url.setOnClickListener(new OnClickListener() {
+	private void initVotePanel() {
+		LinearLayout votingList = (LinearLayout) findViewById(R.id.voting_list);
+		votingList.removeAllViews();
+		if (detailedPlant.votes.size() == 0) {
 
-			@Override
-			public void onClick(View v) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
-						.parse("http://www.google.com/search?q="
-								+ globalState.currentPlant.plant_name
-										.replaceAll(" ", "+") + "&tbm=isch"));
-				startActivity(browserIntent);
+			RelativeLayout votePanel = setUpSingleVotePanel(
+					detailedPlant.identifier_name, detailedPlant.plant_name,
+					detailedPlant.plant_name_agree_prc, "", Button.GONE);
+			votingList.addView(votePanel);
+		} else
+			for (int i = 0; i < detailedPlant.votes.size(); i++) {
+				Vote vote = detailedPlant.votes.get(i);
+				RelativeLayout votePanel = setUpSingleVotePanel(vote.userNames,
+						vote.plantName, vote.agreePercentage,
+						vote.plantGoogleUrl, Button.VISIBLE);
+				votingList.addView(votePanel);
 			}
-		});
-
-		if (globalState.currentPlant.plant_name == null
-				|| globalState.currentPlant.plant_name.equalsIgnoreCase("")) {
-			TextView label1 = (TextView) findViewById(R.id.label1);
-			label1.setVisibility(TextView.INVISIBLE);
-			TextView label2 = (TextView) findViewById(R.id.label2);
-			label2.setVisibility(TextView.INVISIBLE);
-			TextView label3 = (TextView) findViewById(R.id.label3);
-			label3.setVisibility(TextView.INVISIBLE);
-			TextView more = (TextView) findViewById(R.id.more);
-			more.setVisibility(TextView.INVISIBLE);
-			plant_more_url.setVisibility(TextView.INVISIBLE);
-		}
-
-		if (globalState.currentPlant.plant_name_agree_prc == 0) {
-			agree.setVisibility(Button.GONE);
-			disagree.setText("Name It");
-		}
 	}
 
 	// ============= Background Task ========
 	class VoteTask extends AsyncTask<Void, Void, Void> {
 		String result;
 		ProgressDialog dialog = null;
+		String message = "";
 
 		// alertDialog = null;
 
@@ -263,24 +297,60 @@ public class PlantDetails extends Activity {
 
 			}
 
+			JSONObject obj;
+			try {
+				obj = new JSONObject(this.result);
+				message = obj.optString("status");
+				JSONArray votes = obj.optJSONArray("vote_detail");
+				detailedPlant.votes.clear();
+				for (int i = 0; i < votes.length(); i++) {
+					Vote v = new Vote();
+					JSONObject voteObj = votes.getJSONObject(i);
+					v.agreeButtonVisible = voteObj
+							.optBoolean("agreeButtonVisible");
+					v.agreePercentage = voteObj.optInt("agreePercent");
+					v.isSolved = voteObj.optBoolean("isSolved");
+					v.plantGoogleUrl = voteObj.optString("plantGoogleURL");
+					v.plantId = voteObj.optInt("plantId");
+					v.plantName = voteObj.optString("plantName");
+					v.userNames = voteObj.optString("userNames");
+					JSONArray users = voteObj.optJSONArray("users");
+					for (int j = 0; j < users.length(); j++) {
+						User user = new User();
+						JSONObject userObj = users.getJSONObject(j);
+						user.profileImageUrl = userObj
+								.optString("profileImageURL");
+						user.userName = userObj.getString("name");
+						v.users.add(user);
+					}
+					detailedPlant.votes.add(v);
+				}
+				initVotePanel();
+			} catch (Exception e) {
+
+			}
+
 			AlertDialog.Builder alertdialog = new AlertDialog.Builder(mContext);
 			alertdialog.setIcon(R.drawable.logo);
 			alertdialog.setTitle(" ");
-			alertdialog.setMessage(this.result);
+			alertdialog.setMessage(message);
 			alertdialog.setPositiveButton("Ok",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-							finish();
+							try {
+								dialog.dismiss();
+							} catch (Exception e) {
+
+							} // finish();
 						}
 					});
 			alertdialog.setCancelable(true);
 			alertdialog.create().show();
 
-			if (this.result.equalsIgnoreCase("Success")) {
-				finish();
-				startActivity(new Intent(mContext, HomeScreen.class));
-			}
+			// if (this.result.equalsIgnoreCase("Success")) {
+			// finish();
+			// startActivity(new Intent(mContext, HomeScreen.class));
+			// }
 		};
 	}
 
@@ -321,7 +391,11 @@ public class PlantDetails extends Activity {
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			dialog.dismiss();
+			try {
+				dialog.dismiss();
+			} catch (Exception e) {
+
+			}
 			initUI();
 		}
 	}

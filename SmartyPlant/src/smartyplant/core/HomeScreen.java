@@ -211,8 +211,13 @@ public class HomeScreen extends SherlockActivity implements
 						mContext, getColumnWidth(), getColumnHeight(),
 						globalState.all_plants));
 			}
+			try{
 			dialog.dismiss();
-
+			dialog = null;
+			}
+			catch(Exception e){
+				
+			}
 		}
 
 		@Override

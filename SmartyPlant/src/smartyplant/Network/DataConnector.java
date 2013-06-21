@@ -11,20 +11,20 @@ import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import smartyplant.Utils.GlobalState;
 import smartyplant.adapters.PaginationController;
 import smartyplant.modules.BriefedPlant;
 import smartyplant.modules.DetailedPlant;
+import smartyplant.modules.User;
+import smartyplant.modules.Vote;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -170,8 +170,18 @@ public class DataConnector {
 
 			p.identifier_name = obj.getString("identifier_name");
 			p.identifier_twitter_url = obj.getString("identifier_twitter_url");
-			p.identifier_picture_url = "http://mistersmartyplants.com"
-					+ obj.getString("identifier_picture_url").substring(2);
+			
+			String identifier_picture_url = obj.optString("identifier_picture_url");
+			if(identifier_picture_url.equalsIgnoreCase(""))
+			{
+				p.identifier_picture_url = "http://mistersmartyplants.com/images/default_person.jpg";
+			}
+			else
+			{
+				p.identifier_picture_url = "http://mistersmartyplants.com"
+						+ obj.getString("identifier_picture_url").substring(2);
+			}
+
 			// p.identifier_picture_drawable =
 			// drawableFromUrl(p.identifier_picture_url);
 			String num = obj.getString("plant_name_agree_percentage")
@@ -256,7 +266,6 @@ public class DataConnector {
 			instream.close();
 		}
 		return result;
-
 	}
 
 	public DetailedPlant downloadSinglePlant(int id, boolean isNamed) throws Exception {
@@ -295,7 +304,29 @@ public class DataConnector {
 
 			p.plant_name = GlobalState.getInstance().currentPlant.plant_name;
 			p.plant_name_agree_prc = GlobalState.getInstance().currentPlant.plant_name_agree_prc;
-
+			
+			JSONArray votes = obj.optJSONArray("vote_detail");
+			for (int i = 0 ; i < votes.length(); i ++){
+				Vote v = new Vote();
+				JSONObject voteObj = votes.getJSONObject(i);
+				v.agreeButtonVisible = voteObj.optBoolean("agreeButtonVisible");
+				v.agreePercentage = voteObj.optInt("agreePercent");
+				v.isSolved = voteObj.optBoolean("isSolved");
+				v.plantGoogleUrl = voteObj.optString("plantGoogleURL");
+				v.plantId = voteObj.optInt("plantId");
+				v.plantName = voteObj.optString("plantName");
+				v.userNames = voteObj.optString("userNames");
+				JSONArray users = voteObj.optJSONArray("users");
+				for (int j = 0 ; j < users.length() ; j ++){
+					User user = new User();
+					JSONObject userObj = users.getJSONObject(j);
+					user.profileImageUrl = userObj.optString("profileImageURL");
+					user.userName = userObj.getString("name");
+					v.users.add(user);
+				}
+				p.votes.add(v);
+			}
+			
 			return p;
 		}
 		return null;

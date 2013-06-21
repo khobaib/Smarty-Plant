@@ -137,6 +137,7 @@ public class Login extends SherlockActivity {
 
 			try {
 				dialog.dismiss();
+				dialog = null;
 			} catch (Exception e) {
 
 			}

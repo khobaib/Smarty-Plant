@@ -137,8 +137,12 @@ public class Submit extends Activity {
 			alertdialog.setPositiveButton("Ok",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
+							try{
 							dialog.dismiss();
-							finish();
+							}
+							catch(Exception e ){
+								
+							}							finish();
 							if (requestResult) {
 								GlobalState.getInstance().currentBitmaps.clear();	
 								startActivity(new Intent(mContext,

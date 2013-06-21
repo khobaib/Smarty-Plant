@@ -56,106 +56,13 @@
                 </LinearLayout>
             </FrameLayout>
 
-            <TextView
-                android:id="@+id/label1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/image_frame"
-                android:layout_marginBottom="10dp"
+            <LinearLayout
                 android:layout_marginTop="10dp"
-                android:text="USERNAME "
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/label2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/label1"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/label1"
-                android:text=" called this "
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/label3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/label1"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/label2"
-                android:text="PLANT NAME"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/label4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/label1"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:text="0% named"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
-
-            <ProgressBar
-                android:id="@+id/agree_prc_bar"
-                style="@style/CustomProgressBar"
+                android:id="@+id/voting_list"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/label4"
-                android:layout_margin="5dp"
-                android:layout_toLeftOf="@+id/label4"
-                android:progress="0" />
-
-            <RelativeLayout
-                android:id="@+id/voting_layout1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/agree_prc_bar"
-                android:layout_marginTop="5dp" >
-
-                <Button
-                    android:id="@+id/agree_button"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_text"
-                    android:padding="5dp"
-                    android:text="Agree"
-                    android:textColor="#ff0000"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/disagree_button"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@+id/agree_button"
-                    android:background="@drawable/rounded_text"
-                    android:padding="5dp"
-                    android:text="Disagree"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/plant_more_url"
-                    android:text="more"
-                    android:textColor="@android:color/black" />
-
-                <TextView
-                    android:id="@+id/plant_more_url"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="5dp"
-                    android:text="PLANT NAME"
-                    android:textColor="#008800"
-                    android:textStyle="bold" />
-            </RelativeLayout>
+                android:layout_below="@+id/image_frame" >
+            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
 
