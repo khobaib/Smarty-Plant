@@ -50,10 +50,10 @@ public class HomeScreen extends SherlockActivity implements
 	Context mContext = this;
 	int currentTab = -1;
 	int mode = 1;
-	File PhotoDir = new File(Environment.getExternalStorageDirectory(), "smarty_plant_uploads");
+	File PhotoDir = new File(Environment.getExternalStorageDirectory(),
+			"smarty_plant_uploads");
 	String currentImagePath = "";
-	
-	
+
 	PaginationController pController = PaginationController.getInstance();
 
 	@Override
@@ -154,9 +154,9 @@ public class HomeScreen extends SherlockActivity implements
 			task.execute();
 
 		} else {
-			//GlobalState.getInstance().currentBitmaps.clear();
+			// GlobalState.getInstance().currentBitmaps.clear();
 			setPhotoCaptureMode();
-			
+
 		}
 	}
 
@@ -211,12 +211,11 @@ public class HomeScreen extends SherlockActivity implements
 						mContext, getColumnWidth(), getColumnHeight(),
 						globalState.all_plants));
 			}
-			try{
-			dialog.dismiss();
-			dialog = null;
-			}
-			catch(Exception e){
-				
+			try {
+				dialog.dismiss();
+				dialog = null;
+			} catch (Exception e) {
+
 			}
 		}
 
@@ -255,27 +254,27 @@ public class HomeScreen extends SherlockActivity implements
 	}
 
 	private void setClickListners() {
-//		Button takePic = (Button) findViewById(R.id.take_picture);
-//		takePic.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View arg0) {
-//				// GlobalState.getInstance().currentBitmap = null;
-//				startCameraActivity();
-//			}
-//		});
-//
-//		Button gallery = (Button) findViewById(R.id.select_gallery);
-//		gallery.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View arg0) {
-//				// GlobalState.getInstance().currentBitmap = null;
-//				setGallerySelectMode();
-//			}
-//		});
+		// Button takePic = (Button) findViewById(R.id.take_picture);
+		// takePic.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View arg0) {
+		// // GlobalState.getInstance().currentBitmap = null;
+		// startCameraActivity();
+		// }
+		// });
+		//
+		// Button gallery = (Button) findViewById(R.id.select_gallery);
+		// gallery.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View arg0) {
+		// // GlobalState.getInstance().currentBitmap = null;
+		// setGallerySelectMode();
+		// }
+		// });
 
-		Button menu_button = (Button)findViewById(R.id.upload_image);
+		Button menu_button = (Button) findViewById(R.id.upload_image);
 		menu_button.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				registerForContextMenu(v);
@@ -283,7 +282,7 @@ public class HomeScreen extends SherlockActivity implements
 				unregisterForContextMenu(v);
 			}
 		});
-		
+
 		Button done = (Button) findViewById(R.id.done);
 		done.setOnClickListener(new OnClickListener() {
 			@Override
@@ -303,11 +302,11 @@ public class HomeScreen extends SherlockActivity implements
 
 	protected void startCameraActivity() {
 		mode = 1;
-		//File file = new File(PhotoDir, "image_"+new Date().getTime()+".jpg");
-		String timetamp = new Date().getTime()+"";
-		
-		File file = new File(PhotoDir, "//img"+timetamp+".jpeg");
-		//file.mkdirs();
+		// File file = new File(PhotoDir, "image_"+new Date().getTime()+".jpg");
+		String timetamp = new Date().getTime() + "";
+
+		File file = new File(PhotoDir, "//img" + timetamp + ".jpeg");
+		// file.mkdirs();
 		currentImagePath = file.getPath();
 		Uri outputFileUri = Uri.fromFile(file);
 		Intent intent = new Intent(
@@ -328,46 +327,52 @@ public class HomeScreen extends SherlockActivity implements
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		//setPhotoCaptureMode();
+		// setPhotoCaptureMode();
 		Button done = (Button) findViewById(R.id.done);
-
+		Button upload = (Button) findViewById(R.id.upload_image);
 		switch (resultCode) {
 		case 0:
-			if (GlobalState.getInstance().currentBitmaps.size() > 0)
+			if (GlobalState.getInstance().currentBitmaps.size() > 0) {
 				done.setVisibility(Button.VISIBLE);
-			else
+				upload.setText("Upload Another Mystery");
+			} else {
 				done.setVisibility(Button.INVISIBLE);
+				upload.setText("Upload Mystery Plant");
+			}
 			break;
 
 		case -1:
 
 			try {
-				if (mode == 1){
+				if (mode == 1) {
 					onPhotoTaken();
-					if (GlobalState.getInstance().currentBitmaps.size() > 0)
+					if (GlobalState.getInstance().currentBitmaps.size() > 0) {
 						done.setVisibility(Button.VISIBLE);
-					else
+						upload.setText("Upload Another Mystery");
+
+					} else {
 						done.setVisibility(Button.INVISIBLE);
-				}
-				else {
+						upload.setText("Upload Mystery Plant");
+
+					}
+				} else {
 					if (resultCode == RESULT_OK) {
 						Uri selectedImage = data.getData();
-//						InputStream imageStream = getContentResolver()
-//								.openInputStream(selectedImage);
-//
-//						Bitmap selectedBitmap = BitmapFactory
-//								.decodeStream(imageStream);
-//						imageStream.close();
-						
-						GlobalState.getInstance().addBitmap(pathFromUri(selectedImage));
+						GlobalState.getInstance().addBitmap(
+								pathFromUri(selectedImage));
 						GalleryAdapter adapter = (GalleryAdapter) this.gallery
 								.getAdapter();
 						adapter.notifyDataSetChanged();
 
-						if (GlobalState.getInstance().currentBitmaps.size() > 0)
+						if (GlobalState.getInstance().currentBitmaps.size() > 0) {
 							done.setVisibility(Button.VISIBLE);
-						else
+							upload.setText("Upload Another Mystery");
+
+						} else {
 							done.setVisibility(Button.INVISIBLE);
+							upload.setText("Upload Mystery Plant");
+
+						}
 						break;
 					}
 				}
@@ -380,55 +385,49 @@ public class HomeScreen extends SherlockActivity implements
 
 	protected void onPhotoTaken() throws Exception {
 
-//		BitmapFactory.Options options = new BitmapFactory.Options();
-//		options.inSampleSize = 4;
-//		Bitmap bitmap = BitmapFactory.decodeFile(PhotoPath, options);
-//
-//		GlobalState.getInstance().addBitmap(bitmap);
-		
 		GlobalState.getInstance().addBitmap(currentImagePath);
 		GalleryAdapter adapter = (GalleryAdapter) this.gallery.getAdapter();
 		adapter.notifyDataSetChanged();
 	}
 
-	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.upload_image_menu, menu);
+		inflater.inflate(R.menu.upload_image_menu, menu);
 	}
-	
+
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-	    switch (item.getItemId()) {
-	        case R.id.capture_image:
-	        	startCameraActivity();
-	            return true;
-	        case R.id.gallery_image:
-	        	setGallerySelectMode();
-	            return true;
-	        default:
-	            return super.onContextItemSelected(item);
-	    }
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		switch (item.getItemId()) {
+		case R.id.capture_image:
+			startCameraActivity();
+			return true;
+		case R.id.gallery_image:
+			setGallerySelectMode();
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
 	}
-	
-	public String pathFromUri(Uri uri){
-		 String[] proj = { MediaStore.Images.Media.DATA };
-	        Cursor cursor = managedQuery(uri, proj, null, null, null);
-	        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-	        cursor.moveToFirst();
-	        return cursor.getString(column_index);
+
+	public String pathFromUri(Uri uri) {
+		String[] proj = { MediaStore.Images.Media.DATA };
+		Cursor cursor = managedQuery(uri, proj, null, null, null);
+		int column_index = cursor
+				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToFirst();
+		return cursor.getString(column_index);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
 		BugSenseHandler.closeSession(mContext);
-
 
 	}
 }

@@ -2,6 +2,7 @@ package smartyplant.adapters;
 
 import smartyplant.Utils.GlobalState;
 import smartyplant.core.R;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -60,6 +61,21 @@ public class GalleryAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View arg0) {
 				globalState.removeBitmap(bitmapPos);
+				
+				Button upload = (Button)((Activity)mContext).findViewById(R.id.upload_image);
+				Button done = (Button)((Activity)mContext).findViewById(R.id.done);
+				
+				if (globalState.currentBitmaps.size() == 0){
+					upload.setText("Upload Mystery Plant");
+					done.setVisibility(Button.GONE);
+				}
+				else
+				{
+					upload.setText("Upload Another Mystery");
+					done.setVisibility(Button.VISIBLE);
+					
+				}
+				
 				notifyDataSetChanged();
 			}
 		});

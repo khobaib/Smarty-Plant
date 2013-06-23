@@ -82,51 +82,7 @@ public class GlobalState {
 		currentBitmaps.add(bitmap);
 	}
 
-	public Bitmap decodeSampledBitmap(InputStream imageStream, int reqWidth,
-			int reqHeight) {
-
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		BitmapFactory.decodeStream(imageStream, null, options);
-		int imageHeight = options.outHeight;
-		int imageWidth = options.outWidth;
-		String imageType = options.outMimeType;
-
-		// Calculate inSampleSize
-		options.inSampleSize = calculateInSampleSize(options, reqWidth,
-				reqHeight);
-
-		// Decode bitmap with inSampleSize set
-		options.inJustDecodeBounds = false;
-		return BitmapFactory.decodeStream(imageStream, null, options);
-	}
-
-	private int calculateInSampleSize(BitmapFactory.Options options,
-			int reqWidth, int reqHeight) {
-		// Raw height and width of image
-		final int height = options.outHeight;
-		final int width = options.outWidth;
-		int inSampleSize = 1;
-
-		if (height > reqHeight || width > reqWidth) {
-
-			// Calculate ratios of height and width to requested height and
-			// width
-			final int heightRatio = Math.round((float) height
-					/ (float) reqHeight);
-			final int widthRatio = Math.round((float) width / (float) reqWidth);
-
-			// Choose the smallest ratio as inSampleSize value, this will
-			// guarantee
-			// a final image with both dimensions larger than or equal to the
-			// requested height and width.
-			inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-		}
-
-		return inSampleSize;
-	}
-	
-	public Bitmap bitmapFromPath(String path){
+	public Bitmap bitmapFromPath(String path) {
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inSampleSize = 4;
 		Bitmap bitmap = BitmapFactory.decodeFile(path, options);
