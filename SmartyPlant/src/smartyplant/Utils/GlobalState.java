@@ -75,7 +75,8 @@ public class GlobalState {
 	}
 
 	public void removeBitmap(int pos) {
-		currentBitmaps.remove(pos);
+		if (currentBitmaps.size() > pos)
+			currentBitmaps.remove(pos);
 	}
 
 	public void addBitmap(String bitmap) {
@@ -86,6 +87,13 @@ public class GlobalState {
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inSampleSize = 4;
 		Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+		
+		// try again with more downsampling 
+		if(bitmap == null)
+		{
+			options.inSampleSize = 8;
+			bitmap = BitmapFactory.decodeFile(path, options);
+		}
 		return bitmap;
 	}
 

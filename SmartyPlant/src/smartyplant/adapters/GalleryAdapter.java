@@ -61,7 +61,6 @@ public class GalleryAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View arg0) {
 				globalState.removeBitmap(bitmapPos);
-				
 				Button upload = (Button)((Activity)mContext).findViewById(R.id.upload_image);
 				Button done = (Button)((Activity)mContext).findViewById(R.id.done);
 				
