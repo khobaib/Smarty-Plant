@@ -11,6 +11,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,6 +43,8 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.SubMenu;
 import com.bugsense.trace.BugSenseHandler;
 
 public class HomeScreen extends SherlockActivity implements
@@ -53,6 +57,9 @@ public class HomeScreen extends SherlockActivity implements
 	File PhotoDir = new File(Environment.getExternalStorageDirectory(),
 			"smarty_plant_uploads");
 	String currentImagePath = "";
+	SharedPreferences prefs;
+	public static final String PREFS_NAME = "MyPrefsFile";
+
 
 	PaginationController pController = PaginationController.getInstance();
 
@@ -423,6 +430,38 @@ public class HomeScreen extends SherlockActivity implements
 		return cursor.getString(column_index);
 	}
 
+	
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		SubMenu subMenu1 = menu.addSubMenu("Log out");
+
+		subMenu1.setIcon(R.drawable.actionbar);
+		com.actionbarsherlock.view.MenuItem subMenu1Item = subMenu1.getItem();
+		subMenu1Item.setIcon(R.drawable.actionbar);
+		subMenu1Item
+				.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+
+		// getSupportMenuInflater().inflate(R.menu.menu, menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(
+			com.actionbarsherlock.view.MenuItem item) {
+		prefs = getSharedPreferences(PREFS_NAME, 0);
+		prefs.edit().putString("user_name", "").commit();
+		prefs.edit().putString("password", "").commit();
+		prefs.edit().putBoolean("remember_me", false).commit();
+		
+		finish();
+		startActivity(new Intent(mContext, Login.class));
+
+		return super.onOptionsItemSelected(item);
+	}
+	
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub

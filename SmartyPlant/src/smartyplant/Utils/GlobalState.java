@@ -94,6 +94,13 @@ public class GlobalState {
 			options.inSampleSize = 8;
 			bitmap = BitmapFactory.decodeFile(path, options);
 		}
+		
+		// try again with more downsampling 
+		if(bitmap == null)
+		{
+			options.inSampleSize = 16;
+			bitmap = BitmapFactory.decodeFile(path, options);
+		}
 		return bitmap;
 	}
 
