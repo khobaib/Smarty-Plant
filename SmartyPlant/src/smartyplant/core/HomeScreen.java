@@ -261,26 +261,20 @@ public class HomeScreen extends SherlockActivity implements
 	}
 
 	private void setClickListners() {
-		// Button takePic = (Button) findViewById(R.id.take_picture);
-		// takePic.setOnClickListener(new OnClickListener() {
-		// @Override
-		// public void onClick(View arg0) {
-		// // GlobalState.getInstance().currentBitmap = null;
-		// startCameraActivity();
-		// }
-		// });
-		//
-		// Button gallery = (Button) findViewById(R.id.select_gallery);
-		// gallery.setOnClickListener(new OnClickListener() {
-		// @Override
-		// public void onClick(View arg0) {
-		// // GlobalState.getInstance().currentBitmap = null;
-		// setGallerySelectMode();
-		// }
-		// });
-
+		
 		Button menu_button = (Button) findViewById(R.id.upload_image);
 		menu_button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				registerForContextMenu(v);
+				openContextMenu(v);
+				unregisterForContextMenu(v);
+			}
+		});
+		
+		Button menu_button2 = (Button) findViewById(R.id.upload_image2);
+		menu_button2.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -337,14 +331,19 @@ public class HomeScreen extends SherlockActivity implements
 		// setPhotoCaptureMode();
 		Button done = (Button) findViewById(R.id.done);
 		Button upload = (Button) findViewById(R.id.upload_image);
+		Button upload2 = (Button) findViewById(R.id.upload_image2);
+
 		switch (resultCode) {
 		case 0:
 			if (GlobalState.getInstance().currentBitmaps.size() > 0) {
+				upload.setVisibility(Button.INVISIBLE);
+				upload2.setVisibility(Button.VISIBLE);
 				done.setVisibility(Button.VISIBLE);
-				upload.setText("Upload Another Mystery");
 			} else {
-				done.setVisibility(Button.INVISIBLE);
-				upload.setText("Upload Mystery Plant");
+				upload.setVisibility(Button.VISIBLE);
+				upload2.setVisibility(Button.GONE);
+				done.setVisibility(Button.GONE);
+
 			}
 			break;
 
@@ -354,12 +353,13 @@ public class HomeScreen extends SherlockActivity implements
 				if (mode == 1) {
 					onPhotoTaken();
 					if (GlobalState.getInstance().currentBitmaps.size() > 0) {
+						upload.setVisibility(Button.INVISIBLE);
+						upload2.setVisibility(Button.VISIBLE);
 						done.setVisibility(Button.VISIBLE);
-						upload.setText("Upload Another Mystery");
-
 					} else {
-						done.setVisibility(Button.INVISIBLE);
-						upload.setText("Upload Mystery Plant");
+						upload.setVisibility(Button.VISIBLE);
+						upload2.setVisibility(Button.GONE);
+						done.setVisibility(Button.GONE);
 
 					}
 				} else {
@@ -370,14 +370,14 @@ public class HomeScreen extends SherlockActivity implements
 						GalleryAdapter adapter = (GalleryAdapter) this.gallery
 								.getAdapter();
 						adapter.notifyDataSetChanged();
-
 						if (GlobalState.getInstance().currentBitmaps.size() > 0) {
+							upload.setVisibility(Button.INVISIBLE);
+							upload2.setVisibility(Button.VISIBLE);
 							done.setVisibility(Button.VISIBLE);
-							upload.setText("Upload Another Mystery");
-
 						} else {
-							done.setVisibility(Button.INVISIBLE);
-							upload.setText("Upload Mystery Plant");
+							upload.setVisibility(Button.VISIBLE);
+							upload2.setVisibility(Button.GONE);
+							done.setVisibility(Button.GONE);
 
 						}
 						break;

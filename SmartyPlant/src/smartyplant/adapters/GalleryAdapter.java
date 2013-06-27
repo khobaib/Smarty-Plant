@@ -62,15 +62,18 @@ public class GalleryAdapter extends BaseAdapter {
 			public void onClick(View arg0) {
 				globalState.removeBitmap(bitmapPos);
 				Button upload = (Button)((Activity)mContext).findViewById(R.id.upload_image);
+				Button upload2 = (Button)((Activity)mContext).findViewById(R.id.upload_image2);
 				Button done = (Button)((Activity)mContext).findViewById(R.id.done);
 				
 				if (globalState.currentBitmaps.size() == 0){
-					upload.setText("Upload Mystery Plant");
+					upload.setVisibility(Button.VISIBLE);
+					upload2.setVisibility(Button.GONE);
 					done.setVisibility(Button.GONE);
 				}
 				else
 				{
-					upload.setText("Upload Another Mystery");
+					upload.setVisibility(Button.INVISIBLE);
+					upload2.setVisibility(Button.VISIBLE);
 					done.setVisibility(Button.VISIBLE);
 					
 				}
