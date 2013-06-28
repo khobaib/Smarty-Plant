@@ -1,4 +1,4 @@
-package smartyplant.Network;
+package com.mistersmartyplants.parser;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -19,17 +19,19 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import smartyplant.Utils.GlobalState;
-import smartyplant.adapters.PaginationController;
-import smartyplant.modules.BriefedPlant;
-import smartyplant.modules.DetailedPlant;
-import smartyplant.modules.User;
-import smartyplant.modules.Vote;
+import com.mistersmartyplants.adapter.PaginationController;
+import com.mistersmartyplants.model.BriefedPlant;
+import com.mistersmartyplants.model.DetailedPlant;
+import com.mistersmartyplants.model.User;
+import com.mistersmartyplants.model.Vote;
+import com.mistersmartyplants.utility.GlobalState;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
+import android.util.Log;
 
 public class DataConnector {
 
@@ -229,6 +231,7 @@ public class DataConnector {
 		httppost.setHeader("Authorization-Token",
 				GlobalState.getInstance().API_TOKEN);
 		httppost.setHeader("Content-Type", "application/json");
+		Log.d(">>>>>>><<<<<<<", "api_token = " + GlobalState.getInstance().API_TOKEN);
 
 		HttpResponse response = httpclient.execute(httppost);
 		HttpEntity entity = response.getEntity();

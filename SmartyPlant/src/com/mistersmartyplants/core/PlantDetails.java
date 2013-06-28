@@ -1,14 +1,8 @@
-package smartyplant.core;
+package com.mistersmartyplants.core;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import smartyplant.Network.DataConnector;
-import smartyplant.Utils.GlobalState;
-import smartyplant.lazylist.ImageLoader;
-import smartyplant.modules.DetailedPlant;
-import smartyplant.modules.User;
-import smartyplant.modules.Vote;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -33,6 +27,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bugsense.trace.BugSenseHandler;
+import com.mistersmartyplants.lazylist.ImageLoader;
+import com.mistersmartyplants.model.DetailedPlant;
+import com.mistersmartyplants.model.User;
+import com.mistersmartyplants.model.Vote;
+import com.mistersmartyplants.parser.DataConnector;
+import com.mistersmartyplants.utility.GlobalState;
 
 public class PlantDetails extends Activity {
 	Context mContext = this;

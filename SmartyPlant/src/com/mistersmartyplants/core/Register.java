@@ -1,10 +1,10 @@
-package smartyplant.core;
+package com.mistersmartyplants.core;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.bugsense.trace.BugSenseHandler;
+import com.mistersmartyplants.parser.DataConnector;
+import com.mistersmartyplants.utility.GlobalState;
 
-import smartyplant.Network.DataConnector;
-import smartyplant.Utils.GlobalState;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;

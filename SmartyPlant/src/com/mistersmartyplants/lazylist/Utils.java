@@ -1,4 +1,4 @@
-package smartyplant.lazylist;
+package com.mistersmartyplants.lazylist;
 
 import java.io.InputStream;
 import java.io.OutputStream;

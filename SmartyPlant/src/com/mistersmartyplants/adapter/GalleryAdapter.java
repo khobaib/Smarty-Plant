@@ -1,7 +1,8 @@
-package smartyplant.adapters;
+package com.mistersmartyplants.adapter;
 
-import smartyplant.Utils.GlobalState;
-import smartyplant.core.R;
+import com.mistersmartyplants.core.R;
+import com.mistersmartyplants.utility.GlobalState;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;

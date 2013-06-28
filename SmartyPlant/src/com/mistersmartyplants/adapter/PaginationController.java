@@ -1,4 +1,4 @@
-package smartyplant.adapters;
+package com.mistersmartyplants.adapter;
 
 import java.util.ArrayList;
 
@@ -6,8 +6,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import smartyplant.Utils.GlobalState;
-import smartyplant.modules.BriefedPlant;
+import com.mistersmartyplants.model.BriefedPlant;
+import com.mistersmartyplants.utility.GlobalState;
+
 import android.content.Context;
 
 public class PaginationController {

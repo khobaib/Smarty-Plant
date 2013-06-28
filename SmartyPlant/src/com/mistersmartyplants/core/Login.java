@@ -1,7 +1,5 @@
-package smartyplant.core;
+package com.mistersmartyplants.core;
 
-import smartyplant.Network.DataConnector;
-import smartyplant.Utils.GlobalState;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +25,8 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.SubMenu;
 import com.bugsense.trace.BugSenseHandler;
+import com.mistersmartyplants.parser.DataConnector;
+import com.mistersmartyplants.utility.GlobalState;
 
 public class Login extends SherlockActivity {
 	String user_name = "";

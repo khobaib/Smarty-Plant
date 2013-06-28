@@ -1,10 +1,10 @@
-package smartyplant.core;
+package com.mistersmartyplants.core;
 
 import com.bugsense.trace.BugSenseHandler;
+import com.mistersmartyplants.adapter.GalleryAdapter;
+import com.mistersmartyplants.parser.DataConnector;
+import com.mistersmartyplants.utility.GlobalState;
 
-import smartyplant.Network.DataConnector;
-import smartyplant.Utils.GlobalState;
-import smartyplant.adapters.GalleryAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,6 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -106,6 +107,7 @@ public class Submit extends Activity {
 			try {
 				result = DataConnector.getInstance().uploadImage(country,
 						state, city, region, desc);
+				Log.d("<<<<>>>>", "result = " + result);
 			} catch (Exception e) {
 				e.printStackTrace();
 				result = "Error Uploading Image";

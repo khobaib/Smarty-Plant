@@ -1,12 +1,9 @@
-package smartyplant.Utils;
+package com.mistersmartyplants.utility;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import smartyplant.core.R;
-import smartyplant.modules.BriefedPlant;
-import smartyplant.modules.Plant;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,6 +18,9 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.mistersmartyplants.core.R;
+import com.mistersmartyplants.model.BriefedPlant;
+import com.mistersmartyplants.model.Plant;
 
 public class GlobalState {
 

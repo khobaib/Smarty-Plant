@@ -1,12 +1,13 @@
-package smartyplant.adapters;
+package com.mistersmartyplants.adapter;
 
 import java.util.ArrayList;
 
-import smartyplant.Utils.GlobalState;
-import smartyplant.core.R;
-import smartyplant.core.R.layout;
-import smartyplant.lazylist.ImageLoader;
-import smartyplant.modules.BriefedPlant;
+import com.mistersmartyplants.core.R;
+import com.mistersmartyplants.core.R.layout;
+import com.mistersmartyplants.lazylist.ImageLoader;
+import com.mistersmartyplants.model.BriefedPlant;
+import com.mistersmartyplants.utility.GlobalState;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

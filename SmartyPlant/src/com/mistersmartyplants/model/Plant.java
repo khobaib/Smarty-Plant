@@ -1,4 +1,4 @@
-package smartyplant.modules;
+package com.mistersmartyplants.model;
 
 public abstract class Plant {
 

@@ -1,12 +1,8 @@
-package smartyplant.core;
+package com.mistersmartyplants.core;
 
 import java.io.File;
 import java.util.Date;
 
-import smartyplant.Network.DataConnector;
-import smartyplant.Utils.GlobalState;
-import smartyplant.adapters.GalleryAdapter;
-import smartyplant.adapters.PaginationController;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -46,6 +42,10 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.SubMenu;
 import com.bugsense.trace.BugSenseHandler;
+import com.mistersmartyplants.adapter.GalleryAdapter;
+import com.mistersmartyplants.adapter.PaginationController;
+import com.mistersmartyplants.parser.DataConnector;
+import com.mistersmartyplants.utility.GlobalState;
 
 public class HomeScreen extends SherlockActivity implements
 		ActionBar.TabListener {
@@ -214,7 +214,7 @@ public class HomeScreen extends SherlockActivity implements
 				gridView.setAdapter(pController.adapter);
 
 			} else {
-				gridView.setAdapter(new smartyplant.adapters.ImageAdapter(
+				gridView.setAdapter(new com.mistersmartyplants.adapter.ImageAdapter(
 						mContext, getColumnWidth(), getColumnHeight(),
 						globalState.all_plants));
 			}
