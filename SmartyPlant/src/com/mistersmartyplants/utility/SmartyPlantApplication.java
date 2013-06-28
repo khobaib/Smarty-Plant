@@ -50,9 +50,10 @@ public class SmartyPlantApplication extends Application {
     }
     
     public void setAccessToken(String token){
+    	GlobalState.getInstance().API_TOKEN = token;
         Editor editor = User.edit();
-        editor.putString(Constants.ACCESS_TOKEN, token);
-        editor.commit();        
+        editor.putString(Constants.ACCESS_TOKEN, token).commit();
+        
     }
     
     

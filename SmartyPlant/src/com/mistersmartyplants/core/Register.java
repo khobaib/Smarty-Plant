@@ -1,9 +1,15 @@
 package com.mistersmartyplants.core;
 
+import org.json.JSONObject;
+
 import com.actionbarsherlock.app.SherlockActivity;
 import com.bugsense.trace.BugSenseHandler;
+import com.mistersmartyplants.model.ServerResponse;
 import com.mistersmartyplants.parser.DataConnector;
+import com.mistersmartyplants.parser.JsonParser;
+import com.mistersmartyplants.utility.Constants;
 import com.mistersmartyplants.utility.GlobalState;
+import com.mistersmartyplants.utility.SmartyPlantApplication;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -28,32 +34,38 @@ public class Register extends SherlockActivity {
 	EditText confirm_field;
 	EditText email_field;
 	Context mContext = this;
-	
+	SmartyPlantApplication appInstance;
+	JsonParser jsonParser;
+
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
 
-        super.onCreate(savedInstanceState);
-        GlobalState.getInstance().initActionBar(mContext, R.layout.register);
-        
-        username_field = (EditText)findViewById(R.id.user_name_field);
-        email_field = (EditText)findViewById(R.id.email_field);
-        password_field = (EditText)findViewById(R.id.password_field);
-        confirm_field = (EditText)findViewById(R.id.confirm_password_field);
-        
-        ImageView create = (ImageView)findViewById(R.id.create);
-        create.setOnClickListener(new OnClickListener() {
+		super.onCreate(savedInstanceState);
+		GlobalState.getInstance().initActionBar(mContext, R.layout.register);
+		appInstance = (SmartyPlantApplication) getApplication();
+		jsonParser = new JsonParser();
+
+		username_field = (EditText) findViewById(R.id.user_name_field);
+		email_field = (EditText) findViewById(R.id.email_field);
+		password_field = (EditText) findViewById(R.id.password_field);
+		confirm_field = (EditText) findViewById(R.id.confirm_password_field);
+
+		ImageView create = (ImageView) findViewById(R.id.create);
+		create.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				username = username_field.getEditableText().toString();
 				email = email_field.getEditableText().toString();
 				password = password_field.getEditableText().toString();
 				String confirm = confirm_field.getEditableText().toString();
-				
-				if(!password.equals(confirm)){
-					Toast.makeText(mContext,"Password & Confirmation do no match, please retype password", 3000).show();
-				}
-				else{
+
+				if (!password.equals(confirm)) {
+					Toast.makeText(
+							mContext,
+							"Password & Confirmation do no match, please retype password",
+							3000).show();
+				} else {
 					try {
 						RegTask task = new RegTask();
 						task.execute();
@@ -64,70 +76,77 @@ public class Register extends SherlockActivity {
 				}
 			}
 		});
-        
-        
 
-    }
-	
-	
-	 private class RegTask extends AsyncTask<Void, Void, Void>
-	 {
+	}
 
-		int result ;
-    	ProgressDialog dialog = null;
+	private class RegTask extends AsyncTask<Void, Void, Boolean> {
 
-		
-		
+		ProgressDialog dialog = null;
+
 		@Override
-    	protected void onPreExecute() {
-    		dialog = new ProgressDialog(mContext);			
+		protected void onPreExecute() {
+			dialog = new ProgressDialog(mContext);
 			dialog.setTitle(" ");
 			dialog.setIcon(R.drawable.logo);
 			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			dialog.setCancelable(false);
 			dialog.setMessage("Registering ...");
 			dialog.show();
-    	}
-		
-		@Override
-		protected Void doInBackground(Void... params) {
-			
-			try 
-			{
-				result = DataConnector.getInstance().register(username, email, password);
-			} catch (Exception e) {
-				
-				e.printStackTrace();
-			}
-			
-			return null;
-			
 		}
-		
-		@Override
-		protected void onPostExecute(Void result) {
-			try{
-			dialog.dismiss();
-			}
-			catch(Exception e){
-				
-			}
-			if(this.result == 1){
-				Toast.makeText(mContext, "Registered Successfully", 3000).show();
 
-			finish();
-			startActivity(new Intent(mContext, Login.class));
+		@Override
+		protected Boolean doInBackground(Void... params) {
+
+			try {
+				String url = Constants.METHOD_REGISTER;
+				JSONObject requestObj = new JSONObject();
+				requestObj.put("user_name", username);
+				requestObj.put("password", password);
+				requestObj.put("email", email);
+				String requestData = requestObj.toString();
+				
+				ServerResponse response = jsonParser
+						.retrieveServerData(Constants.REQUEST_TYPE_POST, url,
+								null, requestData, null);
+				if (response.getStatus() == 200) {
+					
+					// parse request data here
+					return true;
+				} else {
+					return false;
+				}
+//				result = DataConnector.getInstance().register(username, email,
+//						password);
+			} catch (Exception e) {
+				return false;
 			}
-			
-			else if(this.result == 2){
+
+
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			try {
+				dialog.dismiss();
+			} catch (Exception e) {
+
+			}
+			if (result) {
+				Toast.makeText(mContext, "Registered Successfully", 3000)
+						.show();
+
+				finish();
+				startActivity(new Intent(mContext, Login.class));
+			}
+
+			else {
 				Toast.makeText(mContext, "User already exists", 3000).show();
 			}
+
 			
-			else
-				Toast.makeText(mContext, "Problem With Registration", 3000).show();
 
 		}
-		 
-	 }
-	
+
+	}
+
 }

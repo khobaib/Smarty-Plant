@@ -70,7 +70,7 @@ public class JsonParser {
                 httpGet.setHeader("Content-Type", "application/json");
                 httpGet.setHeader("Accept", "application/json");
                 if (appToken != null){
-                    httpGet.setHeader("token", appToken);
+                    httpGet.setHeader("Authorization-Token", appToken);
                 }
                 //                    httpGet.setHeader("Authorization", editTokenVal);
 

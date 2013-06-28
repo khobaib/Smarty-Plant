@@ -1,32 +1,35 @@
 package com.mistersmartyplants.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.SubMenu;
 import com.bugsense.trace.BugSenseHandler;
+import com.mistersmartyplants.model.ServerResponse;
 import com.mistersmartyplants.parser.DataConnector;
+import com.mistersmartyplants.parser.JsonParser;
+import com.mistersmartyplants.utility.Constants;
 import com.mistersmartyplants.utility.GlobalState;
+import com.mistersmartyplants.utility.SmartyPlantApplication;
 
 public class Login extends SherlockActivity {
 	String user_name = "";
@@ -41,11 +44,16 @@ public class Login extends SherlockActivity {
 	SharedPreferences prefs;
 	public static final String PREFS_NAME = "MyPrefsFile";
 
+	SmartyPlantApplication appInstance;
+	JsonParser jsonParser;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
 		super.onCreate(savedInstanceState);
 		globalState.initActionBar(this, R.layout.login);
+		appInstance = (SmartyPlantApplication) getApplication();
+		jsonParser = new JsonParser();
 
 		user_name_field = (EditText) findViewById(R.id.user_name_field);
 		password_field = (EditText) findViewById(R.id.password_field);
@@ -100,9 +108,9 @@ public class Login extends SherlockActivity {
 
 	}
 
-	private class LoginTask extends AsyncTask<Void, Void, Void> {
+	private class LoginTask extends AsyncTask<Void, Void, Boolean> {
 
-		boolean result;
+		//boolean result;
 		ProgressDialog dialog = null;
 
 		@Override
@@ -118,22 +126,39 @@ public class Login extends SherlockActivity {
 		}
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected Boolean doInBackground(Void... params) {
 
 			try {
-				result = dataConnector.loginIn(user_name, password);
+				String url = Constants.METHOD_LOGIN;
+				
+				JSONObject requestObj = new JSONObject();
+				requestObj.put("user_name", user_name);
+				requestObj.put("password", password);
+				String loginData = requestObj.toString();
+				ServerResponse response = jsonParser.retrieveServerData(
+						Constants.REQUEST_TYPE_POST, url, null,
+						loginData, null);
+				if (response.getStatus() == 200) {
+					JSONObject responsObj = response.getjObj();
+					String token = responsObj.optString("token");
+					appInstance.setAccessToken(token);
+					return true;
+				}
+				else {
+					return false;
+				}
+
+				//result = dataConnector.loginIn(user_name, password);
 				// result =true;
 			} catch (Exception e) {
 
-				e.printStackTrace();
+			return false;
 			}
-
-			return null;
 
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(Boolean result) {
 
 			try {
 				dialog.dismiss();
@@ -141,7 +166,7 @@ public class Login extends SherlockActivity {
 			} catch (Exception e) {
 
 			}
-			if (this.result) {
+			if (result) {
 				finish();
 				startActivity(new Intent(mContext, HomeScreen.class));
 			} else {
@@ -174,13 +199,12 @@ public class Login extends SherlockActivity {
 		startActivity(new Intent(mContext, Register.class));
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
 		BugSenseHandler.closeSession(mContext);
-
 
 	}
 

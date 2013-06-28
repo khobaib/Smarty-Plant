@@ -24,6 +24,7 @@ import com.mistersmartyplants.model.BriefedPlant;
 import com.mistersmartyplants.model.DetailedPlant;
 import com.mistersmartyplants.model.User;
 import com.mistersmartyplants.model.Vote;
+import com.mistersmartyplants.utility.Constants;
 import com.mistersmartyplants.utility.GlobalState;
 
 import android.graphics.Bitmap;
