@@ -29,9 +29,12 @@ import android.widget.Toast;
 import com.bugsense.trace.BugSenseHandler;
 import com.mistersmartyplants.lazylist.ImageLoader;
 import com.mistersmartyplants.model.DetailedPlant;
+import com.mistersmartyplants.model.ServerResponse;
 import com.mistersmartyplants.model.User;
 import com.mistersmartyplants.model.Vote;
 import com.mistersmartyplants.parser.DataConnector;
+import com.mistersmartyplants.parser.JsonParser;
+import com.mistersmartyplants.utility.Constants;
 import com.mistersmartyplants.utility.GlobalState;
 
 public class PlantDetails extends Activity {
@@ -40,6 +43,7 @@ public class PlantDetails extends Activity {
 	String voted_name = "";
 	DetailedPlant detailedPlant;
 	ImageLoader lazyLoader;
+	JsonParser jsonParser;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -149,14 +153,14 @@ public class PlantDetails extends Activity {
 		TextView userNameLabel = (TextView) votePanel.getChildAt(0);
 		userNameLabel.setText(userName);
 		userNameLabel.setVisibility(visibility);
-		
+
 		TextView calledThis = (TextView) votePanel.getChildAt(1);
 		calledThis.setVisibility(visibility);
-		
+
 		TextView plantNameLabel = (TextView) votePanel.getChildAt(2);
 		plantNameLabel.setText(plantName);
 		plantNameLabel.setVisibility(visibility);
-		
+
 		TextView percentLabel = (TextView) votePanel.getChildAt(3);
 		percentLabel.setText(prc + "% agreed");
 
@@ -259,8 +263,7 @@ public class PlantDetails extends Activity {
 	}
 
 	// ============= Background Task ========
-	class VoteTask extends AsyncTask<Void, Void, Void> {
-		String result;
+	class VoteTask extends AsyncTask<Void, Void, String> {
 		ProgressDialog dialog = null;
 		String message = "";
 
@@ -278,19 +281,36 @@ public class PlantDetails extends Activity {
 		}
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected String doInBackground(Void... params) {
 			try {
-				result = DataConnector.getInstance().voteForPlant(voted_name,
-						globalState.currentPlant.plant_id);
+
+				String url = Constants.METHOD_VOTE;
+
+				JSONObject requestObj = new JSONObject();
+				requestObj.put("plant_id", globalState.currentPlant.plant_id);
+				requestObj.put("plant_name", voted_name);
+				requestObj.put("ip_address", "127.0.0.1");
+				String loginData = requestObj.toString();
+				ServerResponse response = jsonParser
+						.retrieveServerData(3, Constants.REQUEST_TYPE_POST,
+								url, null, loginData, globalState.API_TOKEN);
+				if (response.getStatus() == 200) {
+					return response.getStr();
+				} else {
+					return "";
+				}
+
+//				result = DataConnector.getInstance().voteForPlant(voted_name,
+//						globalState.currentPlant.plant_id);
 			} catch (Exception e) {
 				e.printStackTrace();
-				result = "Error Sending Request";
+			//	result = "Error Sending Request";
 			}
 			return null;
 
 		}
 
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(String result) {
 			try {
 				dialog.dismiss();
 			} catch (Exception e) {
@@ -299,7 +319,7 @@ public class PlantDetails extends Activity {
 
 			JSONObject obj;
 			try {
-				obj = new JSONObject(this.result);
+				obj = new JSONObject(result);
 				message = obj.optString("status");
 				JSONArray votes = obj.optJSONArray("vote_detail");
 				detailedPlant.votes.clear();

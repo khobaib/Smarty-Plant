@@ -1,8 +1,16 @@
 package com.mistersmartyplants.core;
 
+import java.io.ByteArrayOutputStream;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.bugsense.trace.BugSenseHandler;
 import com.mistersmartyplants.adapter.GalleryAdapter;
+import com.mistersmartyplants.model.ServerResponse;
 import com.mistersmartyplants.parser.DataConnector;
+import com.mistersmartyplants.parser.JsonParser;
+import com.mistersmartyplants.utility.Constants;
 import com.mistersmartyplants.utility.GlobalState;
 
 import android.app.Activity;
@@ -12,10 +20,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +55,7 @@ public class Submit extends Activity {
 	EditText descField;
 	ProgressDialog dialog = null;
 	boolean requestResult = false;
+	JsonParser jsonParser;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +63,7 @@ public class Submit extends Activity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.submit_form);
+		jsonParser = new JsonParser();
 		countryField = (EditText) findViewById(R.id.country_field);
 		stateField = (EditText) findViewById(R.id.state_field);
 		cityField = (EditText) findViewById(R.id.city_field);
@@ -85,8 +97,7 @@ public class Submit extends Activity {
 	}
 
 	// ============= Background Task ========
-	class UploadTask extends AsyncTask<Void, Void, Void> {
-		String result;
+	class UploadTask extends AsyncTask<Void, Void, String> {
 		ProgressDialog dialog = null;
 
 		// alertDialog = null;
@@ -103,20 +114,54 @@ public class Submit extends Activity {
 		}
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected String doInBackground(Void... params) {
 			try {
-				result = DataConnector.getInstance().uploadImage(country,
-						state, city, region, desc);
-				Log.d("<<<<>>>>", "result = " + result);
+				String url = Constants.METHOD_UPLOAD;
+				
+				
+				JSONArray arr = new JSONArray();
+				for (int i = 0; i < GlobalState.getInstance().currentBitmaps.size(); i++) {
+					JSONObject json = new JSONObject();
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					
+					String path = GlobalState.getInstance().currentBitmaps.get(i);
+					Bitmap bm = GlobalState.getInstance().bitmapFromPath(path);
+					bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+					// bm.recycle();
+					byte[] b = baos.toByteArray();
+					baos.close();
+					baos = null;
+
+					String base64 = Base64.encodeToString(b, Base64.DEFAULT);
+					json.put("base64String", base64.replaceAll("\n", ""));
+					json.put("description", desc);
+					json.put("country", country);
+					json.put("state", state);
+					json.put("city", city);
+					json.put("region", region);
+					arr.put(json);
+				}
+				String loginData = arr.toString();
+				ServerResponse response = jsonParser
+						.retrieveServerData(3, Constants.REQUEST_TYPE_POST,
+								url, null, loginData, GlobalState.getInstance().API_TOKEN);
+				if (response.getStatus() == 200) {
+					return response.getStr();
+				} else {
+					return "";
+				}
+				
+//				result = DataConnector.getInstance().uploadImage(country,
+//						state, city, region, desc);
+		//		Log.d("<<<<>>>>", "result = " + result);
 			} catch (Exception e) {
 				e.printStackTrace();
-				result = "Error Uploading Image";
+				return "Error Uploading Image";
 			}
-			return null;
 
 		}
 
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(String result) {
 			try {
 				dialog.dismiss();
 			} catch (Exception e) {
@@ -126,7 +171,7 @@ public class Submit extends Activity {
 			AlertDialog.Builder alertdialog = new AlertDialog.Builder(mContext);
 			alertdialog.setIcon(R.drawable.logo);
 			alertdialog.setTitle(" ");
-			if (this.result.contains("uccess")) {
+			if (result.contains("uccess")) {
 				alertdialog.setMessage("Plant Submitted Successfully");
 				requestResult = true;
 			}
@@ -155,7 +200,7 @@ public class Submit extends Activity {
 			alertdialog.setCancelable(true);
 			alertdialog.create().show();
 
-			if (this.result.equalsIgnoreCase("Success")) {
+			if (result.equalsIgnoreCase("Success")) {
 				GlobalState.getInstance().currentBitmaps.clear();
 				finish();
 				startActivity(new Intent(mContext, HomeScreen.class));
