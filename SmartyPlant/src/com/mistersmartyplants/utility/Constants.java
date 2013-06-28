@@ -15,7 +15,10 @@ public class Constants {
     public static final String API_URL = "http://api.mistersmartyplants.com/api/";
     public static final String METHOD_LOGIN = API_URL+"login";
     public static final String METHOD_REGISTER = API_URL+"registration";
-    
+    public static final String METHOD_PLANTS_UNSOLVED = API_URL+"plant/unsolved";
+    public static final String METHOD_PLANTS_ALL_MINE = API_URL+"plant/allmine";
+
+ 
     
     public static final int RESPONSE_STATUS_CODE_SUCCESS = 200;
 

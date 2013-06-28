@@ -106,11 +106,11 @@ public class Register extends SherlockActivity {
 				String requestData = requestObj.toString();
 				
 				ServerResponse response = jsonParser
-						.retrieveServerData(Constants.REQUEST_TYPE_POST, url,
+						.retrieveServerData(3,Constants.REQUEST_TYPE_POST, url,
 								null, requestData, null);
 				if (response.getStatus() == 200) {
 					
-					// parse request data here
+					
 					return true;
 				} else {
 					return false;

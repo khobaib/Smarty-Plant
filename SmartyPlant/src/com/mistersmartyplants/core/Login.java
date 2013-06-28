@@ -135,7 +135,7 @@ public class Login extends SherlockActivity {
 				requestObj.put("user_name", user_name);
 				requestObj.put("password", password);
 				String loginData = requestObj.toString();
-				ServerResponse response = jsonParser.retrieveServerData(
+				ServerResponse response = jsonParser.retrieveServerData(1,
 						Constants.REQUEST_TYPE_POST, url, null,
 						loginData, null);
 				if (response.getStatus() == 200) {

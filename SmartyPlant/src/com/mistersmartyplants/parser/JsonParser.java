@@ -18,6 +18,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,6 +31,8 @@ public class JsonParser {
 
     static InputStream          is   = null;
     static JSONObject           jObj = null;
+    static JSONArray           jArr = null;
+
     static String               json = "";
 
     private static final String TAG  = JsonParser.class.getSimpleName();
@@ -39,7 +42,7 @@ public class JsonParser {
 
     }
 
-    public ServerResponse retrieveServerData(int reqType, String url, List<NameValuePair> urlParams, String content, String appToken) {
+    public ServerResponse retrieveServerData(int resposeType, int reqType, String url, List<NameValuePair> urlParams, String content, String appToken) {
         Log.d(TAG, "in retrieveServerData method");
 
         int status = 0;
@@ -81,14 +84,15 @@ public class JsonParser {
                 httpPost.setHeader("Content-Type", "application/json");
                 httpPost.setHeader("Accept", "application/json");
                 if (appToken != null){
-                    httpPost.setHeader("token", appToken);
+                    httpPost.setHeader("Authorization-Token", appToken);
                 }
                 //                    httpPost.setHeader("Authorization", editTokenVal);
-
+                if(content != null)
+                {
                 StringEntity se = new StringEntity(content);
                 se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
                 httpPost.setEntity(se);
-
+                }
                 httpResponse = httpClient.execute(httpPost);                
             }
 
@@ -122,12 +126,29 @@ public class JsonParser {
 
         // try parse the string to a JSON object
         try {
-            jObj = new JSONObject(json);
+        	switch (resposeType) {
+			case 1:
+	            jObj = new JSONObject(json);
+	            return new ServerResponse(jObj, status);
+				
+			case 2:
+				jArr = new JSONArray(json);
+	            return new ServerResponse(jArr, status);
+			
+			case 3:
+				return new ServerResponse(json, status);
+				
+			default:
+				break;
+			}
         } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
+        	Log.e("JSON Parser", "Error parsing data " + e.toString());
+
+            
         }
+    	return null;
+
 
         // return ServerResponse
-        return new ServerResponse(jObj, status);
     }
 }

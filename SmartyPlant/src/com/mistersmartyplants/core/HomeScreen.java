@@ -3,6 +3,9 @@ package com.mistersmartyplants.core;
 import java.io.File;
 import java.util.Date;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,8 +47,13 @@ import com.actionbarsherlock.view.SubMenu;
 import com.bugsense.trace.BugSenseHandler;
 import com.mistersmartyplants.adapter.GalleryAdapter;
 import com.mistersmartyplants.adapter.PaginationController;
+import com.mistersmartyplants.model.BriefedPlant;
+import com.mistersmartyplants.model.ServerResponse;
 import com.mistersmartyplants.parser.DataConnector;
+import com.mistersmartyplants.parser.JsonParser;
+import com.mistersmartyplants.utility.Constants;
 import com.mistersmartyplants.utility.GlobalState;
+import com.mistersmartyplants.utility.SmartyPlantApplication;
 
 public class HomeScreen extends SherlockActivity implements
 		ActionBar.TabListener {
@@ -60,8 +68,9 @@ public class HomeScreen extends SherlockActivity implements
 	SharedPreferences prefs;
 	public static final String PREFS_NAME = "MyPrefsFile";
 
-
 	PaginationController pController = PaginationController.getInstance();
+	SmartyPlantApplication appInstance;
+	JsonParser jsonParser;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +78,9 @@ public class HomeScreen extends SherlockActivity implements
 		setTheme(R.style.Theme_Sherlock_Light);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_screen);
-
+		appInstance = (SmartyPlantApplication) getApplication();
+		jsonParser = new JsonParser();
+		
 		PhotoDir.mkdirs();
 		ActionBar bar = getSupportActionBar();
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -192,13 +203,56 @@ public class HomeScreen extends SherlockActivity implements
 		@Override
 		protected Void doInBackground(Void... params) {
 			try {
-				if (currentTab == 0)
-					globalState.all_plants = dataConnector
-							.getPlantsPartial(GlobalState.PLANTS_UNSOLVED);
-				else
-					globalState.all_plants = dataConnector
-							.getPlants(GlobalState.PLANTS_ALL_MINE);
+				ServerResponse response = null;
+				if (currentTab == 0) {
 
+					String url = Constants.METHOD_PLANTS_UNSOLVED;
+					response = jsonParser.retrieveServerData(2,
+							Constants.REQUEST_TYPE_GET, url, null, null,
+							globalState.API_TOKEN);
+
+					// globalState.all_plants = dataConnector
+					// .getPlantsPartial(GlobalState.PLANTS_UNSOLVED);
+				} else{
+					String url = Constants.METHOD_PLANTS_ALL_MINE;
+					response = jsonParser.retrieveServerData(2,
+							Constants.REQUEST_TYPE_GET, url, null, null,
+							globalState.API_TOKEN);
+//					globalState.all_plants = dataConnector
+//							.getPlants(GlobalState.PLANTS_ALL_MINE);
+				}
+				
+				if (response.getStatus() == 200) {
+					globalState.all_plants.clear();
+					JSONArray arr = response.getjArr();
+					pController.orginalArray = arr;
+					for (int i = 0; i < pController.INITIAL_LOAD_COUNT; i++) {
+						JSONObject obj = arr.getJSONObject(i);
+						BriefedPlant p = new BriefedPlant();
+						p.plant_id = obj.getInt("plant_id");
+						p.plant_name = obj.getString("plant_name");
+						p.image_url = "http://mistersmartyplants.com"
+								+ obj.getString("image_url").replaceAll("~", "");
+						p.identifier_name = obj.getString("identifier_name");
+						p.identifier_twitter_url = obj.getString("identifier_twitter_url");						
+						String identifier_picture_url = obj.optString("identifier_picture_url");
+						if(identifier_picture_url.equalsIgnoreCase(""))
+						{
+							p.identifier_picture_url = "http://mistersmartyplants.com/images/default_person.jpg";
+						}
+						else
+						{
+							p.identifier_picture_url = "http://mistersmartyplants.com"
+									+ obj.getString("identifier_picture_url").substring(2);
+						}
+						String num = obj.getString("plant_name_agree_percentage")
+								.replaceAll("%", "");
+						int prc = Integer.parseInt(num);
+						p.plant_name_agree_prc = prc;
+						globalState.all_plants.add(p);
+					}
+				}
+				
 			} catch (Exception e) {
 
 				e.printStackTrace();
@@ -261,7 +315,7 @@ public class HomeScreen extends SherlockActivity implements
 	}
 
 	private void setClickListners() {
-		
+
 		Button menu_button = (Button) findViewById(R.id.upload_image);
 		menu_button.setOnClickListener(new OnClickListener() {
 
@@ -272,7 +326,7 @@ public class HomeScreen extends SherlockActivity implements
 				unregisterForContextMenu(v);
 			}
 		});
-		
+
 		Button menu_button2 = (Button) findViewById(R.id.upload_image2);
 		menu_button2.setOnClickListener(new OnClickListener() {
 
@@ -430,8 +484,6 @@ public class HomeScreen extends SherlockActivity implements
 		return cursor.getString(column_index);
 	}
 
-	
-	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -455,13 +507,13 @@ public class HomeScreen extends SherlockActivity implements
 		prefs.edit().putString("user_name", "").commit();
 		prefs.edit().putString("password", "").commit();
 		prefs.edit().putBoolean("remember_me", false).commit();
-		
+
 		finish();
 		startActivity(new Intent(mContext, Login.class));
 
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
