@@ -153,7 +153,7 @@ public class PlantDetails extends Activity {
 	}
 
 	private RelativeLayout setUpSingleVotePanel(String userName,
-			String plantName, int prc, String googleURL, int visibility) {
+			String plantName, int prc, String googleURL, int visibility, Boolean agreeBtnVisable) {
 		LayoutInflater inflater = LayoutInflater.from(mContext);
 		RelativeLayout votePanel = (RelativeLayout) inflater.inflate(
 				R.layout.cusotm_vote_panel, null);
@@ -185,6 +185,11 @@ public class PlantDetails extends Activity {
 			disAgreeButton.setText("Name It");
 		final String votedName = plantName;
 
+		if(!agreeBtnVisable)
+		{
+			agreeButton.setVisibility(Button.INVISIBLE);
+			disAgreeButton.setVisibility(Button.INVISIBLE);
+		}
 		agreeButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -254,18 +259,19 @@ public class PlantDetails extends Activity {
 	private void initVotePanel() {
 		LinearLayout votingList = (LinearLayout) findViewById(R.id.voting_list);
 		votingList.removeAllViews();
+		
 		if (detailedPlant.votes.size() == 0) {
 
 			RelativeLayout votePanel = setUpSingleVotePanel(
 					detailedPlant.identifier_name, detailedPlant.plant_name,
-					detailedPlant.plant_name_agree_prc, "", Button.GONE);
+					detailedPlant.plant_name_agree_prc, "", Button.GONE, true);
 			votingList.addView(votePanel);
 		} else
 			for (int i = 0; i < detailedPlant.votes.size(); i++) {
 				Vote vote = detailedPlant.votes.get(i);
 				RelativeLayout votePanel = setUpSingleVotePanel(vote.userNames,
 						vote.plantName, vote.agreePercentage,
-						vote.plantGoogleUrl, Button.VISIBLE);
+						vote.plantGoogleUrl, Button.VISIBLE, vote.agreeButtonVisible);
 				votingList.addView(votePanel);
 			}
 	}
