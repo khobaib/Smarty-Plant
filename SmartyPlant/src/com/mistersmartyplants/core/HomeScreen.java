@@ -1,8 +1,12 @@
 package com.mistersmartyplants.core;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -46,6 +50,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.SubMenu;
 import com.bugsense.trace.BugSenseHandler;
 import com.mistersmartyplants.adapter.GalleryAdapter;
+import com.mistersmartyplants.adapter.ImageAdapter;
 import com.mistersmartyplants.adapter.PaginationController;
 import com.mistersmartyplants.model.BriefedPlant;
 import com.mistersmartyplants.model.ServerResponse;
@@ -67,8 +72,8 @@ public class HomeScreen extends SherlockActivity implements
 	String currentImagePath = "";
 	SharedPreferences prefs;
 	public static final String PREFS_NAME = "MyPrefsFile";
+	int currentIndex;
 
-	PaginationController pController = PaginationController.getInstance();
 	SmartyPlantApplication appInstance;
 	JsonParser jsonParser;
 
@@ -80,7 +85,7 @@ public class HomeScreen extends SherlockActivity implements
 		setContentView(R.layout.home_screen);
 		appInstance = (SmartyPlantApplication) getApplication();
 		jsonParser = new JsonParser();
-		
+
 		PhotoDir.mkdirs();
 		ActionBar bar = getSupportActionBar();
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -120,7 +125,7 @@ public class HomeScreen extends SherlockActivity implements
 
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction transaction) {
-
+		currentIndex = 0;
 		currentTab = tab.getPosition();
 		if (tab.getPosition() == 0) {
 			setContentView(R.layout.my_plants_layout);
@@ -129,13 +134,8 @@ public class HomeScreen extends SherlockActivity implements
 			loadMore.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
-					try {
-						pController.extraLoad();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					gridView.setAdapter(pController.adapter);
+					PlantsTask task = new PlantsTask();
+					task.execute();
 				}
 			});
 
@@ -204,62 +204,76 @@ public class HomeScreen extends SherlockActivity implements
 		protected Void doInBackground(Void... params) {
 			try {
 				ServerResponse response = null;
+				String url = Constants.METHOD_PLANT;
+				List<NameValuePair> urlParam = new ArrayList<NameValuePair>();
+				currentIndex = currentIndex + 6;
+
 				if (currentTab == 0) {
 
-					String url = Constants.METHOD_PLANTS_UNSOLVED;
+					urlParam.add(new BasicNameValuePair("flag", "unsolved"));
+					urlParam.add(new BasicNameValuePair("number_of_record", ""
+							+ currentIndex));
+
 					response = jsonParser.retrieveServerData(1,
-							Constants.REQUEST_TYPE_GET, url, null, null,
+							Constants.REQUEST_TYPE_GET, url, urlParam, null,
 							globalState.API_TOKEN);
 
 					// globalState.all_plants = dataConnector
 					// .getPlantsPartial(GlobalState.PLANTS_UNSOLVED);
-				} else{
-					String url = Constants.METHOD_PLANTS_ALL_MINE;
+				} else {
+					urlParam.add(new BasicNameValuePair("flag", "allmine"));
+					urlParam.add(new BasicNameValuePair("number_of_record", ""
+							+ currentIndex));
+
 					response = jsonParser.retrieveServerData(1,
-							Constants.REQUEST_TYPE_GET, url, null, null,
+							Constants.REQUEST_TYPE_GET, url, urlParam, null,
 							globalState.API_TOKEN);
-//					globalState.all_plants = dataConnector
-//							.getPlants(GlobalState.PLANTS_ALL_MINE);
+					// globalState.all_plants = dataConnector
+					// .getPlants(GlobalState.PLANTS_ALL_MINE);
 				}
-				
+
 				if (response.getStatus() == 200) {
-					
+
 					JSONObject responseObj = response.getjObj();
 					String responseStatus = responseObj.optString("response");
-					if (responseStatus.equalsIgnoreCase("success"))
-					{
-						JSONArray arr = responseObj.optJSONArray("plant_details");
+					if (responseStatus.equalsIgnoreCase("success")) {
+						JSONArray arr = responseObj
+								.optJSONArray("plant_details");
 						globalState.all_plants.clear();
-						pController.orginalArray = arr;
-						for (int i = 0; i < pController.INITIAL_LOAD_COUNT; i++) {
+					
+						for (int i = 0; i < arr.length(); i++) {
 							JSONObject obj = arr.getJSONObject(i);
 							BriefedPlant p = new BriefedPlant();
 							p.plant_id = obj.getInt("plant_id");
 							p.plant_name = obj.getString("plant_name");
 							p.image_url = "http://mistersmartyplants.com"
-									+ obj.getString("image_url").replaceAll("~", "");
-							p.identifier_name = obj.getString("identifier_name");
-							p.identifier_twitter_url = obj.getString("identifier_twitter_url");						
-							String identifier_picture_url = obj.optString("identifier_picture_url");
-							if(identifier_picture_url.equalsIgnoreCase(""))
-							{
+									+ obj.getString("image_url").replaceAll(
+											"~", "");
+							p.identifier_name = obj
+									.getString("identifier_name");
+							p.identifier_twitter_url = obj
+									.getString("identifier_twitter_url");
+							String identifier_picture_url = obj
+									.optString("identifier_picture_url");
+							if (identifier_picture_url.equalsIgnoreCase("")) {
 								p.identifier_picture_url = "http://mistersmartyplants.com/images/default_person.jpg";
-							}
-							else
-							{
+							} else {
 								p.identifier_picture_url = "http://mistersmartyplants.com"
-										+ obj.getString("identifier_picture_url").substring(2);
+										+ obj.getString(
+												"identifier_picture_url")
+												.substring(2);
 							}
-							String num = obj.getString("plant_name_agree_percentage")
-									.replaceAll("%", "");
+							String num = obj.getString(
+									"plant_name_agree_percentage").replaceAll(
+									"%", "");
 							int prc = Integer.parseInt(num);
 							p.plant_name_agree_prc = prc;
 							globalState.all_plants.add(p);
 						}
 					}
-					
+
 				}
-				
+
 			} catch (Exception e) {
 
 				e.printStackTrace();
@@ -269,16 +283,19 @@ public class HomeScreen extends SherlockActivity implements
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (currentTab == 0) {
-				pController.initialLoad(mContext, getColumnWidth(),
-						getColumnHeight());
-				gridView.setAdapter(pController.adapter);
 
-			} else {
+			if(gridView.getAdapter() == null){
+
 				gridView.setAdapter(new com.mistersmartyplants.adapter.ImageAdapter(
-						mContext, getColumnWidth(), getColumnHeight(),
-						globalState.all_plants));
+					mContext, getColumnWidth(), getColumnHeight(),
+					globalState.all_plants));
 			}
+			else
+			{
+				ImageAdapter adapter = (ImageAdapter) gridView.getAdapter();
+				adapter.updatePlants(globalState.all_plants);
+			}
+
 			try {
 				dialog.dismiss();
 				dialog = null;
@@ -287,6 +304,14 @@ public class HomeScreen extends SherlockActivity implements
 			}
 		}
 
+		private BriefedPlant[] toArray(ArrayList<BriefedPlant> arr){
+			BriefedPlant[] result = new BriefedPlant[arr.size()];
+			for (int i = 0 ; i < arr.size() ; i ++){
+				result[i] = arr.get(i);
+			}
+			return result;
+		}
+		
 		@Override
 		public void onCancel(DialogInterface arg0) {
 

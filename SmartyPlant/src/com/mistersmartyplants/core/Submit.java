@@ -116,7 +116,7 @@ public class Submit extends Activity {
 		@Override
 		protected JSONObject doInBackground(Void... params) {
 			try {
-				String url = Constants.METHOD_UPLOAD;
+				String url = Constants.METHOD_PLANT;
 				
 				
 				JSONArray arr = new JSONArray();
