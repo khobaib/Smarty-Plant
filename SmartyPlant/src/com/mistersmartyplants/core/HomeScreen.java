@@ -151,24 +151,7 @@ public class HomeScreen extends SherlockActivity implements
 			PlantsTask task = new PlantsTask();
 			task.execute();
 
-		} else if (tab.getPosition() == 1) {
-			setContentView(R.layout.my_plants_layout);
-			gridView = (GridView) findViewById(R.id.grid_view);
-			gridView.setColumnWidth(getColumnWidth());
-			gridView.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
-					GlobalState.getInstance().currentPlant = GlobalState
-							.getInstance().all_plants.get(arg2);
-					GlobalState.getInstance().currentIndex = arg2;
-					startActivity(new Intent(mContext, PlantDetails.class));
-				}
-			});
-			PlantsTask task = new PlantsTask();
-			task.execute();
-
-		} else {
+		}  else {
 			// GlobalState.getInstance().currentBitmaps.clear();
 			setPhotoCaptureMode();
 
@@ -332,6 +315,7 @@ public class HomeScreen extends SherlockActivity implements
 	// ========================== Submit Plants Functions =============
 	private void setPhotoCaptureMode() {
 		setContentView(R.layout.submit_plants_layout);
+		
 		setClickListners();
 		setGallery();
 	}
@@ -381,6 +365,18 @@ public class HomeScreen extends SherlockActivity implements
 				}
 			}
 		});
+		Button upload = (Button) findViewById(R.id.upload_image);
+		Button upload2 = (Button) findViewById(R.id.upload_image2);
+		if (GlobalState.getInstance().currentBitmaps.size() > 0) {
+			upload.setVisibility(Button.INVISIBLE);
+			upload2.setVisibility(Button.VISIBLE);
+			done.setVisibility(Button.VISIBLE);
+		} else {
+			upload.setVisibility(Button.VISIBLE);
+			upload2.setVisibility(Button.GONE);
+			done.setVisibility(Button.GONE);
+
+		}
 	}
 
 	protected void startCameraActivity() {
