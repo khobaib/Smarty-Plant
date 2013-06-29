@@ -51,6 +51,7 @@ public class PlantDetails extends Activity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.plant_details);
+		jsonParser = new JsonParser();
 		lazyLoader = new ImageLoader(mContext);
 		LoadDataTask loadData = new LoadDataTask();
 		loadData.execute();
@@ -263,7 +264,7 @@ public class PlantDetails extends Activity {
 	}
 
 	// ============= Background Task ========
-	class VoteTask extends AsyncTask<Void, Void, String> {
+	class VoteTask extends AsyncTask<Void, Void, JSONObject> {
 		ProgressDialog dialog = null;
 		String message = "";
 
@@ -281,7 +282,7 @@ public class PlantDetails extends Activity {
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
+		protected JSONObject doInBackground(Void... params) {
 			try {
 
 				String url = Constants.METHOD_VOTE;
@@ -292,12 +293,12 @@ public class PlantDetails extends Activity {
 				requestObj.put("ip_address", "127.0.0.1");
 				String loginData = requestObj.toString();
 				ServerResponse response = jsonParser
-						.retrieveServerData(3, Constants.REQUEST_TYPE_POST,
+						.retrieveServerData(1, Constants.REQUEST_TYPE_POST,
 								url, null, loginData, globalState.API_TOKEN);
 				if (response.getStatus() == 200) {
-					return response.getStr();
+					return response.getjObj();
 				} else {
-					return "";
+					return null;
 				}
 
 //				result = DataConnector.getInstance().voteForPlant(voted_name,
@@ -310,16 +311,14 @@ public class PlantDetails extends Activity {
 
 		}
 
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(JSONObject obj) {
 			try {
 				dialog.dismiss();
 			} catch (Exception e) {
 
 			}
 
-			JSONObject obj;
 			try {
-				obj = new JSONObject(result);
 				message = obj.optString("status");
 				JSONArray votes = obj.optJSONArray("vote_detail");
 				detailedPlant.votes.clear();
