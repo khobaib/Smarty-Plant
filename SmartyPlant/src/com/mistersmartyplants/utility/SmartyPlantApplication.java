@@ -38,7 +38,7 @@ public class SmartyPlantApplication extends Application {
     
     public void setCredentials(String email, String password){
         Editor editor = User.edit();
-        editor.putString(Constants.EMAIL, email);
+        editor.putString(Constants.USERNAME, email);
         editor.putString(Constants.PASSWORD, password);
         editor.commit();
     }
@@ -62,8 +62,8 @@ public class SmartyPlantApplication extends Application {
         return firstTimeFlag;
     }
     
-    public String getEmail(){
-        String email = User.getString(Constants.EMAIL, null);
+    public String getUserName(){
+        String email = User.getString(Constants.USERNAME, null);
         return email;
     }
     

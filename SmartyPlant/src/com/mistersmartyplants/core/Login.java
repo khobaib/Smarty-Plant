@@ -41,8 +41,6 @@ public class Login extends SherlockActivity {
 
 	GlobalState globalState = GlobalState.getInstance();
 	DataConnector dataConnector = DataConnector.getInstance();
-	SharedPreferences prefs;
-	public static final String PREFS_NAME = "MyPrefsFile";
 
 	SmartyPlantApplication appInstance;
 	JsonParser jsonParser;
@@ -58,17 +56,7 @@ public class Login extends SherlockActivity {
 		user_name_field = (EditText) findViewById(R.id.user_name_field);
 		password_field = (EditText) findViewById(R.id.password_field);
 		remember_me = (CheckBox) findViewById(R.id.remember_me);
-		prefs = getSharedPreferences(PREFS_NAME, 0);
-
-		if (prefs.getBoolean("remember_me", false)) {
-			remember_me.setChecked(true);
-			user_name = prefs.getString("user_name", "");
-			password = prefs.getString("password", "");
-
-			LoginTask task = new LoginTask();
-			task.execute();
-		}
-
+		
 		final ImageView sign_in = (ImageView) findViewById(R.id.sign_in);
 		sign_in.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -76,18 +64,12 @@ public class Login extends SherlockActivity {
 				password = password_field.getEditableText().toString();
 
 				if (remember_me.isChecked()) {
-					SharedPreferences.Editor editor = prefs.edit();
-					editor.putString("user_name", user_name);
-					editor.putString("password", password);
-					editor.putBoolean("remember_me", true);
-					editor.commit();
+					appInstance.setRememberMe(true);
+					appInstance.setCredentials(user_name, password);
 
 				} else {
-					SharedPreferences.Editor editor = prefs.edit();
-					editor.putString("user_name", "");
-					editor.putString("password", "");
-					editor.putBoolean("remember_me", false);
-					editor.commit();
+					appInstance.setRememberMe(false);
+					appInstance.setCredentials("", "");
 				}
 
 				LoginTask task = new LoginTask();
