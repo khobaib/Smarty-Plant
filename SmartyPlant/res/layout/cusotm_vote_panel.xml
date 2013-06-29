@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
     android:background="@drawable/rounded_text"
+    android:layout_height="wrap_content"
     android:padding="5dp" >
 
     <TextView
@@ -21,17 +21,16 @@
         android:layout_alignBaseline="@+id/label1"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/label1"
-        android:text=" called this "
+        android:text=" called this :"
         android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/label3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/label1"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/label2"
+        android:layout_below="@+id/label1"
         android:text="PLANT NAME"
+        android:layout_centerHorizontal="true"
         android:textColor="@android:color/black"
         android:textStyle="bold" />
 
@@ -40,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/label1"
+        android:layout_below="@+id/label3"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:text="0% named"
@@ -62,8 +61,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/agree_prc_bar"
-        android:layout_margin="5dp"
-        android:layout_marginTop="5dp" >
+        android:layout_marginTop="5dp"
+        android:layout_margin="5dp" >
 
         <Button
             android:id="@+id/agree_button"
@@ -88,22 +87,22 @@
             android:textStyle="bold" />
 
         <TextView
+            android:layout_alignBaseline="@+id/plant_more_url"
             android:id="@+id/more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/plant_more_url"
             android:layout_toLeftOf="@+id/plant_more_url"
             android:text="more"
             android:textColor="@android:color/black" />
 
         <TextView
+            android:layout_marginTop="3dp"
+            android:layout_below="@+id/disagree_button"
             android:id="@+id/plant_more_url"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/disagree_button"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="3dp"
             android:text="PLANT NAME"
             android:textColor="#008800"
             android:textStyle="bold" />
