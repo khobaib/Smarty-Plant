@@ -145,7 +145,12 @@ public class Submit extends Activity {
 				ServerResponse response = jsonParser
 						.retrieveServerData(3, Constants.REQUEST_TYPE_POST,
 								url, null, loginData, GlobalState.getInstance().API_TOKEN);
-				if (response.getStatus() == 200) {
+				
+				Log.d("vote", ""+ response.getStatus());
+				Log.d("vote", response.getStr());
+				
+
+				if (response.getStatus() == 200 || response.getStatus() == 201) {
 					return response.getStr();
 				} else {
 					return "";
@@ -167,6 +172,7 @@ public class Submit extends Activity {
 			} catch (Exception e) {
 
 			}
+            Log.d("OnPostExec", "res: "+result);
 
 			AlertDialog.Builder alertdialog = new AlertDialog.Builder(mContext);
 			alertdialog.setIcon(R.drawable.logo);
