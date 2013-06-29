@@ -49,7 +49,7 @@ public class ImageLoader {
         }
         else
         {
-            queuePhoto(url, imageView);
+            queuePhoto(url, imageView, 280);
             imageView.setImageResource(stub_id);
         }
     }
@@ -59,18 +59,18 @@ public class ImageLoader {
     
 
         
-    private void queuePhoto(String url, ImageView imageView)
+    private void queuePhoto(String url, ImageView imageView, int imageQuality)
     {
         PhotoToLoad p=new PhotoToLoad(url, imageView);
-        executorService.submit(new PhotosLoader(p));
+        executorService.submit(new PhotosLoader(p, imageQuality));
     }
     
-    private Bitmap getBitmap(String url) 
+    public Bitmap getBitmap(String url, int imageQuality) 
     {
         File f=fileCache.getFile(url);
         
         //from SD cache
-        Bitmap b = decodeFile(f);
+        Bitmap b = decodeFile(f, imageQuality);
         if(b!=null)
             return b;
         
@@ -87,7 +87,7 @@ public class ImageLoader {
             Utils.CopyStream(is, os);
             os.close();
             conn.disconnect();
-            bitmap = decodeFile(f);
+            bitmap = decodeFile(f, imageQuality);
             return bitmap;
         } catch (Throwable ex){
            ex.printStackTrace();
@@ -98,7 +98,7 @@ public class ImageLoader {
     }
 
     //decodes image and scales it to reduce memory consumption
-    private Bitmap decodeFile(File f){
+    private Bitmap decodeFile(File f, int imageQuality){
         try {
             //decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();
@@ -108,7 +108,7 @@ public class ImageLoader {
             stream1.close();
             
             //Find the correct scale value. It should be the power of 2.
-            final int REQUIRED_SIZE=70;
+            final int REQUIRED_SIZE = imageQuality;
             int width_tmp=o.outWidth, height_tmp=o.outHeight;
             int scale=1;
             while(true){
@@ -147,8 +147,10 @@ public class ImageLoader {
     
     class PhotosLoader implements Runnable {
         PhotoToLoad photoToLoad;
-        PhotosLoader(PhotoToLoad photoToLoad){
+        int imageQuality;
+        PhotosLoader(PhotoToLoad photoToLoad, int imageQuality){
             this.photoToLoad=photoToLoad;
+            this.imageQuality = imageQuality;
         }
         
         @Override
@@ -156,7 +158,7 @@ public class ImageLoader {
             try{
                 if(imageViewReused(photoToLoad))
                     return;
-                Bitmap bmp=getBitmap(photoToLoad.url);
+                Bitmap bmp=getBitmap(photoToLoad.url, imageQuality);
                 memoryCache.put(photoToLoad.url, bmp);
                 if(imageViewReused(photoToLoad))
                     return;

@@ -15,6 +15,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -50,6 +51,8 @@ public class PlantDetails extends Activity {
 	ImageLoader lazyLoader;
 	JsonParser jsonParser;
 	SmartyPlantApplication appInstance;
+	
+	Bitmap bMap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +113,11 @@ public class PlantDetails extends Activity {
 	private void initUI() {
 
 		ImageView image = (ImageView) findViewById(R.id.image_view);
-		lazyLoader.DisplayImage(detailedPlant.imageUrls.get(0), image);
+//		if(bMap != null)
+//		    bMap.recycle();
+		bMap = lazyLoader.getBitmap(detailedPlant.imageUrls.get(0), 1000);
+		image.setImageBitmap(bMap);
+//		lazyLoader.DisplayImage(detailedPlant.imageUrls.get(0), image);
 
 		initVotePanel();
 		initMiniGallery();
@@ -130,7 +137,12 @@ public class PlantDetails extends Activity {
 				imgV.setBackgroundResource(R.drawable.rounded_text);
 			else
 				imgV.setBackgroundResource(R.drawable.rounded_gray);
-			lazyLoader.DisplayImage(detailedPlant.imageUrls.get(i), imgV);
+			
+//		     if(bMap != null)
+//		            bMap.recycle();
+		        bMap = lazyLoader.getBitmap(detailedPlant.imageUrls.get(i), 1000);
+		        imgV.setImageBitmap(bMap);
+//			lazyLoader.DisplayImage(detailedPlant.imageUrls.get(i), imgV);
 			imgV.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {

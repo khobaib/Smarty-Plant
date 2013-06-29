@@ -58,9 +58,9 @@ public class JsonParser {
 
         if (urlParams != null) {
             String paramString = URLEncodedUtils.format(urlParams, "utf-8");
-            url += "?" + paramString;
-            Log.d(TAG, "GET url = " + url);
+            url += "?" + paramString;            
         }
+        Log.d(TAG, "GET url = " + url);
 
         // Making HTTP request
         try {
