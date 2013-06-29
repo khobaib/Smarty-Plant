@@ -206,7 +206,9 @@ public class Submit extends Activity {
 			if (msg.equalsIgnoreCase("success")) {
 				GlobalState.getInstance().currentBitmaps.clear();
 				finish();
-				startActivity(new Intent(mContext, HomeScreen.class));
+				Intent i = new Intent(Submit.this, HomeScreen.class);
+				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(i);
 			}
 		};
 	}
