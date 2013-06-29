@@ -207,7 +207,7 @@ public class HomeScreen extends SherlockActivity implements
 				if (currentTab == 0) {
 
 					String url = Constants.METHOD_PLANTS_UNSOLVED;
-					response = jsonParser.retrieveServerData(2,
+					response = jsonParser.retrieveServerData(1,
 							Constants.REQUEST_TYPE_GET, url, null, null,
 							globalState.API_TOKEN);
 
@@ -215,7 +215,7 @@ public class HomeScreen extends SherlockActivity implements
 					// .getPlantsPartial(GlobalState.PLANTS_UNSOLVED);
 				} else{
 					String url = Constants.METHOD_PLANTS_ALL_MINE;
-					response = jsonParser.retrieveServerData(2,
+					response = jsonParser.retrieveServerData(1,
 							Constants.REQUEST_TYPE_GET, url, null, null,
 							globalState.API_TOKEN);
 //					globalState.all_plants = dataConnector
@@ -223,34 +223,41 @@ public class HomeScreen extends SherlockActivity implements
 				}
 				
 				if (response.getStatus() == 200) {
-					globalState.all_plants.clear();
-					JSONArray arr = response.getjArr();
-					pController.orginalArray = arr;
-					for (int i = 0; i < pController.INITIAL_LOAD_COUNT; i++) {
-						JSONObject obj = arr.getJSONObject(i);
-						BriefedPlant p = new BriefedPlant();
-						p.plant_id = obj.getInt("plant_id");
-						p.plant_name = obj.getString("plant_name");
-						p.image_url = "http://mistersmartyplants.com"
-								+ obj.getString("image_url").replaceAll("~", "");
-						p.identifier_name = obj.getString("identifier_name");
-						p.identifier_twitter_url = obj.getString("identifier_twitter_url");						
-						String identifier_picture_url = obj.optString("identifier_picture_url");
-						if(identifier_picture_url.equalsIgnoreCase(""))
-						{
-							p.identifier_picture_url = "http://mistersmartyplants.com/images/default_person.jpg";
+					
+					JSONObject responseObj = response.getjObj();
+					String responseStatus = responseObj.optString("response");
+					if (responseStatus.equalsIgnoreCase("success"))
+					{
+						JSONArray arr = responseObj.optJSONArray("plant_details");
+						globalState.all_plants.clear();
+						pController.orginalArray = arr;
+						for (int i = 0; i < pController.INITIAL_LOAD_COUNT; i++) {
+							JSONObject obj = arr.getJSONObject(i);
+							BriefedPlant p = new BriefedPlant();
+							p.plant_id = obj.getInt("plant_id");
+							p.plant_name = obj.getString("plant_name");
+							p.image_url = "http://mistersmartyplants.com"
+									+ obj.getString("image_url").replaceAll("~", "");
+							p.identifier_name = obj.getString("identifier_name");
+							p.identifier_twitter_url = obj.getString("identifier_twitter_url");						
+							String identifier_picture_url = obj.optString("identifier_picture_url");
+							if(identifier_picture_url.equalsIgnoreCase(""))
+							{
+								p.identifier_picture_url = "http://mistersmartyplants.com/images/default_person.jpg";
+							}
+							else
+							{
+								p.identifier_picture_url = "http://mistersmartyplants.com"
+										+ obj.getString("identifier_picture_url").substring(2);
+							}
+							String num = obj.getString("plant_name_agree_percentage")
+									.replaceAll("%", "");
+							int prc = Integer.parseInt(num);
+							p.plant_name_agree_prc = prc;
+							globalState.all_plants.add(p);
 						}
-						else
-						{
-							p.identifier_picture_url = "http://mistersmartyplants.com"
-									+ obj.getString("identifier_picture_url").substring(2);
-						}
-						String num = obj.getString("plant_name_agree_percentage")
-								.replaceAll("%", "");
-						int prc = Integer.parseInt(num);
-						p.plant_name_agree_prc = prc;
-						globalState.all_plants.add(p);
 					}
+					
 				}
 				
 			} catch (Exception e) {

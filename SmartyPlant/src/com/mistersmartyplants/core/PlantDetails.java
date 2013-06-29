@@ -323,8 +323,10 @@ public class PlantDetails extends Activity {
 			}
 
 			try {
-				message = obj.optString("status");
-				JSONArray votes = obj.optJSONArray("vote_detail");
+				message = obj.optString("response");
+				if (message.equalsIgnoreCase("success"))
+				{
+				JSONArray votes = obj.optJSONArray("vote_details");
 				detailedPlant.votes.clear();
 				for (int i = 0; i < votes.length(); i++) {
 					Vote v = new Vote();
@@ -349,6 +351,7 @@ public class PlantDetails extends Activity {
 					detailedPlant.votes.add(v);
 				}
 				initVotePanel();
+				}
 			} catch (Exception e) {
 
 			}
@@ -431,7 +434,8 @@ public class PlantDetails extends Activity {
 			try {
 				dialog.dismiss();
 		        Log.d("singlePlant", "result:" + obj.toString());
-
+		        if (obj.optString("response").equalsIgnoreCase("success"))
+		        {
 				detailedPlant = new DetailedPlant();
 				detailedPlant.plant_id = obj.optInt("plant_id");
 				detailedPlant.identifier_name = obj.optString("uploaded_by");
@@ -473,7 +477,7 @@ public class PlantDetails extends Activity {
 					detailedPlant.votes.add(v);
 				}
 				globalState.currentPlant = detailedPlant;
-				
+		        }
 			} catch (Exception e) {
 
 			}

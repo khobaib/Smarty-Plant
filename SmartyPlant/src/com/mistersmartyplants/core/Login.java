@@ -112,7 +112,6 @@ public class Login extends SherlockActivity {
 
 		//boolean result;
 		ProgressDialog dialog = null;
-
 		@Override
 		protected void onPreExecute() {
 			dialog = new ProgressDialog(mContext);
@@ -140,11 +139,15 @@ public class Login extends SherlockActivity {
 						loginData, null);
 				if (response.getStatus() == 200) {
 					JSONObject responsObj = response.getjObj();
-					String token = responsObj.optString("token");
-					appInstance.setAccessToken(token);
+					String responseStatus = responsObj.optString("response");
+					if (responseStatus.equalsIgnoreCase("success")){
+						String token = responsObj.optString("token");
+						appInstance.setAccessToken(token);
+					}
 					return true;
 				}
 				else {
+					
 					return false;
 				}
 

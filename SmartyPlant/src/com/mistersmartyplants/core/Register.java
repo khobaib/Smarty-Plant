@@ -82,7 +82,7 @@ public class Register extends SherlockActivity {
 	private class RegTask extends AsyncTask<Void, Void, Boolean> {
 
 		ProgressDialog dialog = null;
-
+		String msg="";
 		@Override
 		protected void onPreExecute() {
 			dialog = new ProgressDialog(mContext);
@@ -106,12 +106,15 @@ public class Register extends SherlockActivity {
 				String requestData = requestObj.toString();
 				
 				ServerResponse response = jsonParser
-						.retrieveServerData(3,Constants.REQUEST_TYPE_POST, url,
+						.retrieveServerData(1,Constants.REQUEST_TYPE_POST, url,
 								null, requestData, null);
 				if (response.getStatus() == 200) {
-					
-					
-					return true;
+					msg = response.getjObj().optString("response");
+					if (msg.equalsIgnoreCase("success")){
+						return true;
+					}
+					else
+						return false;
 				} else {
 					return false;
 				}
@@ -134,7 +137,6 @@ public class Register extends SherlockActivity {
 			if (result) {
 				Toast.makeText(mContext, "Registered Successfully", 3000)
 						.show();
-
 				finish();
 				startActivity(new Intent(mContext, Login.class));
 			}

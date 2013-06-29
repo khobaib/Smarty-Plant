@@ -97,7 +97,7 @@ public class Submit extends Activity {
 	}
 
 	// ============= Background Task ========
-	class UploadTask extends AsyncTask<Void, Void, String> {
+	class UploadTask extends AsyncTask<Void, Void, JSONObject> {
 		ProgressDialog dialog = null;
 
 		// alertDialog = null;
@@ -114,7 +114,7 @@ public class Submit extends Activity {
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
+		protected JSONObject doInBackground(Void... params) {
 			try {
 				String url = Constants.METHOD_UPLOAD;
 				
@@ -143,17 +143,17 @@ public class Submit extends Activity {
 				}
 				String loginData = arr.toString();
 				ServerResponse response = jsonParser
-						.retrieveServerData(3, Constants.REQUEST_TYPE_POST,
+						.retrieveServerData(1, Constants.REQUEST_TYPE_POST,
 								url, null, loginData, GlobalState.getInstance().API_TOKEN);
 				
 				Log.d("vote", ""+ response.getStatus());
-				Log.d("vote", response.getStr());
+				Log.d("vote", response.getjObj().toString());
 				
 
 				if (response.getStatus() == 200 || response.getStatus() == 201) {
-					return response.getStr();
+					return response.getjObj();
 				} else {
-					return "";
+					return null;
 				}
 				
 //				result = DataConnector.getInstance().uploadImage(country,
@@ -161,12 +161,12 @@ public class Submit extends Activity {
 		//		Log.d("<<<<>>>>", "result = " + result);
 			} catch (Exception e) {
 				e.printStackTrace();
-				return "Error Uploading Image";
+				return null;
 			}
 
 		}
 
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(JSONObject result) {
 			try {
 				dialog.dismiss();
 			} catch (Exception e) {
@@ -177,13 +177,14 @@ public class Submit extends Activity {
 			AlertDialog.Builder alertdialog = new AlertDialog.Builder(mContext);
 			alertdialog.setIcon(R.drawable.logo);
 			alertdialog.setTitle(" ");
-			if (result.contains("uccess")) {
+			String msg = result.optString("response");
+			
+			if (msg.equalsIgnoreCase("success")) {
 				alertdialog.setMessage("Plant Submitted Successfully");
 				requestResult = true;
 			}
 
 			else {
-
 				alertdialog.setMessage("Failed to Submit Plant");
 				requestResult = false;
 			}
@@ -206,7 +207,7 @@ public class Submit extends Activity {
 			alertdialog.setCancelable(true);
 			alertdialog.create().show();
 
-			if (result.equalsIgnoreCase("Success")) {
+			if (msg.equalsIgnoreCase("success")) {
 				GlobalState.getInstance().currentBitmaps.clear();
 				finish();
 				startActivity(new Intent(mContext, HomeScreen.class));
