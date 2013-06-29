@@ -2,16 +2,6 @@ package com.mistersmartyplants.core;
 
 import org.json.JSONObject;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.bugsense.trace.BugSenseHandler;
-import com.mistersmartyplants.model.ServerResponse;
-import com.mistersmartyplants.parser.DataConnector;
-import com.mistersmartyplants.parser.JsonParser;
-import com.mistersmartyplants.utility.Constants;
-import com.mistersmartyplants.utility.GlobalState;
-import com.mistersmartyplants.utility.SmartyPlantApplication;
-
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -19,10 +9,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockActivity;
+import com.bugsense.trace.BugSenseHandler;
+import com.mistersmartyplants.model.ServerResponse;
+import com.mistersmartyplants.parser.JsonParser;
+import com.mistersmartyplants.utility.Constants;
+import com.mistersmartyplants.utility.GlobalState;
+import com.mistersmartyplants.utility.SmartyPlantApplication;
 
 public class Register extends SherlockActivity {
 

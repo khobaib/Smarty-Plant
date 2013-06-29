@@ -5,37 +5,31 @@ import java.io.ByteArrayOutputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.bugsense.trace.BugSenseHandler;
-import com.mistersmartyplants.adapter.GalleryAdapter;
-import com.mistersmartyplants.model.ServerResponse;
-import com.mistersmartyplants.parser.DataConnector;
-import com.mistersmartyplants.parser.JsonParser;
-import com.mistersmartyplants.utility.Constants;
-import com.mistersmartyplants.utility.GlobalState;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bugsense.trace.BugSenseHandler;
+import com.mistersmartyplants.adapter.GalleryAdapter;
+import com.mistersmartyplants.model.ServerResponse;
+import com.mistersmartyplants.parser.JsonParser;
+import com.mistersmartyplants.utility.Constants;
+import com.mistersmartyplants.utility.GlobalState;
+import com.mistersmartyplants.utility.SmartyPlantApplication;
 
 public class Submit extends Activity {
 	Context mContext = this;
@@ -56,6 +50,7 @@ public class Submit extends Activity {
 	ProgressDialog dialog = null;
 	boolean requestResult = false;
 	JsonParser jsonParser;
+	SmartyPlantApplication appInstance;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +59,7 @@ public class Submit extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.submit_form);
 		jsonParser = new JsonParser();
+		appInstance = (SmartyPlantApplication)getApplication();
 		countryField = (EditText) findViewById(R.id.country_field);
 		stateField = (EditText) findViewById(R.id.state_field);
 		cityField = (EditText) findViewById(R.id.city_field);
@@ -144,7 +140,7 @@ public class Submit extends Activity {
 				String loginData = arr.toString();
 				ServerResponse response = jsonParser
 						.retrieveServerData(1, Constants.REQUEST_TYPE_POST,
-								url, null, loginData, GlobalState.getInstance().API_TOKEN);
+								url, null, loginData, appInstance.getAccessToken());
 				
 				Log.d("vote", ""+ response.getStatus());
 				Log.d("vote", response.getjObj().toString());

@@ -26,15 +26,11 @@ public class GlobalState {
 
 	private static GlobalState instance = new GlobalState();
 
-	public String API_TOKEN = "";
 	public String base64 = "";
 	public ArrayList<String> currentBitmaps = new ArrayList<String>();
 	public Plant currentPlant;
 	public int currentIndex;
 
-	public static String PLANTS_ALL_MINE = "allmine";
-	public static String PLANTS_ALL = "all";
-	public static String PLANTS_UNSOLVED = "unsolved";
 
 	public ArrayList<BriefedPlant> all_plants = new ArrayList<BriefedPlant>();
 

@@ -52,7 +52,6 @@ import com.mistersmartyplants.adapter.GalleryAdapter;
 import com.mistersmartyplants.adapter.ImageAdapter;
 import com.mistersmartyplants.model.BriefedPlant;
 import com.mistersmartyplants.model.ServerResponse;
-import com.mistersmartyplants.parser.DataConnector;
 import com.mistersmartyplants.parser.JsonParser;
 import com.mistersmartyplants.utility.Constants;
 import com.mistersmartyplants.utility.GlobalState;
@@ -184,7 +183,6 @@ public class HomeScreen extends SherlockActivity implements
 			DialogInterface.OnCancelListener {
 
 		GlobalState globalState = GlobalState.getInstance();
-		DataConnector dataConnector = DataConnector.getInstance();
 		ProgressDialog dialog = null;
 
 		@Override
@@ -214,7 +212,7 @@ public class HomeScreen extends SherlockActivity implements
 
 					response = jsonParser.retrieveServerData(1,
 							Constants.REQUEST_TYPE_GET, url, urlParam, null,
-							globalState.API_TOKEN);
+							appInstance.getAccessToken());
 
 					// globalState.all_plants = dataConnector
 					// .getPlantsPartial(GlobalState.PLANTS_UNSOLVED);
@@ -225,7 +223,7 @@ public class HomeScreen extends SherlockActivity implements
 
 					response = jsonParser.retrieveServerData(1,
 							Constants.REQUEST_TYPE_GET, url, urlParam, null,
-							globalState.API_TOKEN);
+							appInstance.getAccessToken());
 					// globalState.all_plants = dataConnector
 					// .getPlants(GlobalState.PLANTS_ALL_MINE);
 				}

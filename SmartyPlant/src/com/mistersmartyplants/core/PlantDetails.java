@@ -40,6 +40,7 @@ import com.mistersmartyplants.model.Vote;
 import com.mistersmartyplants.parser.JsonParser;
 import com.mistersmartyplants.utility.Constants;
 import com.mistersmartyplants.utility.GlobalState;
+import com.mistersmartyplants.utility.SmartyPlantApplication;
 
 public class PlantDetails extends Activity {
 	Context mContext = this;
@@ -48,6 +49,7 @@ public class PlantDetails extends Activity {
 	DetailedPlant detailedPlant;
 	ImageLoader lazyLoader;
 	JsonParser jsonParser;
+	SmartyPlantApplication appInstance;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class PlantDetails extends Activity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.plant_details);
+		appInstance = (SmartyPlantApplication)getApplication();
 		jsonParser = new JsonParser();
 		lazyLoader = new ImageLoader(mContext);
 		LoadDataTask loadData = new LoadDataTask();
@@ -298,7 +301,7 @@ public class PlantDetails extends Activity {
 				String loginData = requestObj.toString();
 				ServerResponse response = jsonParser
 						.retrieveServerData(1, Constants.REQUEST_TYPE_POST,
-								url, null, loginData, globalState.API_TOKEN);
+								url, null, loginData, appInstance.getAccessToken());
 				if (response.getStatus() == 200) {
 					return response.getjObj();
 				} else {
@@ -408,7 +411,7 @@ public class PlantDetails extends Activity {
 	            urlParam.add(new BasicNameValuePair("id", ""+globalState.currentPlant.plant_id));
 				ServerResponse response = jsonParser.retrieveServerData(1,
 						Constants.REQUEST_TYPE_GET, url, urlParam,
-						null, globalState.API_TOKEN);
+						null, appInstance.getAccessToken());
 				
 		        Log.d("singlePlant", "Status:"+response.getStatus());
 		        Log.d("singlePlant", "Res :"+response.getjObj().toString());

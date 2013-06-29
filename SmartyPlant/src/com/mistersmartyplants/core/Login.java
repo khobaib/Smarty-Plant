@@ -1,16 +1,10 @@
 package com.mistersmartyplants.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -25,7 +19,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.SubMenu;
 import com.bugsense.trace.BugSenseHandler;
 import com.mistersmartyplants.model.ServerResponse;
-import com.mistersmartyplants.parser.DataConnector;
 import com.mistersmartyplants.parser.JsonParser;
 import com.mistersmartyplants.utility.Constants;
 import com.mistersmartyplants.utility.GlobalState;
@@ -40,7 +33,6 @@ public class Login extends SherlockActivity {
 	Context mContext = this;
 
 	GlobalState globalState = GlobalState.getInstance();
-	DataConnector dataConnector = DataConnector.getInstance();
 
 	SmartyPlantApplication appInstance;
 	JsonParser jsonParser;
