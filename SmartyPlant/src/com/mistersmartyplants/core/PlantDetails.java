@@ -1,5 +1,10 @@
 package com.mistersmartyplants.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -11,9 +16,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,7 +37,6 @@ import com.mistersmartyplants.model.DetailedPlant;
 import com.mistersmartyplants.model.ServerResponse;
 import com.mistersmartyplants.model.User;
 import com.mistersmartyplants.model.Vote;
-import com.mistersmartyplants.parser.DataConnector;
 import com.mistersmartyplants.parser.JsonParser;
 import com.mistersmartyplants.utility.Constants;
 import com.mistersmartyplants.utility.GlobalState;
@@ -374,7 +378,7 @@ public class PlantDetails extends Activity {
 	}
 
 	// ====== LoadDataTask ===============
-	private class LoadDataTask extends AsyncTask<Void, Void, Void> {
+	private class LoadDataTask extends AsyncTask<Void, Void, JSONObject> {
 		ProgressDialog dialog = null;
 
 		@Override
@@ -389,17 +393,31 @@ public class PlantDetails extends Activity {
 		}
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected JSONObject doInBackground(Void... params) {
 
-			boolean isNamed = false;
-			if (globalState.currentPlant.plant_name_agree_prc > 66)
-				isNamed = true;
+			
 
 			try {
-				detailedPlant = DataConnector.getInstance()
+				
+				
+				String url = Constants.METHOD_SINGLE_PLANT;
+				List<NameValuePair> urlParam = new ArrayList<NameValuePair>();
+	            urlParam.add(new BasicNameValuePair("id", ""+globalState.currentPlant.plant_id));
+				ServerResponse response = jsonParser.retrieveServerData(1,
+						Constants.REQUEST_TYPE_GET, url, urlParam,
+						null, globalState.API_TOKEN);
+				
+		        Log.d("singlePlant", "Status:"+response.getStatus());
+		        Log.d("singlePlant", "Res :"+response.getjObj().toString());
+
+				if(response.getStatus() == 200)
+				{
+					return response.getjObj();
+				}
+				/*detailedPlant = DataConnector.getInstance()
 						.downloadSinglePlant(globalState.currentPlant.plant_id,
-								isNamed);
-				globalState.currentPlant = detailedPlant;
+								isNamed);*/
+				//globalState.currentPlant = detailedPlant;
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -408,10 +426,54 @@ public class PlantDetails extends Activity {
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
+		protected void onPostExecute(JSONObject obj) {
+			super.onPostExecute(obj);
 			try {
 				dialog.dismiss();
+		        Log.d("singlePlant", "result:" + obj.toString());
+
+				detailedPlant = new DetailedPlant();
+				detailedPlant.plant_id = obj.optInt("plant_id");
+				detailedPlant.identifier_name = obj.optString("uploaded_by");
+				detailedPlant.country = obj.optString("country");
+				detailedPlant.state = obj.optString("state");
+				detailedPlant.region = obj.optString("region");
+				detailedPlant.city = obj.optString("city");
+				detailedPlant.description = obj.getString("description");
+				detailedPlant.group_id = obj.optString("group_id");
+
+				JSONArray images = obj.optJSONArray("image_url");
+				for (int i = 0; i < images.length(); i++) {
+					detailedPlant.imageUrls.add("http://mistersmartyplants.com"
+							+ images.getString(i).replaceAll("~", ""));
+				}
+
+				detailedPlant.plant_name = GlobalState.getInstance().currentPlant.plant_name;
+				detailedPlant.plant_name_agree_prc = GlobalState.getInstance().currentPlant.plant_name_agree_prc;
+				
+				JSONArray votes = obj.optJSONArray("vote_detail");
+				for (int i = 0 ; i < votes.length(); i ++){
+					Vote v = new Vote();
+					JSONObject voteObj = votes.getJSONObject(i);
+					v.agreeButtonVisible = voteObj.optBoolean("agreeButtonVisible");
+					v.agreePercentage = voteObj.optInt("agreePercent");
+					v.isSolved = voteObj.optBoolean("isSolved");
+					v.plantGoogleUrl = voteObj.optString("plantGoogleURL");
+					v.plantId = voteObj.optInt("plantId");
+					v.plantName = voteObj.optString("plantName");
+					v.userNames = voteObj.optString("userNames");
+					JSONArray users = voteObj.optJSONArray("users");
+					for (int j = 0 ; j < users.length() ; j ++){
+						User user = new User();
+						JSONObject userObj = users.getJSONObject(j);
+						user.profileImageUrl = userObj.optString("profileImageURL");
+						user.userName = userObj.getString("name");
+						v.users.add(user);
+					}
+					detailedPlant.votes.add(v);
+				}
+				globalState.currentPlant = detailedPlant;
+				
 			} catch (Exception e) {
 
 			}

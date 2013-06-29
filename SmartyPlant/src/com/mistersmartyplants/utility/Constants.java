@@ -19,6 +19,7 @@ public class Constants {
     public static final String METHOD_PLANTS_ALL_MINE = API_URL+"plant/allmine";
     public static final String METHOD_VOTE = API_URL+"vote";
     public static final String METHOD_UPLOAD = API_URL+"plant";
+    public static final String METHOD_SINGLE_PLANT = API_URL+"singleplant";
 
 
  
