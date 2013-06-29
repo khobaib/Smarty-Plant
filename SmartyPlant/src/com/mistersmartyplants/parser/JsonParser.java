@@ -44,6 +44,7 @@ public class JsonParser {
 
     public ServerResponse retrieveServerData(int resposeType, int reqType, String url, List<NameValuePair> urlParams, String content, String appToken) {
         Log.d(TAG, "in retrieveServerData method");
+        Log.d("APPTOKEN", "token = " + appToken);           // debug flag added, dont remove it.
 
         int status = 0;
 
