@@ -15,7 +15,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -51,7 +50,6 @@ import com.actionbarsherlock.view.SubMenu;
 import com.bugsense.trace.BugSenseHandler;
 import com.mistersmartyplants.adapter.GalleryAdapter;
 import com.mistersmartyplants.adapter.ImageAdapter;
-import com.mistersmartyplants.adapter.PaginationController;
 import com.mistersmartyplants.model.BriefedPlant;
 import com.mistersmartyplants.model.ServerResponse;
 import com.mistersmartyplants.parser.DataConnector;
@@ -127,7 +125,7 @@ public class HomeScreen extends SherlockActivity implements
 	public void onTabSelected(Tab tab, FragmentTransaction transaction) {
 		currentIndex = 0;
 		currentTab = tab.getPosition();
-		if (tab.getPosition() == 0) {
+		if (tab.getPosition() <= 1) {
 			setContentView(R.layout.my_plants_layout);
 			Button loadMore = (Button) findViewById(R.id.load_more_button);
 			loadMore.setVisibility(Button.VISIBLE);

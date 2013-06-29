@@ -19,20 +19,18 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.mistersmartyplants.adapter.PaginationController;
-import com.mistersmartyplants.model.BriefedPlant;
-import com.mistersmartyplants.model.DetailedPlant;
-import com.mistersmartyplants.model.User;
-import com.mistersmartyplants.model.Vote;
-import com.mistersmartyplants.utility.Constants;
-import com.mistersmartyplants.utility.GlobalState;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
 import android.util.Log;
+
+import com.mistersmartyplants.model.BriefedPlant;
+import com.mistersmartyplants.model.DetailedPlant;
+import com.mistersmartyplants.model.User;
+import com.mistersmartyplants.model.Vote;
+import com.mistersmartyplants.utility.GlobalState;
 
 public class DataConnector {
 
@@ -131,60 +129,6 @@ public class DataConnector {
 			p.identifier_twitter_url = obj.getString("identifier_twitter_url");
 			p.identifier_picture_url = "http://mistersmartyplants.com"
 					+ obj.getString("identifier_picture_url").substring(2);
-			// p.identifier_picture_drawable =
-			// drawableFromUrl(p.identifier_picture_url);
-			String num = obj.getString("plant_name_agree_percentage")
-					.replaceAll("%", "");
-
-			int prc = Integer.parseInt(num);
-			p.plant_name_agree_prc = prc;
-			plants.add(p);
-		}
-		return plants;
-	}
-
-	public ArrayList<BriefedPlant> getPlantsPartial(String type) throws Exception {
-		PaginationController pController = PaginationController.getInstance();
-
-		ArrayList<BriefedPlant> plants = new ArrayList<BriefedPlant>();
-		String result = "";
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpGet httpget = new HttpGet(API_URL + "//plant/" + type);
-
-		httpget.setHeader("Authorization-Token",
-				GlobalState.getInstance().API_TOKEN);
-		HttpResponse response = httpclient.execute(httpget);
-		HttpEntity entity = response.getEntity();
-		if (entity != null) {
-			InputStream instream = entity.getContent();
-			result = convertStreamToString(instream);
-			instream.close();
-		}
-		JSONArray arr = new JSONArray(result);
-		pController.orginalArray = arr;
-		for (int i = 0; i < pController.INITIAL_LOAD_COUNT; i++) {
-			JSONObject obj = arr.getJSONObject(i);
-			BriefedPlant p = new BriefedPlant();
-			p.plant_id = obj.getInt("plant_id");
-			p.plant_name = obj.getString("plant_name");
-			p.image_url = "http://mistersmartyplants.com"
-					+ obj.getString("image_url").replaceAll("~", "");
-			// p.image_drawable = drawableFromUrl(p.image_url);
-
-			p.identifier_name = obj.getString("identifier_name");
-			p.identifier_twitter_url = obj.getString("identifier_twitter_url");
-			
-			String identifier_picture_url = obj.optString("identifier_picture_url");
-			if(identifier_picture_url.equalsIgnoreCase(""))
-			{
-				p.identifier_picture_url = "http://mistersmartyplants.com/images/default_person.jpg";
-			}
-			else
-			{
-				p.identifier_picture_url = "http://mistersmartyplants.com"
-						+ obj.getString("identifier_picture_url").substring(2);
-			}
-
 			// p.identifier_picture_drawable =
 			// drawableFromUrl(p.identifier_picture_url);
 			String num = obj.getString("plant_name_agree_percentage")
