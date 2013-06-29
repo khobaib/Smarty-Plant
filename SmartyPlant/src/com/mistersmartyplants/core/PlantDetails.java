@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -167,6 +168,19 @@ public class PlantDetails extends Activity {
 			miniGallery.setVisibility(LinearLayout.INVISIBLE);
 		}
 	}
+	
+	
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) { // Back key pressed
+            Intent i = new Intent(PlantDetails.this, HomeScreen.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 	private RelativeLayout setUpSingleVotePanel(String userName,
 			String plantName, int prc, String googleURL, int visibility, Boolean agreeBtnVisable) {
