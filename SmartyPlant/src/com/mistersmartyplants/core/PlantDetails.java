@@ -150,6 +150,10 @@ public class PlantDetails extends Activity {
 			});
 			miniGallery.addView(imgV);
 		}
+		if (detailedPlant.imageUrls.size() <=1)
+		{
+			miniGallery.setVisibility(LinearLayout.INVISIBLE);
+		}
 	}
 
 	private RelativeLayout setUpSingleVotePanel(String userName,
