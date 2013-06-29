@@ -20,7 +20,6 @@ import com.mistersmartyplants.utility.SmartyPlantApplication;
 public class Splash extends Activity{
 	
 	SmartyPlantApplication appInstance;
-	SharedPreferences prefs;
 	String user_name = "";
 	String password = "";
 	Context mContext = this;
@@ -32,11 +31,10 @@ public class Splash extends Activity{
 		setContentView(R.layout.splash);
 		jsonParser = new JsonParser();
 		appInstance = (SmartyPlantApplication)getApplication();
-		prefs = getSharedPreferences(Constants.PREFS_NAME, 0);
 
-		if (prefs.getBoolean("remember_me", false)) {
-			user_name = prefs.getString("user_name", "");
-			password = prefs.getString("password", "");
+		if (appInstance.isRememberMe()) {
+			user_name = appInstance.getUserName();
+			password = appInstance.getPassword();
 			LoginTask task = new LoginTask();
 			task.execute();
 		}
