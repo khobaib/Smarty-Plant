@@ -25,6 +25,7 @@
 
             <ImageView
                 android:id="@+id/identifier_picture"
+                android:visibility="gone"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@drawable/rounded_text" />

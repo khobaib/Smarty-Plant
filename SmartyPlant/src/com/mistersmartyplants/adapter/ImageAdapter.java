@@ -91,8 +91,8 @@ public class ImageAdapter extends BaseAdapter {
 		RelativeLayout identifier_info = (RelativeLayout) imageFrame
 				.getChildAt(1);
 
-		ImageView identifier_image = (ImageView) identifier_info.getChildAt(0);
-		imageLoader.DisplayImage(p.identifier_picture_url, identifier_image);
+/*		ImageView identifier_image = (ImageView) identifier_info.getChildAt(0);
+		imageLoader.DisplayImage(p.identifier_picture_url, identifier_image);*/
 
 		TextView identifier_name = (TextView) identifier_info.getChildAt(1);
 		identifier_name.setText("");
