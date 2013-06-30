@@ -67,9 +67,7 @@ public class HomeScreen extends SherlockActivity implements
 	File PhotoDir = new File(Environment.getExternalStorageDirectory(),
 			"smarty_plant_uploads");
 	String currentImagePath = "";
-	SharedPreferences prefs;
-	public static final String PREFS_NAME = "MyPrefsFile";
-	int currentIndex;
+			int currentIndex;
 
 	SmartyPlantApplication appInstance;
 	JsonParser jsonParser;
@@ -215,6 +213,7 @@ public class HomeScreen extends SherlockActivity implements
 
 					JSONObject responseObj = response.getjObj();
 					String responseStatus = responseObj.optString("response");
+					
 					if (responseStatus.equalsIgnoreCase("success")) {
 						JSONArray arr = responseObj
 								.optJSONArray("plant_details");
@@ -250,6 +249,10 @@ public class HomeScreen extends SherlockActivity implements
 							globalState.all_plants.add(p);
 						}
 					}
+					else{
+						globalState.all_plants.clear();
+						
+					}
 
 				}
 
@@ -278,6 +281,8 @@ public class HomeScreen extends SherlockActivity implements
 			try {
 				dialog.dismiss();
 				dialog = null;
+				if (globalState.all_plants.size() == 0)
+					Toast.makeText(mContext, "No Plants to show", 3000).show();
 			} catch (Exception e) {
 
 			}
@@ -527,14 +532,10 @@ public class HomeScreen extends SherlockActivity implements
 	@Override
 	public boolean onOptionsItemSelected(
 			com.actionbarsherlock.view.MenuItem item) {
-		prefs = getSharedPreferences(PREFS_NAME, 0);
-		prefs.edit().putString("user_name", "").commit();
-		prefs.edit().putString("password", "").commit();
-		prefs.edit().putBoolean("remember_me", false).commit();
-
+		appInstance.setCredentials("", "");
+		appInstance.setRememberMe(false);
 		finish();
 		startActivity(new Intent(mContext, Login.class));
-
 		return super.onOptionsItemSelected(item);
 	}
 

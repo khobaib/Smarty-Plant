@@ -17,6 +17,7 @@ public class SmartyPlantApplication extends Application {
         super.onCreate();
         context = getApplicationContext();
         User = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        
     }
     
     
