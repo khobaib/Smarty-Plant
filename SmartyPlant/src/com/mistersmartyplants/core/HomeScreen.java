@@ -75,7 +75,7 @@ public class HomeScreen extends SherlockActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
-		setTheme(R.style.Theme_Holo_light);
+		setTheme(R.style.Theme_Smarty_plants_style);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_screen);
 		appInstance = (SmartyPlantApplication) getApplication();
