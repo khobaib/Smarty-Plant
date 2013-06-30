@@ -277,6 +277,12 @@ public class HomeScreen extends SherlockActivity implements
 				ImageAdapter adapter = (ImageAdapter) gridView.getAdapter();
 				adapter.updatePlants(globalState.all_plants);
 			}
+			
+			if (currentIndex > globalState.all_plants.size())
+			{
+				Button load_more = (Button)findViewById(R.id.load_more_button);
+				load_more.setVisibility(Button.GONE);
+			}
 
 			try {
 				dialog.dismiss();
@@ -288,13 +294,7 @@ public class HomeScreen extends SherlockActivity implements
 			}
 		}
 
-		private BriefedPlant[] toArray(ArrayList<BriefedPlant> arr){
-			BriefedPlant[] result = new BriefedPlant[arr.size()];
-			for (int i = 0 ; i < arr.size() ; i ++){
-				result[i] = arr.get(i);
-			}
-			return result;
-		}
+		
 		
 		@Override
 		public void onCancel(DialogInterface arg0) {
