@@ -74,7 +74,8 @@ public class HomeScreen extends SherlockActivity implements
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
+//		BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
+	    BugSenseHandler.initAndStartSession(HomeScreen.this, "8e103589");
 		setTheme(R.style.Theme_Smarty_plants_style);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_screen);
@@ -543,7 +544,14 @@ public class HomeScreen extends SherlockActivity implements
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
-		BugSenseHandler.closeSession(mContext);
+		BugSenseHandler.closeSession(HomeScreen.this);
 
+	}
+	
+	
+	@Override
+	protected void onStop() {
+	    super.onStop();
+	    BugSenseHandler.closeSession(HomeScreen.this);
 	}
 }
