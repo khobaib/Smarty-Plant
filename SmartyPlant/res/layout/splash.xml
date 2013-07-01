@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/logo2" />
+        android:layout_margin="50dp"
+        android:src="@drawable/background" />
 
 </RelativeLayout>

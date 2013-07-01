@@ -14,7 +14,7 @@
             android:id="@+id/plant_image"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/rounded_gray" />
+            android:background="@drawable/rounded_text" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -61,13 +61,13 @@
         android:layout_alignLeft="@+id/photo_frame"
         android:layout_alignRight="@+id/photo_frame"
         android:layout_below="@+id/photo_frame"
-        android:background="@drawable/rounded_gray" >
+        android:background="@drawable/rounded_text" >
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_below="@+id/photo_frame"
-            android:background="@android:color/darker_gray" >
+            android:background="@android:color/white" >
 
             <TextView
                 android:layout_width="wrap_content"

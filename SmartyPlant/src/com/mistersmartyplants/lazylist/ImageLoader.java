@@ -36,7 +36,7 @@ public class ImageLoader {
         executorService=Executors.newFixedThreadPool(5);
     }
     
-    final int stub_id = com.mistersmartyplants.core.R.drawable.logo;
+    final int stub_id = com.mistersmartyplants.core.R.drawable.icon2x;
     public void DisplayImage(String url, ImageView imageView)
     {
         imageViews.put(imageView, url);

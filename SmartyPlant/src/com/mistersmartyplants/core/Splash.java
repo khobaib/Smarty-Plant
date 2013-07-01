@@ -11,12 +11,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.mistersmartyplants.model.ServerResponse;
 import com.mistersmartyplants.parser.JsonParser;
 import com.mistersmartyplants.utility.Constants;
+import com.mistersmartyplants.utility.GlobalState;
 import com.mistersmartyplants.utility.SmartyPlantApplication;
 
-public class Splash extends Activity{
+public class Splash extends SherlockActivity{
 	
 	SmartyPlantApplication appInstance;
 	String user_name = "";
@@ -27,7 +29,7 @@ public class Splash extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.splash);
+		GlobalState.getInstance().initActionBar(mContext, R.layout.splash);
 		jsonParser = new JsonParser();
 		appInstance = (SmartyPlantApplication)getApplication();
 
@@ -63,8 +65,8 @@ public class Splash extends Activity{
 		protected void onPreExecute() {
 			dialog = new ProgressDialog(mContext);
 			dialog.setTitle(" ");
-
-			dialog.setIcon(R.drawable.logo);
+			
+			dialog.setIcon(R.drawable.icon);
 			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			dialog.setCancelable(false);
 			dialog.setMessage("Logging In");

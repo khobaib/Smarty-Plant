@@ -84,7 +84,7 @@ public class Register extends SherlockActivity {
 		protected void onPreExecute() {
 			dialog = new ProgressDialog(mContext);
 			dialog.setTitle(" ");
-			dialog.setIcon(R.drawable.logo);
+			dialog.setIcon(R.drawable.icon);
 			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			dialog.setCancelable(false);
 			dialog.setMessage("Registering ...");
