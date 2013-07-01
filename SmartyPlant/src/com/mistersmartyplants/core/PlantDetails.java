@@ -60,6 +60,7 @@ public class PlantDetails extends Activity {
 		BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
 
 		super.onCreate(savedInstanceState);
+		setTheme(R.style.Theme_Sherlock_Light);
 		setContentView(R.layout.plant_details);
 		appInstance = (SmartyPlantApplication)getApplication();
 		jsonParser = new JsonParser();
