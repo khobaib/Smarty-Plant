@@ -36,7 +36,7 @@ public class Register extends SherlockActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-	    BugSenseHandler.initAndStartSession(Register.this, "8e103589");
+	    BugSenseHandler.initAndStartSession(Register.this, "f2391cbb");
 
 		super.onCreate(savedInstanceState);
 		GlobalState.getInstance().initActionBar(mContext, R.layout.register);

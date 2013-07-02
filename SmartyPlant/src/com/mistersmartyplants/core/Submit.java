@@ -57,7 +57,7 @@ public class Submit extends Activity {
         
 
         super.onCreate(savedInstanceState);
-        BugSenseHandler.initAndStartSession(Submit.this, "8e103589");
+        BugSenseHandler.initAndStartSession(Submit.this, "f2391cbb");
         setContentView(R.layout.submit_form);
         jsonParser = new JsonParser();
         appInstance = (SmartyPlantApplication)getApplication();

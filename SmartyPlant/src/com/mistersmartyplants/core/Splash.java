@@ -30,7 +30,7 @@ public class Splash extends SherlockActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		BugSenseHandler.initAndStartSession(Splash.this, "8e103589");
+		BugSenseHandler.initAndStartSession(Splash.this, "f2391cbb");
 		
 		GlobalState.getInstance().initActionBar(mContext, R.layout.splash);
 		jsonParser = new JsonParser();
