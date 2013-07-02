@@ -54,7 +54,7 @@ public class Submit extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
+        BugSenseHandler.initAndStartSession(Submit.this, "8e103589");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.submit_form);

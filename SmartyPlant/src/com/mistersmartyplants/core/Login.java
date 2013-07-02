@@ -39,7 +39,7 @@ public class Login extends SherlockActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
+	    BugSenseHandler.initAndStartSession(Login.this, "8e103589");
 		super.onCreate(savedInstanceState);
 		globalState.initActionBar(this, R.layout.login);
 		appInstance = (SmartyPlantApplication) getApplication();

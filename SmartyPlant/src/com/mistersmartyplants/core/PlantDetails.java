@@ -57,7 +57,7 @@ public class PlantDetails extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
+	    BugSenseHandler.initAndStartSession(PlantDetails.this, "8e103589");
 
 		super.onCreate(savedInstanceState);
 		setTheme(R.style.Theme_Sherlock_Light);
