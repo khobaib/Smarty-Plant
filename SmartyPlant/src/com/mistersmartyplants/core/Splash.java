@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.bugsense.trace.BugSenseHandler;
 import com.mistersmartyplants.model.ServerResponse;
 import com.mistersmartyplants.parser.JsonParser;
 import com.mistersmartyplants.utility.Constants;
@@ -29,6 +30,8 @@ public class Splash extends SherlockActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		BugSenseHandler.initAndStartSession(Splash.this, "8e103589");
+		
 		GlobalState.getInstance().initActionBar(mContext, R.layout.splash);
 		jsonParser = new JsonParser();
 		appInstance = (SmartyPlantApplication)getApplication();
