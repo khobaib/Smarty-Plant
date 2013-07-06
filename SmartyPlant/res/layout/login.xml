@@ -4,7 +4,12 @@
     android:layout_height="fill_parent"
     android:background="@android:color/white"
     android:orientation="vertical" >
-
+    <ScrollView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/form"
@@ -40,80 +45,99 @@
             android:layout_height="wrap_content"
             android:background="@drawable/form_cell"
             android:orientation="vertical"
-            android:padding="10dp"
-            >
+            android:padding="10dp" >
 
-        
-                <TextView
-                    android:id="@+id/user_name_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="20dp"
-                    android:text="Username :"
-                    android:textColor="@android:color/black" />
+            <TextView
+                android:id="@+id/user_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Username :"
+                android:textColor="@android:color/black" />
 
-                <EditText
-                    android:id="@+id/user_name_field"
-                    android:layout_toRightOf="@+id/user_name_label"
-                    android:layout_alignBaseline="@+id/user_name_label"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="fill_parent"
-                    android:background="@drawable/rounded_text"
-                    android:singleLine="true"
-                    android:textColor="@android:color/black"
-                     />
+            <EditText
+                android:id="@+id/user_name_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/user_name_label"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/user_name_label"
+                android:background="@drawable/rounded_text"
+                android:singleLine="true"
+                android:textColor="@android:color/black" />
 
+            <TextView
+                android:id="@+id/password_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_name_label"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Password :"
+                android:textColor="@android:color/black" />
 
-                <TextView
-                    android:id="@+id/password_label"
-                    android:layout_below="@+id/user_name_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="20dp"
-                    
-                    android:text="Password :"
-                    android:textColor="@android:color/black" />
+            <EditText
+                android:id="@+id/password_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/password_label"
+                android:layout_alignLeft="@+id/user_name_field"
+                android:layout_below="@+id/user_name_field"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rounded_text"
+                android:password="true"
+                android:singleLine="true"
+                android:textColor="@android:color/black" />
 
-                <EditText
-                    android:id="@+id/password_field"
-                    android:layout_alignLeft="@+id/user_name_field"
-                    android:layout_below="@+id/user_name_field"
-                    android:layout_alignBaseline="@+id/password_label"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_width="fill_parent"
-                    android:background="@drawable/rounded_text"
-                    android:password="true"
-                    android:singleLine="true"
-                    android:textColor="@android:color/black"
-                    />
-                <TextView 
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/password_field"/>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/password_field" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="200dp"
+            android:layout_height="230dp"
             android:background="@drawable/form_end" >
-
-            
 
             <CheckBox
                 android:id="@+id/remember_me"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_above="@+id/social_panel"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="25dp"
                 android:text="Remember Me"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/social_panel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/sign_in"
+                android:layout_margin="5dp"
+                android:layout_centerHorizontal="true" >
+
+                <Button
+                    android:id="@+id/fb_login"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/fb_logo"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:layout_marginLeft="5dp"
+                    android:id="@+id/tw_login"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/tw_logo" />
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/sign_in"
@@ -122,7 +146,7 @@
                 android:layout_above="@+id/register"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/sign_in" />
-            
+
             <ImageView
                 android:id="@+id/register"
                 android:layout_width="wrap_content"
@@ -133,5 +157,7 @@
                 android:background="@drawable/reg" />
         </RelativeLayout>
     </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
