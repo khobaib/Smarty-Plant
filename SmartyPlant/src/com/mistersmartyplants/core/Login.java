@@ -34,7 +34,6 @@ import com.facebook.Session.OpenRequest;
 import com.facebook.SessionLoginBehavior;
 import com.facebook.SessionState;
 import com.facebook.Settings;
-import com.facebook.android.Facebook;
 import com.facebook.model.GraphUser;
 import com.mistersmartyplants.model.ServerResponse;
 import com.mistersmartyplants.parser.JsonParser;
