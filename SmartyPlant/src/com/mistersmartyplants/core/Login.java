@@ -6,10 +6,17 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.User;
+import twitter4j.auth.AccessToken;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,10 +41,10 @@ import com.facebook.Session.OpenRequest;
 import com.facebook.SessionLoginBehavior;
 import com.facebook.SessionState;
 import com.facebook.Settings;
-import com.facebook.android.Facebook;
 import com.facebook.model.GraphUser;
 import com.mistersmartyplants.model.ServerResponse;
 import com.mistersmartyplants.parser.JsonParser;
+import com.mistersmartyplants.utility.AlertDialogManager;
 import com.mistersmartyplants.utility.Constants;
 import com.mistersmartyplants.utility.GlobalState;
 import com.mistersmartyplants.utility.SmartyPlantApplication;
@@ -55,6 +62,8 @@ public class Login extends SherlockActivity {
 	SmartyPlantApplication appInstance;
 	JsonParser jsonParser;
 
+	AlertDialogManager alert = new AlertDialogManager();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		BugSenseHandler.initAndStartSession(Login.this, "f2391cbb");
@@ -63,6 +72,7 @@ public class Login extends SherlockActivity {
 		appInstance = (SmartyPlantApplication) getApplication();
 		jsonParser = new JsonParser();
 		initFb(savedInstanceState);
+		initTwitter();
 
 		user_name_field = (EditText) findViewById(R.id.user_name_field);
 		password_field = (EditText) findViewById(R.id.password_field);
@@ -87,13 +97,12 @@ public class Login extends SherlockActivity {
 					requestObj.put("user_name", user_name);
 					requestObj.put("password", password);
 					String param = requestObj.toString();
-					String[] params = {param};
+					String[] params = { param };
 					LoginTask task = new LoginTask();
 					task.execute(params);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				
 
 			}
 		});
@@ -130,12 +139,12 @@ public class Login extends SherlockActivity {
 		protected Boolean doInBackground(String... params) {
 
 			try {
-			
+
 				String url = Constants.METHOD_LOGIN;
 
-//				JSONObject requestObj = new JSONObject();
-//				requestObj.put("user_name", user_name);
-//				requestObj.put("password", password);
+				// JSONObject requestObj = new JSONObject();
+				// requestObj.put("user_name", user_name);
+				// requestObj.put("password", password);
 				String loginData = params[0];
 				ServerResponse response = jsonParser
 						.retrieveServerData(1, Constants.REQUEST_TYPE_POST,
@@ -214,9 +223,10 @@ public class Login extends SherlockActivity {
 	}
 
 	private void initFb(Bundle savedInstanceState) {
-	/*	Facebook facebook = new Facebook("625398507471708");
-		String[] PERMISSIONS = {"email"};
-		facebook.authorize(this, PERMISSIONS, null);*/
+		/*
+		 * Facebook facebook = new Facebook("625398507471708"); String[]
+		 * PERMISSIONS = {"email"}; facebook.authorize(this, PERMISSIONS, null);
+		 */
 		Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 		Session session = Session.getActiveSession();
 		if (session == null) {
@@ -232,7 +242,7 @@ public class Login extends SherlockActivity {
 				permissions.add("publish_stream");
 				permissions.add("email");
 				op.setPermissions(permissions);
-				
+
 				session = new Session(this);
 				session.openForPublish(op);
 			}
@@ -259,66 +269,64 @@ public class Login extends SherlockActivity {
 		});
 
 	}
-	
-	
-	//============ Social Login ===================
-	//============ Facebook     ===================
+
+	// ============ Social Login ===================
+	// ============ Facebook ===================
 	Session.StatusCallback statusCallback = new Session.StatusCallback() {
-	    public void call(Session session, SessionState state, Exception exception) {
-	        if (state.isOpened()) {
-	            Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
-	            	
-	                public void onCompleted(GraphUser user, Response response) {
-	                    if (response != null) {
-	                        // do something with <response> now
-	                        try{
-	                        	String userID = user.getId();
-	                        	String userName = user.getName();
-	                        	String profileURL = user.getLink();
-	                        	String provider = "facebook";
-	                        	String email = (String) user.getProperty("email");
-	                        	JSONObject obj = user.getInnerJSONObject();
-	                        	
-	                        	JSONObject requestObj = new JSONObject();
-	                        	requestObj.put("user_name", null);
-	                        	requestObj.put("password", null);
-	                        	requestObj.put("provider_name", provider);
-	                        	requestObj.put("identifier", profileURL);
-	                        	requestObj.put("verified_email", email);
-	                        	requestObj.put("photo", "");
-	                        	requestObj.put("url", "");
-	                        	requestObj.put("provider_id", "");
-	                        	requestObj.put("preferred_user_name", userName);
-	                        	
-	                        	String[] params = {requestObj.toString()};
-	                        	LoginTask task = new LoginTask();
-	                        	task.execute(params);
-	                        	
-	                        	
-	                        	
-	                        	
-	                        	
-	                        Toast.makeText(mContext, user.getFirstName(), Toast.LENGTH_LONG).show();
-	                        } catch(Exception e) {
-	                             e.printStackTrace();
-	                             Log.d("social_login", "Exception e");
+		public void call(Session session, SessionState state,
+				Exception exception) {
+			if (state.isOpened()) {
+				Request.executeMeRequestAsync(session,
+						new Request.GraphUserCallback() {
 
-	 	                        Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
-	                         }
-	                    }
-	                    else{
-                            Log.d("social_login", "response null");
- 	                        Toast.makeText(mContext, "response null" , Toast.LENGTH_LONG).show();
-                            
+							public void onCompleted(GraphUser user,
+									Response response) {
+								if (response != null) {
+									// do something with <response> now
+									try {
+										String userID = user.getId();
+										String userName = user.getName();
+										String profileURL = user.getLink();
+										String provider = "facebook";
+										String email = (String) user
+												.getProperty("email");
+										JSONObject obj = user
+												.getInnerJSONObject();
 
-	                    }
-	                }
-	            });
-	        }
-	    }
+										JSONObject requestObj = new JSONObject();
+										requestObj.put("user_name", null);
+										requestObj.put("password", null);
+										requestObj.put("provider_name",
+												provider);
+										requestObj
+												.put("identifier", profileURL);
+										requestObj.put("verified_email", email);
+										requestObj.put("photo", "");
+										requestObj.put("url", "");
+										requestObj.put("provider_id", "");
+										requestObj.put("preferred_user_name",
+												userName);
+
+										String[] params = { requestObj
+												.toString() };
+										LoginTask task = new LoginTask();
+										task.execute(params);
+
+									} catch (Exception e) {
+										e.printStackTrace();
+										Log.d("social_login", "Exception e");
+
+									}
+								} else {
+									Log.d("social_login", "response null");
+
+								}
+							}
+						});
+			}
+		}
 	};
 
-		
 	class SessionStatusCallback implements Session.StatusCallback {
 		@Override
 		public void call(Session session, SessionState state,
@@ -330,10 +338,170 @@ public class Login extends SherlockActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Session.getActiveSession().onActivityResult(this, requestCode,resultCode, data);
-	
+		/*
+		 * if(requestCode == 2) { authenticateViaTwitter(data); } else
+		 */
+		Session.getActiveSession().onActivityResult(this, requestCode,
+				resultCode, data);
+
+	}
+
+	// ============================== Twitter ============================
+	private void initTwitter() {
+		Button twitterButton = (Button) findViewById(R.id.tw_login);
+		twitterButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				loginToTwitter();
+			}
+		});
+		
+		TwitterloginTask task = new TwitterloginTask();
+		task.execute();
+		
+			
+	}
+
+	private String[] authenticateViaTwitter(Intent data) {
+		Uri uri = data.getData();
+		if (uri != null
+				&& uri.toString().startsWith(Constants.TWITTER_CALLBACK_URL)) {
+			String verifier = uri
+					.getQueryParameter(Constants.URL_TWITTER_OAUTH_VERIFIER);
+			try {
+				AccessToken accessToken = globalState.twitter
+						.getOAuthAccessToken(globalState.TwitterRequestToken,
+								verifier);
+				// store access token
+				appInstance.setTwitterAccessToken(accessToken.getToken());
+				appInstance.setTwitterAccessTokenSecret(accessToken
+						.getTokenSecret());
+				appInstance.setTwitterLoggedIn(true);
+				long userID = accessToken.getUserId();
+				User user = globalState.twitter.showUser(userID);
+				String username = user.getName();
+				String profileURL = user.getURL();
+				userID = user.getId();
+				String provider = "twitter";
+
+				JSONObject requestObj = new JSONObject();
+				requestObj.put("user_name", null);
+				requestObj.put("password", null);
+				requestObj.put("provider_name", provider);
+				requestObj.put("identifier", profileURL);
+				requestObj.put("verified_email", null);
+				requestObj.put("photo", "");
+				requestObj.put("url", "");
+				requestObj.put("provider_id", "");
+				requestObj.put("preferred_user_name", username);
+
+				String[] params = { requestObj.toString() };
+				return params;
+				
+
+			} catch (Exception e) {
+				
+				Log.d("twitter", e.getMessage());
+				return null;
+			}
+		}
+		return null;
+	}
+
+	private void loginToTwitter() {
+		// Check if already logged in
+		
+			ConfigurationBuilder builder = new ConfigurationBuilder();
+			builder.setOAuthConsumerKey(Constants.TWITTER_CONSUMER_KEY);
+			builder.setOAuthConsumerSecret(Constants.TWITTER_CONSUMER_SECRET);
+			Configuration configuration = builder.build();
+			TwitterFactory factory = new TwitterFactory(configuration);
+			globalState.twitter = factory.getInstance();
+
+			TwitterInitTask twitterLogin = new TwitterInitTask();
+			twitterLogin.execute();
+		
+	}
+
+	/**
+	 * Check user already logged in your application using twitter Login flag is
+	 * fetched from Shared Preferences
+	 * */
+	private boolean isTwitterLoggedInAlready() {
+		return appInstance.isTwiiterLoggedIn();
+	}
+
+	private class TwitterInitTask extends AsyncTask<Void, Void, Boolean> {
+		Button twButton = (Button) findViewById(R.id.tw_login);
+		ProgressDialog dialog = null;
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			twButton.setClickable(false);
+			dialog = new ProgressDialog(mContext);
+			dialog.setTitle(" ");
+			dialog.setIcon(R.drawable.icon);
+			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			dialog.setCancelable(false);
+			dialog.setMessage("Authenticating Twitter");
+			dialog.show();
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... arg0) {
+			try {
+				globalState.TwitterRequestToken = globalState.twitter
+						.getOAuthRequestToken(Constants.TWITTER_CALLBACK_URL);
+			} catch (TwitterException e) {
+				return false;
+			}
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			try {
+				dialog.dismiss();
+				dialog = null;
+			} catch (Exception e) {
+
+			}
+			twButton.setClickable(true);
+			if (result) {
+				startActivity(new Intent(Intent.ACTION_VIEW,
+						Uri.parse(globalState.TwitterRequestToken
+								.getAuthenticationURL())));
+				// startActivityForResult(new
+				// Intent(Intent.ACTION_VIEW,Uri.parse(requestToken.getAuthenticationURL())),
+				// 2);
+			} else
+				Toast.makeText(mContext, "Failed to login into Twitter",
+						Toast.LENGTH_LONG).show();
+		}
 	}
 	
-	
+	private class TwitterloginTask extends AsyncTask<Void, Void, String[]>
+	{
+		@Override
+		protected String[] doInBackground(Void... params) {
+			return authenticateViaTwitter(getIntent());
+		}
+		@Override
+		protected void onPostExecute(String[] result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			if (result != null){
+				LoginTask task = new LoginTask();
+				task.execute(result);
+			}
+			else
+			{
+				//Toast.makeText(mContext, "Failed to Authenticate Twitter", Toast.LENGTH_LONG).show();
+			}
+		}
+	}
 
 }

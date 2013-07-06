@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
 public class SmartyPlantApplication extends Application {
@@ -56,6 +58,21 @@ public class SmartyPlantApplication extends Application {
         
     }
     
+    public void setTwitterLoggedIn(Boolean isLoggedIn){
+        Editor editor = User.edit();
+        editor.putBoolean(Constants.TWITTER_IS_LOGGED_IN, isLoggedIn).commit();
+        
+    }
+    
+    public void setTwitterAccessToken(String token){
+        Editor editor = User.edit();
+        editor.putString(Constants.PREF_KEY_OAUTH_TOKEN, token).commit();
+    }
+    
+    public void setTwitterAccessTokenSecret(String token){
+        Editor editor = User.edit();
+        editor.putString(Constants.PREF_KEY_OAUTH_SECRET, token).commit();
+    }
     
     public boolean isFirstTime(){
         Boolean firstTimeFlag = User.getBoolean(Constants.FIRST_TIME, true);
@@ -80,6 +97,37 @@ public class SmartyPlantApplication extends Application {
     public String getAccessToken(){
         String token = User.getString(Constants.ACCESS_TOKEN, null);
         return token;
+    }
+   
+    public boolean isTwiiterLoggedIn(){
+        Boolean isLogggedIn = User.getBoolean(Constants.TWITTER_IS_LOGGED_IN, false);
+        return isLogggedIn;
+    }
+    
+    public String getTwitterAccessToken(){
+        String token = User.getString(Constants.PREF_KEY_OAUTH_TOKEN, null);
+        return token;
+    }
+    
+    public String getTwitterSecret(){
+        String token = User.getString(Constants.PREF_KEY_OAUTH_SECRET, null);
+        return token;
+    }
+    
+    public boolean isConnectingToInternet(){
+        ConnectivityManager connectivity = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+          if (connectivity != null)
+          {
+              NetworkInfo[] info = connectivity.getAllNetworkInfo();
+              if (info != null)
+                  for (int i = 0; i < info.length; i++)
+                      if (info[i].getState() == NetworkInfo.State.CONNECTED)
+                      {
+                          return true;
+                      }
+  
+          }
+          return false;
     }
 
 }

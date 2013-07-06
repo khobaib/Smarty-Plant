@@ -4,6 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import twitter4j.Twitter;
+import twitter4j.auth.RequestToken;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -30,7 +33,8 @@ public class GlobalState {
 	public ArrayList<String> currentBitmaps = new ArrayList<String>();
 	public Plant currentPlant;
 	public int currentIndex;
-
+	public RequestToken TwitterRequestToken;
+	public Twitter twitter;
 
 	public ArrayList<BriefedPlant> all_plants = new ArrayList<BriefedPlant>();
 

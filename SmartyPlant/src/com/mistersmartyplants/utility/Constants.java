@@ -21,10 +21,20 @@ public class Constants {
     public static final String METHOD_VOTE = API_URL+"vote";
     public static final String METHOD_PLANT = API_URL+"plant";
     public static final String METHOD_SINGLE_PLANT = API_URL+"singleplant";
-
-
- 
-    
     public static final int RESPONSE_STATUS_CODE_SUCCESS = 200;
+    
+    //==== Twitter API =====
+    public static String TWITTER_CONSUMER_KEY = "fKjCEIFtih9CgBQELuxD7A";
+    public static String TWITTER_CONSUMER_SECRET = "e0mLYheNSTcREuq9VeqJ3Lp45TpEkoSuap5CtWiAgo";
+    public static String TWITTER_PREFERENCE_NAME = "twitter_oauth";
+    public static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
+    public static final String PREF_KEY_OAUTH_SECRET = "oauth_token_secret";
+    public static final String PREF_KEY_TWITTER_LOGIN = "isTwitterLogedIn";
+    public static final String TWITTER_CALLBACK_URL = "oauth://t4jsample";
+    public static final String URL_TWITTER_AUTH = "auth_url";
+    public static final String URL_TWITTER_OAUTH_VERIFIER = "oauth_verifier";
+    public static final String URL_TWITTER_OAUTH_TOKEN = "oauth_token";
+    public static final String TWITTER_IS_LOGGED_IN = "twitter_logged_in";
 
+    
 }
