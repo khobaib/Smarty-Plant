@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,25 +84,26 @@ public class GlobalState {
 		currentBitmaps.add(bitmap);
 	}
 
-	public Bitmap bitmapFromPath(String path) {
+	public Bitmap bitmapFromPath(String path)
+	{
+		boolean satisfied = false;
+		int factor = 2;
 		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inSampleSize = 4;
-		Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+		Bitmap bitmap = null;
 		
-		// try again with more downsampling 
-		if(bitmap == null)
+		while (!satisfied)
 		{
-			options.inSampleSize = 8;
+			factor = factor*2;
+			options.inSampleSize = factor;
 			bitmap = BitmapFactory.decodeFile(path, options);
-		}
-		
-		// try again with more downsampling 
-		if(bitmap == null)
-		{
-			options.inSampleSize = 16;
-			bitmap = BitmapFactory.decodeFile(path, options);
+			
+			if(bitmap == null)
+				satisfied = false;
 		}
 		return bitmap;
 	}
-
+	
+	
+	
+	
 }
