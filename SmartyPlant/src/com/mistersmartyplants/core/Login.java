@@ -356,8 +356,15 @@ public class Login extends SherlockActivity {
 			}
 		});
 		
-		TwitterloginTask task = new TwitterloginTask();
-		task.execute();
+		
+		
+//		TwitterloginTask task = new TwitterloginTask();
+//		task.execute();
+		Uri uri = getIntent().getData();
+		if (uri != null && uri.toString().startsWith(Constants.TWITTER_CALLBACK_URL)) {
+			TwitterloginTask task = new TwitterloginTask();
+			task.execute();
+		}
 		
 			
 	}
@@ -423,13 +430,7 @@ public class Login extends SherlockActivity {
 		
 	}
 
-	/**
-	 * Check user already logged in your application using twitter Login flag is
-	 * fetched from Shared Preferences
-	 * */
-	private boolean isTwitterLoggedInAlready() {
-		return appInstance.isTwiiterLoggedIn();
-	}
+
 
 	private class TwitterInitTask extends AsyncTask<Void, Void, Boolean> {
 		Button twButton = (Button) findViewById(R.id.tw_login);
@@ -445,7 +446,7 @@ public class Login extends SherlockActivity {
 			dialog.setIcon(R.drawable.icon);
 			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			dialog.setCancelable(false);
-			dialog.setMessage("Authenticating Twitter");
+			dialog.setMessage("Loading Twitter");
 			dialog.show();
 		}
 
@@ -471,9 +472,10 @@ public class Login extends SherlockActivity {
 			}
 			twButton.setClickable(true);
 			if (result) {
-				startActivity(new Intent(Intent.ACTION_VIEW,
-						Uri.parse(globalState.TwitterRequestToken
-								.getAuthenticationURL())));
+				Intent intent = (new Intent(Intent.ACTION_VIEW,Uri.parse(globalState.TwitterRequestToken.getAuthenticationURL())));
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				
 				// startActivityForResult(new
 				// Intent(Intent.ACTION_VIEW,Uri.parse(requestToken.getAuthenticationURL())),
 				// 2);
@@ -485,14 +487,41 @@ public class Login extends SherlockActivity {
 	
 	private class TwitterloginTask extends AsyncTask<Void, Void, String[]>
 	{
+		ProgressDialog dialog = null;
+		Button twButton = (Button) findViewById(R.id.tw_login);
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			twButton.setClickable(false);
+			dialog = new ProgressDialog(mContext);
+			dialog.setTitle(" ");
+			dialog.setIcon(R.drawable.icon);
+			dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			dialog.setCancelable(false);
+			dialog.setMessage("Authenticating Twitter");
+			dialog.show();
+			
+		}
 		@Override
 		protected String[] doInBackground(Void... params) {
+		
 			return authenticateViaTwitter(getIntent());
+			
 		}
 		@Override
 		protected void onPostExecute(String[] result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
+			super.onPostExecute(result);
+			try {
+				dialog.dismiss();
+				dialog = null;
+			} catch (Exception e) {
+
+			}
+			twButton.setClickable(true);
 			if (result != null){
 				LoginTask task = new LoginTask();
 				task.execute(result);
