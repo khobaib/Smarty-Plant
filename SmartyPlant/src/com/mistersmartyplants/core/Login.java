@@ -56,6 +56,7 @@ public class Login extends SherlockActivity {
 	EditText password_field;
 	CheckBox remember_me;
 	Context mContext = this;
+	ProgressDialog fbLoginDialog = null;
 
 	GlobalState globalState = GlobalState.getInstance();
 
@@ -264,6 +265,7 @@ public class Login extends SherlockActivity {
 				} else {
 					Session.openActiveSession((Activity) mContext, true,
 							statusCallback);
+
 				}
 			}
 		});
@@ -273,14 +275,27 @@ public class Login extends SherlockActivity {
 	// ============ Social Login ===================
 	// ============ Facebook ===================
 	Session.StatusCallback statusCallback = new Session.StatusCallback() {
+
 		public void call(Session session, SessionState state,
 				Exception exception) {
 			if (state.isOpened()) {
+				
+				fbLoginDialog = new ProgressDialog(mContext);
+				fbLoginDialog.setTitle(" ");
+				fbLoginDialog.setIcon(R.drawable.icon);
+				fbLoginDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				fbLoginDialog.setCancelable(false);
+				fbLoginDialog.setMessage("Authenticating Facebook");
+				fbLoginDialog.show();
+				
 				Request.executeMeRequestAsync(session,
 						new Request.GraphUserCallback() {
 
-							public void onCompleted(GraphUser user,
-									Response response) {
+							public void onCompleted(GraphUser user,Response response) {
+								
+								fbLoginDialog.dismiss();
+								fbLoginDialog = null;
+								
 								if (response != null) {
 									// do something with <response> now
 									try {
@@ -327,13 +342,7 @@ public class Login extends SherlockActivity {
 		}
 	};
 
-	class SessionStatusCallback implements Session.StatusCallback {
-		@Override
-		public void call(Session session, SessionState state,
-				Exception exception) {
-			// updateView();
-		}
-	}
+	
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -355,18 +364,16 @@ public class Login extends SherlockActivity {
 				loginToTwitter();
 			}
 		});
-		
-		
-		
-//		TwitterloginTask task = new TwitterloginTask();
-//		task.execute();
+
+		// TwitterloginTask task = new TwitterloginTask();
+		// task.execute();
 		Uri uri = getIntent().getData();
-		if (uri != null && uri.toString().startsWith(Constants.TWITTER_CALLBACK_URL)) {
+		if (uri != null
+				&& uri.toString().startsWith(Constants.TWITTER_CALLBACK_URL)) {
 			TwitterloginTask task = new TwitterloginTask();
 			task.execute();
 		}
-		
-			
+
 	}
 
 	private String[] authenticateViaTwitter(Intent data) {
@@ -404,10 +411,9 @@ public class Login extends SherlockActivity {
 
 				String[] params = { requestObj.toString() };
 				return params;
-				
 
 			} catch (Exception e) {
-				
+
 				Log.d("twitter", e.getMessage());
 				return null;
 			}
@@ -417,20 +423,18 @@ public class Login extends SherlockActivity {
 
 	private void loginToTwitter() {
 		// Check if already logged in
-		
-			ConfigurationBuilder builder = new ConfigurationBuilder();
-			builder.setOAuthConsumerKey(Constants.TWITTER_CONSUMER_KEY);
-			builder.setOAuthConsumerSecret(Constants.TWITTER_CONSUMER_SECRET);
-			Configuration configuration = builder.build();
-			TwitterFactory factory = new TwitterFactory(configuration);
-			globalState.twitter = factory.getInstance();
 
-			TwitterInitTask twitterLogin = new TwitterInitTask();
-			twitterLogin.execute();
-		
+		ConfigurationBuilder builder = new ConfigurationBuilder();
+		builder.setOAuthConsumerKey(Constants.TWITTER_CONSUMER_KEY);
+		builder.setOAuthConsumerSecret(Constants.TWITTER_CONSUMER_SECRET);
+		Configuration configuration = builder.build();
+		TwitterFactory factory = new TwitterFactory(configuration);
+		globalState.twitter = factory.getInstance();
+
+		TwitterInitTask twitterLogin = new TwitterInitTask();
+		twitterLogin.execute();
+
 	}
-
-
 
 	private class TwitterInitTask extends AsyncTask<Void, Void, Boolean> {
 		Button twButton = (Button) findViewById(R.id.tw_login);
@@ -472,10 +476,12 @@ public class Login extends SherlockActivity {
 			}
 			twButton.setClickable(true);
 			if (result) {
-				Intent intent = (new Intent(Intent.ACTION_VIEW,Uri.parse(globalState.TwitterRequestToken.getAuthenticationURL())));
+				Intent intent = (new Intent(Intent.ACTION_VIEW,
+						Uri.parse(globalState.TwitterRequestToken
+								.getAuthenticationURL())));
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
-				
+
 				// startActivityForResult(new
 				// Intent(Intent.ACTION_VIEW,Uri.parse(requestToken.getAuthenticationURL())),
 				// 2);
@@ -484,9 +490,8 @@ public class Login extends SherlockActivity {
 						Toast.LENGTH_LONG).show();
 		}
 	}
-	
-	private class TwitterloginTask extends AsyncTask<Void, Void, String[]>
-	{
+
+	private class TwitterloginTask extends AsyncTask<Void, Void, String[]> {
 		ProgressDialog dialog = null;
 		Button twButton = (Button) findViewById(R.id.tw_login);
 
@@ -502,14 +507,16 @@ public class Login extends SherlockActivity {
 			dialog.setCancelable(false);
 			dialog.setMessage("Authenticating Twitter");
 			dialog.show();
-			
+
 		}
+
 		@Override
 		protected String[] doInBackground(Void... params) {
-		
+
 			return authenticateViaTwitter(getIntent());
-			
+
 		}
+
 		@Override
 		protected void onPostExecute(String[] result) {
 			// TODO Auto-generated method stub
@@ -522,13 +529,12 @@ public class Login extends SherlockActivity {
 
 			}
 			twButton.setClickable(true);
-			if (result != null){
+			if (result != null) {
 				LoginTask task = new LoginTask();
 				task.execute(result);
-			}
-			else
-			{
-				//Toast.makeText(mContext, "Failed to Authenticate Twitter", Toast.LENGTH_LONG).show();
+			} else {
+				// Toast.makeText(mContext, "Failed to Authenticate Twitter",
+				// Toast.LENGTH_LONG).show();
 			}
 		}
 	}
