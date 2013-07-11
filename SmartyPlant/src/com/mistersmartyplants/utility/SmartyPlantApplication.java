@@ -73,6 +73,16 @@ public class SmartyPlantApplication extends Application {
         Editor editor = User.edit();
         editor.putString(Constants.PREF_KEY_OAUTH_SECRET, token).commit();
     }
+
+    public void setFbLoginParams(String params){
+    	Editor editor = User.edit();
+        editor.putString(Constants.FB_LOGIN_PARAMS, params).commit();
+    }
+    
+    public void setTwLoginParams(String params){
+    	Editor editor = User.edit();
+        editor.putString(Constants.TW_LOGIN_PARAMS, params).commit();
+    }
     
     public boolean isFirstTime(){
         Boolean firstTimeFlag = User.getBoolean(Constants.FIRST_TIME, true);
@@ -112,6 +122,26 @@ public class SmartyPlantApplication extends Application {
     public String getTwitterSecret(){
         String token = User.getString(Constants.PREF_KEY_OAUTH_SECRET, null);
         return token;
+    }
+    
+    public String getFbLoginParams(){
+    	String params = User.getString(Constants.FB_LOGIN_PARAMS, null);
+        return params;
+    }
+    
+    public String getTwLoginParams(){
+    	String params = User.getString(Constants.TW_LOGIN_PARAMS, null);
+        return params;
+    }
+    
+    public void clearFbLoginParam(){
+    	Editor editor = User.edit();
+        editor.remove(Constants.FB_LOGIN_PARAMS).commit();
+    }
+    
+    public void clearTwLoginParam(){
+    	Editor editor = User.edit();
+        editor.remove(Constants.TW_LOGIN_PARAMS).commit();
     }
     
     public boolean isConnectingToInternet(){

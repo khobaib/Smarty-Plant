@@ -301,7 +301,15 @@ public class Login extends SherlockActivity {
 			
 			@Override
 			public void onClick(View arg0) {
-				onClickLogin();
+				String savedParams = appInstance.getFbLoginParams();
+				if(savedParams!= null && !savedParams.equalsIgnoreCase(""))
+				{
+					String[] params = {savedParams};
+					LoginTask task = new LoginTask();
+					task.execute(params);
+				}
+				else
+					onClickLogin();
 			}
 		});
 	}
@@ -353,19 +361,16 @@ public class Login extends SherlockActivity {
 										JSONObject requestObj = new JSONObject();
 										requestObj.put("user_name", null);
 										requestObj.put("password", null);
-										requestObj.put("provider_name",
-												provider);
-										requestObj
-												.put("identifier", profileURL);
+										requestObj.put("provider_name",provider);
+										requestObj.put("identifier", profileURL);
 										requestObj.put("verified_email", email);
 										requestObj.put("photo", "");
 										requestObj.put("url", "");
 										requestObj.put("provider_id", "");
-										requestObj.put("preferred_user_name",
-												userName);
-
-										String[] params = { requestObj
-												.toString() };
+										requestObj.put("preferred_user_name",userName);
+										
+										appInstance.setFbLoginParams(requestObj.toString());
+										String[] params = { requestObj.toString() };
 										LoginTask task = new LoginTask();
 										task.execute(params);
 
@@ -409,12 +414,20 @@ public class Login extends SherlockActivity {
 		twitterButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
+				String savedParams = appInstance.getTwLoginParams();
+				if(savedParams!= null && !savedParams.equalsIgnoreCase(""))
+				{
+					String[] params = {savedParams};
+					LoginTask task = new LoginTask();
+					task.execute(params);
+					return;
+				}
+				
 				loginToTwitter();
 			}
 		});
 
-		// TwitterloginTask task = new TwitterloginTask();
-		// task.execute();
+
 		Uri uri = getIntent().getData();
 		if (uri != null
 				&& uri.toString().startsWith(Constants.TWITTER_CALLBACK_URL)) {
@@ -457,6 +470,8 @@ public class Login extends SherlockActivity {
 				requestObj.put("provider_id", "");
 				requestObj.put("preferred_user_name", username);
 
+				appInstance.setTwLoginParams(requestObj.toString());
+				
 				String[] params = { requestObj.toString() };
 				return params;
 
