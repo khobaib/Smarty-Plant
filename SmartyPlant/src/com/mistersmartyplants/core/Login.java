@@ -98,6 +98,7 @@ public class Login extends SherlockActivity {
 					requestObj.put("user_name", user_name);
 					requestObj.put("password", password);
 					String param = requestObj.toString();
+					Log.d("smarty_login", param);
 					String[] params = { param };
 					LoginTask task = new LoginTask();
 					task.execute(params);
@@ -156,8 +157,12 @@ public class Login extends SherlockActivity {
 					if (responseStatus.equalsIgnoreCase("success")) {
 						String token = responsObj.optString("token");
 						appInstance.setAccessToken(token);
+						return true;
 					}
-					return true;
+					else
+						return false;
+					
+					
 				} else {
 
 					return false;
