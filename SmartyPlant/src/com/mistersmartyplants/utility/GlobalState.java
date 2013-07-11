@@ -99,6 +99,8 @@ public class GlobalState {
 			
 			if(bitmap == null)
 				satisfied = false;
+			else
+				satisfied = true;
 		}
 		return bitmap;
 	}
