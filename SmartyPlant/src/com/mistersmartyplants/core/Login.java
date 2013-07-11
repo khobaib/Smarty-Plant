@@ -72,7 +72,7 @@ public class Login extends SherlockActivity {
 		globalState.initActionBar(this, R.layout.login);
 		appInstance = (SmartyPlantApplication) getApplication();
 		jsonParser = new JsonParser();
-		initFb(savedInstanceState);
+		initFacebook(savedInstanceState);
 		initTwitter();
 
 		user_name_field = (EditText) findViewById(R.id.user_name_field);
@@ -235,23 +235,6 @@ public class Login extends SherlockActivity {
 				session = Session.restoreSession(this, null, statusCallback,
 						savedInstanceState);
 			}
-			if (session == null) {
-				OpenRequest op = new OpenRequest(this);
-				op.setLoginBehavior(SessionLoginBehavior.SUPPRESS_SSO);
-				op.setCallback(null);
-				List<String> permissions = new ArrayList<String>();
-				permissions.add("publish_stream");
-				permissions.add("email");
-				op.setPermissions(permissions);
-
-				session = new Session(this);
-				session.openForPublish(op);
-			}
-			Session.setActiveSession(session);
-			if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-				session.openForRead(new Session.OpenRequest(this)
-						.setCallback(statusCallback));
-			}
 		}
 
 		Button fbLogin = (Button) findViewById(R.id.fb_login);
@@ -259,6 +242,25 @@ public class Login extends SherlockActivity {
 			@Override
 			public void onClick(View arg0) {
 				Session session = Session.getActiveSession();
+				if (session == null) {
+					OpenRequest op = new OpenRequest((Activity) mContext);
+					op.setLoginBehavior(SessionLoginBehavior.SUPPRESS_SSO);
+					op.setCallback(null);
+					List<String> permissions = new ArrayList<String>();
+					permissions.add("publish_stream");
+					permissions.add("email");
+					op.setPermissions(permissions);
+
+					session = new Session(mContext);
+					session.openForPublish(op);
+					Session.setActiveSession(session);
+
+				}
+				if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
+					session.openForRead(new Session.OpenRequest((Activity) mContext)
+							.setCallback(statusCallback));
+				}
+				
 				if (!session.isOpened() && !session.isClosed()) {
 					session.openForRead(new Session.OpenRequest(
 							(Activity) mContext).setCallback(statusCallback));
@@ -274,6 +276,41 @@ public class Login extends SherlockActivity {
 
 	// ============ Social Login ===================
 	// ============ Facebook ===================
+	private void initFacebook(Bundle savedInstanceState){
+        Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+        Session session = Session.getActiveSession();
+        if (session == null) {
+            if (savedInstanceState != null) {
+                session = Session.restoreSession(this, null, statusCallback, savedInstanceState);
+            }
+            if (session == null) {
+                session = new Session(this);
+            }
+            Session.setActiveSession(session);
+            if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
+                session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
+            }
+        }
+        Button fbLogin = (Button) findViewById(R.id.fb_login);
+        fbLogin.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				onClickLogin();
+			}
+		});
+	}
+	
+	private void onClickLogin() {
+        Session session = Session.getActiveSession();
+        if (!session.isOpened() && !session.isClosed()) {
+            session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
+        } else {
+            Session.openActiveSession(this, true, statusCallback);
+        }
+    }
+	
+	
 	Session.StatusCallback statusCallback = new Session.StatusCallback() {
 
 		public void call(Session session, SessionState state,
@@ -342,16 +379,22 @@ public class Login extends SherlockActivity {
 		}
 	};
 
-	
+	 @Override
+	    public void onStart() {
+	        super.onStart();
+	        Session.getActiveSession().addCallback(statusCallback);
+	    }
+
+	    @Override
+	    public void onStop() {
+	        super.onStop();
+	        Session.getActiveSession().removeCallback(statusCallback);
+	    }
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		/*
-		 * if(requestCode == 2) { authenticateViaTwitter(data); } else
-		 */
-		Session.getActiveSession().onActivityResult(this, requestCode,
-				resultCode, data);
+		Session.getActiveSession().onActivityResult(this, requestCode,resultCode, data);
 
 	}
 

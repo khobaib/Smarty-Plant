@@ -48,6 +48,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.SubMenu;
 import com.bugsense.trace.BugSenseHandler;
+import com.facebook.Session;
 import com.mistersmartyplants.adapter.GalleryAdapter;
 import com.mistersmartyplants.adapter.ImageAdapter;
 import com.mistersmartyplants.model.BriefedPlant;
@@ -536,6 +537,11 @@ public class HomeScreen extends SherlockActivity implements
 			com.actionbarsherlock.view.MenuItem item) {
 		appInstance.setCredentials("", "");
 		appInstance.setRememberMe(false);
+		
+		 Session session = Session.getActiveSession();
+	     if (session!=null && !session.isClosed()) {
+	    	 session.closeAndClearTokenInformation();
+	     }
 		finish();
 		startActivity(new Intent(mContext, Login.class));
 		return super.onOptionsItemSelected(item);
