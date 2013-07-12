@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -127,11 +128,12 @@ public class PlantDetails extends Activity {
 
     private void initMiniGallery() {
         LinearLayout miniGallery = (LinearLayout) findViewById(R.id.mini_gallery);
+        int dim = miniGallery.getHeight() - 5 ;
+        
         for (int i = 0; i < detailedPlant.imageUrls.size(); i++) {
 
             final ImageView imgV = new ImageView(mContext);
-            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT);
+            LayoutParams params = new LayoutParams(dim, dim);
             params.setMargins(5, 5, 5, 5);
             imgV.setLayoutParams(params);
 
@@ -145,7 +147,7 @@ public class PlantDetails extends Activity {
             //            bMap = lazyLoader.getBitmap(detailedPlant.imageUrls.get(i), 1000);
             //            imgV.setImageBitmap(bMap);
             loadImage(detailedPlant.imageUrls.get(i), imgV);
-
+            
             // lazyLoader.DisplayImage(detailedPlant.imageUrls.get(i), imgV);
             imgV.setOnClickListener(new OnClickListener() {
                 @Override
@@ -153,15 +155,17 @@ public class PlantDetails extends Activity {
                     ImageView miniItem = (ImageView) v;
                     ImageView mainImageView = (ImageView) findViewById(R.id.image_view);
                     mainImageView.setImageDrawable(miniItem.getDrawable());
-
+                    
                     LinearLayout miniGallery = (LinearLayout) findViewById(R.id.mini_gallery);
 
                     for (int j = 0; j < miniGallery.getChildCount(); j++) {
                         ImageView view = (ImageView) miniGallery.getChildAt(j);
                         view.setBackgroundResource(R.drawable.rounded_gray);
+                        
+                        Log.d("smarty", "DIM : "+view.getWidth() + " x " +view.getHeight());
                     }
                     miniItem.setBackgroundResource(R.drawable.rounded_text);
-
+                    
                 }
             });
             miniGallery.addView(imgV);
@@ -186,6 +190,7 @@ public class PlantDetails extends Activity {
                     @Override
                     public void run() {
                         imgV.setImageBitmap(bMap);
+                        Log.d("smarty", "Bitmap Dim : "+ bMap.getWidth() + " x " + bMap.getHeight());
 
                     }
                 });

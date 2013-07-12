@@ -156,6 +156,10 @@ public class Login extends SherlockActivity {
 					String responseStatus = responsObj.optString("response");
 					if (responseStatus.equalsIgnoreCase("success")) {
 						String token = responsObj.optString("token");
+						String uid = responsObj.optString("uid");
+						String uname = responsObj.optString("user_name");
+						Log.d("smarty_uid", "name : "+uname + " uid : "+uid );
+					
 						appInstance.setAccessToken(token);
 						return true;
 					}
@@ -458,18 +462,17 @@ public class Login extends SherlockActivity {
 				String profileURL = user.getURL();
 				userID = user.getId();
 				String provider = "twitter";
-
+				String email = user.getScreenName()+"@twitter.com";
 				JSONObject requestObj = new JSONObject();
 				requestObj.put("user_name", null);
 				requestObj.put("password", null);
 				requestObj.put("provider_name", provider);
 				requestObj.put("identifier", profileURL);
-				requestObj.put("verified_email", null);
+				requestObj.put("verified_email", email);
 				requestObj.put("photo", "");
 				requestObj.put("url", "");
 				requestObj.put("provider_id", "");
 				requestObj.put("preferred_user_name", username);
-
 				appInstance.setTwLoginParams(requestObj.toString());
 				
 				String[] params = { requestObj.toString() };
@@ -477,7 +480,6 @@ public class Login extends SherlockActivity {
 
 			} catch (Exception e) {
 
-				Log.d("twitter", e.getMessage());
 				return null;
 			}
 		}
