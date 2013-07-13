@@ -309,6 +309,7 @@ public class Login extends SherlockActivity {
 				if(savedParams!= null && !savedParams.equalsIgnoreCase(""))
 				{
 					String[] params = {savedParams};
+					Log.d("smarty", savedParams);
 					LoginTask task = new LoginTask();
 					task.execute(params);
 				}
@@ -459,7 +460,6 @@ public class Login extends SherlockActivity {
 				long userID = accessToken.getUserId();
 				User user = globalState.twitter.showUser(userID);
 				String username = user.getName();
-				String profileURL = user.getURL();
 				userID = user.getId();
 				String provider = "twitter";
 				String email = user.getScreenName()+"@twitter.com";
@@ -467,7 +467,7 @@ public class Login extends SherlockActivity {
 				requestObj.put("user_name", null);
 				requestObj.put("password", null);
 				requestObj.put("provider_name", provider);
-				requestObj.put("identifier", profileURL);
+				requestObj.put("identifier", userID);
 				requestObj.put("verified_email", email);
 				requestObj.put("photo", "");
 				requestObj.put("url", "");

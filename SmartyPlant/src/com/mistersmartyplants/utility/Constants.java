@@ -35,11 +35,11 @@ public class Constants {
     public static final String URL_TWITTER_OAUTH_VERIFIER = "oauth_verifier";
     public static final String URL_TWITTER_OAUTH_TOKEN = "oauth_token";
     public static final String TWITTER_IS_LOGGED_IN = "twitter_logged_in";
-    public static final String TW_LOGIN_PARAMS = "";
+    public static final String TW_LOGIN_PARAMS = "tw_login_params";
     
     
     //==== Fb API ====
-    public static final String FB_LOGIN_PARAMS = "";
+    public static final String FB_LOGIN_PARAMS = "fb_login_params";
     
     
 }
