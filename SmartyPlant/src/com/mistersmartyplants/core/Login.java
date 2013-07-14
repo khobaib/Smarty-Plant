@@ -444,6 +444,8 @@ public class Login extends SherlockActivity {
 
 	private String[] authenticateViaTwitter(Intent data) {
 		Uri uri = data.getData();
+		
+		
 		if (uri != null
 				&& uri.toString().startsWith(Constants.TWITTER_CALLBACK_URL)) {
 			String verifier = uri
@@ -545,8 +547,12 @@ public class Login extends SherlockActivity {
 						Uri.parse(globalState.TwitterRequestToken
 								.getAuthenticationURL())));
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+				intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				intent.addFlags(Intent.FLAG_FROM_BACKGROUND);
+				finish();
 				startActivity(intent);
-
+			
 				// startActivityForResult(new
 				// Intent(Intent.ACTION_VIEW,Uri.parse(requestToken.getAuthenticationURL())),
 				// 2);
