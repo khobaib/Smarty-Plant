@@ -550,7 +550,7 @@ public class Login extends SherlockActivity {
 				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 				intent.addFlags(Intent.FLAG_FROM_BACKGROUND);
-				finish();
+				//finish();
 				startActivity(intent);
 			
 				// startActivityForResult(new
