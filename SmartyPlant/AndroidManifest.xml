@@ -45,7 +45,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
-                    android:host="t4jsample"
+                    android:host="smartyplants"
                     android:scheme="oauth" />
             </intent-filter>
         </activity>
