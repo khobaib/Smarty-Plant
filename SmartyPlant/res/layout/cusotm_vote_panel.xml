@@ -22,6 +22,7 @@
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/label1"
         android:text=" called this :"
+        android:visibility="gone"
         android:textColor="@android:color/black" />
 
     <TextView

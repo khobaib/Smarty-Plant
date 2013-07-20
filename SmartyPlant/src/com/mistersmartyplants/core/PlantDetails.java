@@ -222,11 +222,11 @@ public class PlantDetails extends Activity {
                 R.layout.cusotm_vote_panel, null);
 
         TextView userNameLabel = (TextView) votePanel.getChildAt(0);
-        userNameLabel.setText(userName);
+        userNameLabel.setText(userName + " called this:");
         userNameLabel.setVisibility(visibility);
 
-        TextView calledThis = (TextView) votePanel.getChildAt(1);
-        calledThis.setVisibility(visibility);
+//        TextView calledThis = (TextView) votePanel.getChildAt(1);
+//        calledThis.setVisibility(visibility);
 
         TextView plantNameLabel = (TextView) votePanel.getChildAt(2);
         plantNameLabel.setText(plantName);
