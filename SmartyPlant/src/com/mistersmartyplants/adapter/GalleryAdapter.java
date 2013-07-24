@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class GalleryAdapter extends BaseAdapter {
@@ -47,47 +48,51 @@ public class GalleryAdapter extends BaseAdapter {
 	public View getView(int pos, View view, ViewGroup parent) {
 		String path = globalState.currentBitmaps.get(pos);
 		Bitmap bitmap = globalState.bitmapFromPath(path);
-		
+
 		LayoutInflater inflater = (LayoutInflater) mContext
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View v = inflater.inflate(R.layout.custom_gallery_item, null);
-		FrameLayout frame = (FrameLayout)v;
-		TextView tv = (TextView)frame.getChildAt(0);
+		FrameLayout frame = (FrameLayout) v;
+		TextView tv = (TextView) frame.getChildAt(0);
 		Drawable d = new BitmapDrawable(bitmap);
 		tv.setBackgroundDrawable(d);
-		Button remove = (Button)frame.getChildAt(1);		
-		if (mode == 1){
-		final int bitmapPos = pos;
-		remove.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				globalState.removeBitmap(bitmapPos);
-				Button upload = (Button)((Activity)mContext).findViewById(R.id.upload_image);
-				Button upload2 = (Button)((Activity)mContext).findViewById(R.id.upload_image2);
-				Button done = (Button)((Activity)mContext).findViewById(R.id.done);
-				
-				if (globalState.currentBitmaps.size() == 0){
-					upload.setVisibility(Button.VISIBLE);
-					upload2.setVisibility(Button.GONE);
-					done.setVisibility(Button.GONE);
+		Button remove = (Button) frame.getChildAt(1);
+		if (mode == 1) {
+			final int bitmapPos = pos;
+			remove.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					globalState.removeBitmap(bitmapPos);
+					Button upload = (Button) ((Activity) mContext)
+							.findViewById(R.id.upload_image);
+					Button upload2 = (Button) ((Activity) mContext)
+							.findViewById(R.id.upload_image2);
+					Button done = (Button) ((Activity) mContext)
+							.findViewById(R.id.done);
+					LinearLayout noteText = (LinearLayout) ((Activity) mContext)
+							.findViewById(R.id.note_text);
+
+					if (globalState.currentBitmaps.size() == 0) {
+						upload.setVisibility(Button.VISIBLE);
+						upload2.setVisibility(Button.GONE);
+						done.setVisibility(Button.GONE);
+
+						noteText.setVisibility(LinearLayout.VISIBLE);
+					} else {
+						upload.setVisibility(Button.INVISIBLE);
+						upload2.setVisibility(Button.VISIBLE);
+						done.setVisibility(Button.VISIBLE);
+
+						noteText.setVisibility(LinearLayout.GONE);
+					}
+
+					notifyDataSetChanged();
 				}
-				else
-				{
-					upload.setVisibility(Button.INVISIBLE);
-					upload2.setVisibility(Button.VISIBLE);
-					done.setVisibility(Button.VISIBLE);
-					
-				}
-				
-				notifyDataSetChanged();
-			}
-		});
-		}
-		else
-		{
+			});
+		} else {
 			remove.setVisibility(Button.INVISIBLE);
 		}
-		
+
 		return v;
 	}
 

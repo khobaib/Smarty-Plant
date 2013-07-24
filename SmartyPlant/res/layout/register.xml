@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:layout_below="@+id/password_label"
-                android:text="Confrim Password :"
+                android:text="Confirm Password :"
                 android:textColor="@android:color/black"/>
             
             <EditText 

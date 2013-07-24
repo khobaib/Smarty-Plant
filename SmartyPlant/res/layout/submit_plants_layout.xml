@@ -1,17 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="@android:color/white" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
+        <LinearLayout
+            android:id="@+id/note_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical"
+            android:paddingLeft="10dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="For best chance at ID:"
+                android:textColor="@android:color/black"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="1) Include a picture of the flower when possible"
+                android:textColor="@android:color/black"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="2) Include more than one photo"
+                android:textColor="@android:color/black"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="3) Provide a description with details like plant size and other characteristics  "
+                android:textColor="@android:color/black"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/button_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/note_text"
             android:layout_centerHorizontal="true"
             android:layout_margin="20dp" >
 
@@ -32,7 +78,6 @@
             android:layout_below="@+id/button_group"
             android:padding="10dp" >
 
-            
             <Gallery
                 android:id="@+id/gallery_view"
                 android:layout_width="fill_parent"
@@ -40,18 +85,18 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="30dp"
                 android:gravity="center_horizontal" />
-            
+
             <Button
-                android:visibility="gone"
                 android:id="@+id/upload_image2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/gallery_view"
+                android:layout_centerHorizontal="true"
                 android:background="@drawable/rounded_gray"
                 android:drawableLeft="@drawable/camera1"
                 android:text="Upload another picture of this plant"
-                android:layout_centerHorizontal="true"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/done"

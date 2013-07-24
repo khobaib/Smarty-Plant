@@ -40,6 +40,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -373,17 +374,19 @@ public class HomeScreen extends SherlockActivity implements
 				}
 			}
 		});
+		LinearLayout noteText = (LinearLayout)findViewById(R.id.note_text);
 		Button upload = (Button) findViewById(R.id.upload_image);
 		Button upload2 = (Button) findViewById(R.id.upload_image2);
 		if (GlobalState.getInstance().currentBitmaps.size() > 0) {
 			upload.setVisibility(Button.INVISIBLE);
 			upload2.setVisibility(Button.VISIBLE);
 			done.setVisibility(Button.VISIBLE);
+			noteText.setVisibility(LinearLayout.GONE);
 		} else {
 			upload.setVisibility(Button.VISIBLE);
 			upload2.setVisibility(Button.GONE);
 			done.setVisibility(Button.GONE);
-
+			noteText.setVisibility(LinearLayout.VISIBLE);
 		}
 	}
 
@@ -418,17 +421,19 @@ public class HomeScreen extends SherlockActivity implements
 		Button done = (Button) findViewById(R.id.done);
 		Button upload = (Button) findViewById(R.id.upload_image);
 		Button upload2 = (Button) findViewById(R.id.upload_image2);
-
+		LinearLayout noteText = (LinearLayout)findViewById(R.id.note_text);
 		switch (resultCode) {
 		case 0:
 			if (GlobalState.getInstance().currentBitmaps.size() > 0) {
 				upload.setVisibility(Button.INVISIBLE);
 				upload2.setVisibility(Button.VISIBLE);
 				done.setVisibility(Button.VISIBLE);
+				noteText.setVisibility(LinearLayout.GONE);
 			} else {
 				upload.setVisibility(Button.VISIBLE);
 				upload2.setVisibility(Button.GONE);
 				done.setVisibility(Button.GONE);
+				noteText.setVisibility(LinearLayout.VISIBLE);
 
 			}
 			break;
@@ -442,11 +447,14 @@ public class HomeScreen extends SherlockActivity implements
 						upload.setVisibility(Button.INVISIBLE);
 						upload2.setVisibility(Button.VISIBLE);
 						done.setVisibility(Button.VISIBLE);
+
+						noteText.setVisibility(LinearLayout.GONE);
 					} else {
 						upload.setVisibility(Button.VISIBLE);
 						upload2.setVisibility(Button.GONE);
 						done.setVisibility(Button.GONE);
 
+						noteText.setVisibility(LinearLayout.VISIBLE);
 					}
 				} else {
 					if (resultCode == RESULT_OK) {
@@ -460,11 +468,14 @@ public class HomeScreen extends SherlockActivity implements
 							upload.setVisibility(Button.INVISIBLE);
 							upload2.setVisibility(Button.VISIBLE);
 							done.setVisibility(Button.VISIBLE);
+
+							noteText.setVisibility(LinearLayout.GONE);
 						} else {
 							upload.setVisibility(Button.VISIBLE);
 							upload2.setVisibility(Button.GONE);
 							done.setVisibility(Button.GONE);
 
+							noteText.setVisibility(LinearLayout.VISIBLE);
 						}
 						break;
 					}
