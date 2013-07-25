@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Display;
@@ -402,7 +403,7 @@ public class HomeScreen extends SherlockActivity implements
 		Intent intent = new Intent(
 				android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-		startActivityForResult(intent, 0);
+		startActivityForResult(intent, 1);
 	}
 
 	private void setGallerySelectMode() {
@@ -410,8 +411,7 @@ public class HomeScreen extends SherlockActivity implements
 		Intent intent = new Intent();
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);
-		startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-				0);
+		startActivityForResult(intent,2);
 
 	}
 
@@ -422,6 +422,9 @@ public class HomeScreen extends SherlockActivity implements
 		Button upload = (Button) findViewById(R.id.upload_image);
 		Button upload2 = (Button) findViewById(R.id.upload_image2);
 		LinearLayout noteText = (LinearLayout)findViewById(R.id.note_text);
+		gallery = (Gallery) findViewById(R.id.gallery_view);
+		Log.d("helal", "Gallery" + gallery);
+		
 		switch (resultCode) {
 		case 0:
 			if (GlobalState.getInstance().currentBitmaps.size() > 0) {
@@ -441,7 +444,7 @@ public class HomeScreen extends SherlockActivity implements
 		case -1:
 
 			try {
-				if (mode == 1) {
+				if (requestCode == 1) {
 					onPhotoTaken();
 					if (GlobalState.getInstance().currentBitmaps.size() > 0) {
 						upload.setVisibility(Button.INVISIBLE);
@@ -461,8 +464,7 @@ public class HomeScreen extends SherlockActivity implements
 						Uri selectedImage = data.getData();
 						GlobalState.getInstance().addBitmap(
 								pathFromUri(selectedImage));
-						GalleryAdapter adapter = (GalleryAdapter) this.gallery
-								.getAdapter();
+						GalleryAdapter adapter = (GalleryAdapter) this.gallery.getAdapter();
 						adapter.notifyDataSetChanged();
 						if (GlobalState.getInstance().currentBitmaps.size() > 0) {
 							upload.setVisibility(Button.INVISIBLE);

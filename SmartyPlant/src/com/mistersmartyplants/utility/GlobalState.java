@@ -1,18 +1,16 @@
 package com.mistersmartyplants.utility;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import twitter4j.Twitter;
 import twitter4j.auth.RequestToken;
-
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
+import android.media.ExifInterface;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +19,6 @@ import android.view.ViewGroup;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.mistersmartyplants.core.R;
 import com.mistersmartyplants.model.BriefedPlant;
 import com.mistersmartyplants.model.Plant;
@@ -90,6 +87,17 @@ public class GlobalState {
 		int factor = 2;
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		Bitmap bitmap = null;
+		int orientation ;
+		
+		try{
+		ExifInterface ei = new ExifInterface(path);
+		orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+		}
+		catch(Exception e)
+		{
+			Log.d("helal", e.getMessage());
+			orientation = 0;
+		}
 		
 		while (!satisfied)
 		{
@@ -102,10 +110,34 @@ public class GlobalState {
 			else
 				satisfied = true;
 		}
+		
+		
+		Log.d("helal", "Orientation :" + orientation);		
+		
+		switch(orientation) {
+		case ExifInterface.ORIENTATION_ROTATE_90:
+			Log.d("helal", "Rotate : 90");
+	        bitmap = rotateImage(bitmap, 90);
+	        break;
+	        
+	    case ExifInterface.ORIENTATION_ROTATE_180:
+	    	Log.d("helal", "Rotate : 180");
+	    	bitmap = rotateImage(bitmap, 180);
+	        break;
+	    
+		}
+
 		return bitmap;
 	}
 	
-	
+	private Bitmap rotateImage(Bitmap bitmap, int angle){
+		 Matrix matrix = new Matrix();
+	     //matrix.postRotate(angle);
+	     matrix.setRotate(angle);
+	     
+	     return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+	}
 	
 	
 }

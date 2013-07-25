@@ -190,7 +190,7 @@ public class PlantDetails extends Activity {
                     @Override
                     public void run() {
                         imgV.setImageBitmap(bMap);
-                        Log.d("smarty", "Bitmap Dim : "+ bMap.getWidth() + " x " + bMap.getHeight());
+                        //Log.d("smarty", "Bitmap Dim : "+ bMap.getWidth() + " x " + bMap.getHeight());
 
                     }
                 });
