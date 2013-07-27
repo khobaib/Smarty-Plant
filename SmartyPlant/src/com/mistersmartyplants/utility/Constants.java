@@ -22,6 +22,8 @@ public class Constants {
     public static final String METHOD_PLANT = API_URL+"plant";
     public static final String METHOD_SINGLE_PLANT = API_URL+"singleplant";
     public static final int RESPONSE_STATUS_CODE_SUCCESS = 200;
+    public static final String DEVICE_MODEL = "device_model";
+
     
     //==== Twitter API =====
     public static String TWITTER_CONSUMER_KEY = "fKjCEIFtih9CgBQELuxD7A";

@@ -84,6 +84,17 @@ public class SmartyPlantApplication extends Application {
         editor.putString(Constants.TW_LOGIN_PARAMS, params).commit();
     }
     
+    public void setDeviceModel(){
+    	String deviceModel = GlobalState.getInstance().getDeviceModelName();
+    	Editor editor = User.edit();
+        editor.putString(Constants.DEVICE_MODEL, deviceModel).commit();
+    }
+    
+    public String getDeviceModel(){
+    	String model = User.getString(Constants.DEVICE_MODEL, "");
+        return model;
+    }
+    
     public boolean isFirstTime(){
         Boolean firstTimeFlag = User.getBoolean(Constants.FIRST_TIME, true);
         return firstTimeFlag;

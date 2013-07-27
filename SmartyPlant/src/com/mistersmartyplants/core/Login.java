@@ -115,7 +115,6 @@ public class Login extends SherlockActivity {
 			@Override
 			public void onClick(View arg0) {
 				startActivity(new Intent(mContext, Register.class));
-
 			}
 		});
 
@@ -191,6 +190,10 @@ public class Login extends SherlockActivity {
 
 			}
 			if (result) {
+				String deviceModel = appInstance.getDeviceModel();
+				if(deviceModel == null || deviceModel.equals(""))
+					appInstance.setDeviceModel();
+				Log.d("helal", appInstance.getDeviceModel());
 				finish();
 				startActivity(new Intent(mContext, HomeScreen.class));
 			} else {

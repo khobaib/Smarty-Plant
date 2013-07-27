@@ -136,6 +136,7 @@ public class Submit extends Activity {
 					json.put("state", state);
 					json.put("city", city);
 					json.put("region", region);
+					json.put("device_model", appInstance.getDeviceModel());
 					arr.put(json);
 				}
 				String loginData = arr.toString();
