@@ -47,25 +47,17 @@ public class JsonParser {
         Log.d("APPTOKEN", "token = " + appToken);           // debug flag added, dont remove it.
 
         int status = 0;
-
-//        String editTokenVal = null;
         StringBuilder sb = null;
-        //        if (appToken != null) {
-        //            sb = new StringBuilder();
-        //            sb.append("token:\"" + appToken);
-        //            editTokenVal = sb.toString();
-        //            Log.d(TAG, "string token in header = " + editTokenVal);
-        //        }
+
 
         if (urlParams != null) {
             String paramString = URLEncodedUtils.format(urlParams, "utf-8");
             url += "?" + paramString;            
         }
-        Log.d(TAG, "GET url = " + url);
+        Log.d(TAG, "final url = " + url);
+        Log.d(TAG, "final content = " + content);
 
-        // Making HTTP request
         try {
-            // request method is GET
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpResponse httpResponse = null;
 
@@ -76,7 +68,6 @@ public class JsonParser {
                 if (appToken != null){
                     httpGet.setHeader("Authorization-Token", appToken);
                 }
-                //                    httpGet.setHeader("Authorization", editTokenVal);
 
                 httpResponse = httpClient.execute(httpGet);
 
@@ -87,12 +78,11 @@ public class JsonParser {
                 if (appToken != null){
                     httpPost.setHeader("Authorization-Token", appToken);
                 }
-                //                    httpPost.setHeader("Authorization", editTokenVal);
-                if(content != null)
-                {
-                StringEntity se = new StringEntity(content);
-                se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-                httpPost.setEntity(se);
+
+                if(content != null){
+                    StringEntity se = new StringEntity(content);
+                    se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                    httpPost.setEntity(se);
                 }
                 httpResponse = httpClient.execute(httpPost);                
             }
@@ -127,27 +117,27 @@ public class JsonParser {
 
         // try parse the string to a JSON object
         try {
-        	switch (resposeType) {
-			case 1:
-	            jObj = new JSONObject(json);
-	            return new ServerResponse(jObj, status);
-				
-			case 2:
-				jArr = new JSONArray(json);
-	            return new ServerResponse(jArr, status);
-			
-			case 3:
-				return new ServerResponse(json, status);
-				
-			default:
-				break;
-			}
-        } catch (JSONException e) {
-        	Log.e("JSON Parser", "Error parsing data " + e.toString());
+            switch (resposeType) {
+                case 1:
+                    jObj = new JSONObject(json);
+                    return new ServerResponse(jObj, status);
 
-            
+                case 2:
+                    jArr = new JSONArray(json);
+                    return new ServerResponse(jArr, status);
+
+                case 3:
+                    return new ServerResponse(json, status);
+
+                default:
+                    break;
+            }
+        } catch (JSONException e) {
+            Log.e("JSON Parser", "Error parsing data " + e.toString());
+
+
         }
-    	return null;
+        return null;
 
 
         // return ServerResponse
