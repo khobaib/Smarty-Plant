@@ -346,8 +346,7 @@ public class Login extends SherlockActivity {
 				fbLoginDialog.setMessage("Authenticating Facebook");
 				fbLoginDialog.show();
 				
-				Request.executeMeRequestAsync(session,
-						new Request.GraphUserCallback() {
+				Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
 
 							public void onCompleted(GraphUser user,Response response) {
 								
@@ -361,10 +360,8 @@ public class Login extends SherlockActivity {
 										String userName = user.getName();
 										String profileURL = user.getLink();
 										String provider = "facebook";
-										String email = (String) user
-												.getProperty("email");
-										JSONObject obj = user
-												.getInnerJSONObject();
+										String email = (String) user.getProperty("email");
+										JSONObject obj = user.getInnerJSONObject();
 
 										JSONObject requestObj = new JSONObject();
 										requestObj.put("user_name", null);

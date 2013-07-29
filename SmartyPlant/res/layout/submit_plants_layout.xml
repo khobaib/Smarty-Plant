@@ -6,8 +6,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content" >
 
         <LinearLayout
             android:id="@+id/note_text"
@@ -70,6 +69,13 @@
                 android:text="Upload Mystery Plant"
                 android:textStyle="bold" />
         </RelativeLayout>
+
+        <Spinner
+            android:id="@+id/s_upload"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerInParent="true"
+            android:spinnerMode="dialog" />
 
         <RelativeLayout
             android:id="@+id/form"

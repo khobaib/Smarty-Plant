@@ -1,5 +1,9 @@
 package com.mistersmartyplants.utility;
 
+import java.io.File;
+
+import android.os.Environment;
+
 public class Constants {
     
     public static final int REQUEST_TYPE_GET = 1;
@@ -11,6 +15,9 @@ public class Constants {
     public static final String PASSWORD = "password";
     public static final String REMEMBER_ME = "remember_me";
 	public static final String PREFS_NAME = "MyPrefsFile";
+	
+    public static final File APP_DIRECTORY =
+            new File(Environment.getExternalStorageDirectory(),"smarty_plant_uploads");
 
     //==== API METHODS =====
     public static final String API_URL = "http://api.mistersmartyplants.com/api/";

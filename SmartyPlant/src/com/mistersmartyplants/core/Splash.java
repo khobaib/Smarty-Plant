@@ -2,7 +2,6 @@ package com.mistersmartyplants.core;
 
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +17,7 @@ import com.mistersmartyplants.parser.JsonParser;
 import com.mistersmartyplants.utility.Constants;
 import com.mistersmartyplants.utility.GlobalState;
 import com.mistersmartyplants.utility.SmartyPlantApplication;
+import com.mistersmartyplants.utility.Utility;
 
 public class Splash extends SherlockActivity{
 	
@@ -35,6 +35,12 @@ public class Splash extends SherlockActivity{
 		GlobalState.getInstance().initActionBar(mContext, R.layout.splash);
 		jsonParser = new JsonParser();
 		appInstance = (SmartyPlantApplication)getApplication();
+		
+        Boolean isFirstTime = appInstance.isFirstTime();
+        if(isFirstTime){
+            Utility.createDirectory();
+            appInstance.setFirstTime(false);
+        }
 
 		if (appInstance.isRememberMe()) {
 			user_name = appInstance.getUserName();
