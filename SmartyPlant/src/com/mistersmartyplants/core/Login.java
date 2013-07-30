@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -115,6 +116,16 @@ public class Login extends SherlockActivity {
 			@Override
 			public void onClick(View arg0) {
 				startActivity(new Intent(mContext, Register.class));
+			}
+		});
+		
+		TextView forgotPass = (TextView)findViewById(R.id.forget_pass);
+		forgotPass.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				String url = "http://www.mistersmartyplants.com/Account/ChangePassword.aspx";
+				 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+	                startActivity(browserIntent);
 			}
 		});
 
