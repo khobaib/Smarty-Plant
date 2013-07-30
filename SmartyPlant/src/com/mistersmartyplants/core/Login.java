@@ -311,7 +311,11 @@ public class Login extends SherlockActivity {
             }
             Session.setActiveSession(session);
             if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-                session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
+				List<String> permissions = new ArrayList<String>();
+				permissions.add("publish_stream");
+				permissions.add("email");
+
+            	session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback).setPermissions(permissions));
             }
         }
         Button fbLogin = (Button) findViewById(R.id.fb_login);
@@ -374,6 +378,8 @@ public class Login extends SherlockActivity {
 										String email = (String) user.getProperty("email");
 										JSONObject obj = user.getInnerJSONObject();
 
+										Log.d("helal", obj.toString());
+										Log.d("helal", "EMAIL : "+email);
 										JSONObject requestObj = new JSONObject();
 										requestObj.put("user_name", null);
 										requestObj.put("password", null);
