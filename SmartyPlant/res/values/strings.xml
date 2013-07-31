@@ -5,5 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="applicationId">625398507471708</string>
+    <string name="forget_password"><u>Click here</u></string>
 
 </resources>
