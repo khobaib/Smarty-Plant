@@ -105,8 +105,11 @@ public class Splash extends SherlockActivity{
                     if (responseStatus.equalsIgnoreCase("success")){
                         String token = responsObj.optString("token");
                         appInstance.setAccessToken(token);
+                        return true;
                     }
-                    return true;
+                    else
+                    	return false;
+                    
                 }
                 else {
 

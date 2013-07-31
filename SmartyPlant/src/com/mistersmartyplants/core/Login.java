@@ -165,13 +165,16 @@ public class Login extends SherlockActivity {
 						.retrieveServerData(1, Constants.REQUEST_TYPE_POST,
 								url, null, loginData, null);
 				if (response.getStatus() == 200) {
+					Log.d("smarty_uid", response.getStatus()+"");
+					Log.d("smarty_uid", response.getStr());
+					
 					JSONObject responsObj = response.getjObj();
 					String responseStatus = responsObj.optString("response");
 					if (responseStatus.equalsIgnoreCase("success")) {
 						String token = responsObj.optString("token");
 						String uid = responsObj.optString("uid");
 						String uname = responsObj.optString("user_name");
-						Log.d("smarty_uid", "name : "+uname + " uid : "+uid );
+						Log.d("smarty_uid", "name : "+uname + " uid : "+uid + " response : "+responseStatus);
 					
 						appInstance.setAccessToken(token);
 						return true;
