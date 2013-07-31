@@ -440,7 +440,7 @@ public class Login extends SherlockActivity {
 				String username = user.getName();
 				userID = user.getId();
 				String provider = "twitter";
-				String email = user.getScreenName()+"@twitter.com";
+				String email = "twitter";
 				JSONObject requestObj = new JSONObject();
 				requestObj.put("user_name", null);
 				requestObj.put("password", null);
