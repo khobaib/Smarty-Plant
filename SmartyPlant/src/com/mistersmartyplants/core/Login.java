@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.SubMenu;
+import com.actionbarsherlock.view.Window;
 import com.bugsense.trace.BugSenseHandler;
 import com.facebook.LoggingBehavior;
 import com.facebook.Request;
@@ -70,7 +71,9 @@ public class Login extends SherlockActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		BugSenseHandler.initAndStartSession(Login.this, "f2391cbb");
 		super.onCreate(savedInstanceState);
-		globalState.initActionBar(this, R.layout.login_new);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.login_new);
+//		globalState.initActionBar(this, R.layout.login_new);
 		appInstance = (SmartyPlantApplication) getApplication();
 		jsonParser = new JsonParser();
 		initFacebook(savedInstanceState);
@@ -215,28 +218,28 @@ public class Login extends SherlockActivity {
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-
-		SubMenu subMenu1 = menu.addSubMenu("Register");
-
-		subMenu1.setIcon(R.drawable.actionbar);
-		com.actionbarsherlock.view.MenuItem subMenu1Item = subMenu1.getItem();
-		subMenu1Item.setIcon(R.drawable.actionbar);
-		subMenu1Item
-				.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-
-		// getSupportMenuInflater().inflate(R.menu.menu, menu);
-
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(
-			com.actionbarsherlock.view.MenuItem item) {
-		startActivity(new Intent(mContext, Register.class));
-		return super.onOptionsItemSelected(item);
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//
+//		SubMenu subMenu1 = menu.addSubMenu("Register");
+//
+//		subMenu1.setIcon(R.drawable.actionbar);
+//		com.actionbarsherlock.view.MenuItem subMenu1Item = subMenu1.getItem();
+//		subMenu1Item.setIcon(R.drawable.actionbar);
+//		subMenu1Item
+//				.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+//
+//		// getSupportMenuInflater().inflate(R.menu.menu, menu);
+//
+//		return super.onCreateOptionsMenu(menu);
+//	}
+//
+//	@Override
+//	public boolean onOptionsItemSelected(
+//			com.actionbarsherlock.view.MenuItem item) {
+//		startActivity(new Intent(mContext, Register.class));
+//		return super.onOptionsItemSelected(item);
+//	}
 
 	@Override
 	public void onBackPressed() {
