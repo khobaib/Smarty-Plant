@@ -249,56 +249,6 @@ public class Login extends SherlockActivity {
 
 	}
 
-	private void initFb(Bundle savedInstanceState) {
-		/*
-		 * Facebook facebook = new Facebook("625398507471708"); String[]
-		 * PERMISSIONS = {"email"}; facebook.authorize(this, PERMISSIONS, null);
-		 */
-		Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
-		Session session = Session.getActiveSession();
-		if (session == null) {
-			if (savedInstanceState != null) {
-				session = Session.restoreSession(this, null, statusCallback,
-						savedInstanceState);
-			}
-		}
-
-		Button fbLogin = (Button) findViewById(R.id.fb_login);
-		fbLogin.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				Session session = Session.getActiveSession();
-				if (session == null) {
-					OpenRequest op = new OpenRequest((Activity) mContext);
-					op.setLoginBehavior(SessionLoginBehavior.SUPPRESS_SSO);
-					op.setCallback(null);
-					List<String> permissions = new ArrayList<String>();
-					permissions.add("publish_stream");
-					permissions.add("email");
-					op.setPermissions(permissions);
-
-					session = new Session(mContext);
-					session.openForPublish(op);
-					Session.setActiveSession(session);
-
-				}
-				if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-					session.openForRead(new Session.OpenRequest((Activity) mContext)
-							.setCallback(statusCallback));
-				}
-				
-				if (!session.isOpened() && !session.isClosed()) {
-					session.openForRead(new Session.OpenRequest(
-							(Activity) mContext).setCallback(statusCallback));
-				} else {
-					Session.openActiveSession((Activity) mContext, true,
-							statusCallback);
-
-				}
-			}
-		});
-
-	}
 
 	// ============ Social Login ===================
 	// ============ Facebook ===================
@@ -343,7 +293,10 @@ public class Login extends SherlockActivity {
 	private void onClickLogin() {
         Session session = Session.getActiveSession();
         if (!session.isOpened() && !session.isClosed()) {
-            session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
+    		List<String> permissions = new ArrayList<String>();
+			permissions.add("publish_stream");
+			permissions.add("email");
+            session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback).setPermissions(permissions));
         } else {
             Session.openActiveSession(this, true, statusCallback);
         }
