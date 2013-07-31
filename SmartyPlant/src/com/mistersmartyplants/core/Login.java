@@ -70,7 +70,7 @@ public class Login extends SherlockActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		BugSenseHandler.initAndStartSession(Login.this, "f2391cbb");
 		super.onCreate(savedInstanceState);
-		globalState.initActionBar(this, R.layout.login);
+		globalState.initActionBar(this, R.layout.login_new);
 		appInstance = (SmartyPlantApplication) getApplication();
 		jsonParser = new JsonParser();
 		initFacebook(savedInstanceState);
@@ -80,7 +80,7 @@ public class Login extends SherlockActivity {
 		password_field = (EditText) findViewById(R.id.password_field);
 		remember_me = (CheckBox) findViewById(R.id.remember_me);
 
-		final ImageView sign_in = (ImageView) findViewById(R.id.sign_in);
+		final Button sign_in = (Button) findViewById(R.id.sign_in);
 		sign_in.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				user_name = user_name_field.getEditableText().toString();
@@ -110,7 +110,7 @@ public class Login extends SherlockActivity {
 			}
 		});
 
-		ImageView reg = (ImageView) findViewById(R.id.register);
+		Button reg = (Button) findViewById(R.id.register);
 		reg.setOnClickListener(new View.OnClickListener() {
 
 			@Override
