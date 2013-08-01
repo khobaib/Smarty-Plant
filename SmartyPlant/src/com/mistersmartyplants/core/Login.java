@@ -289,7 +289,7 @@ public class Login extends SherlockActivity {
 			
 			@Override
 			public void onClick(View arg0) {
-				String savedParams = appInstance.getFbLoginParams();
+			/*	String savedParams = appInstance.getFbLoginParams();
 				if(savedParams!= null && !savedParams.equalsIgnoreCase(""))
 				{
 					String[] params = {savedParams};
@@ -297,7 +297,7 @@ public class Login extends SherlockActivity {
 					LoginTask task = new LoginTask();
 					task.execute(params);
 				}
-				else
+				else*/
 					onClickLogin();
 			}
 		});
@@ -305,7 +305,9 @@ public class Login extends SherlockActivity {
 	
 	private void onClickLogin() {
         Session session = Session.getActiveSession();
+        
         if (!session.isOpened() && !session.isClosed()) {
+        	        	
     		List<String> permissions = new ArrayList<String>();
 			permissions.add("email");
 			OpenRequest openRequest = new Session.OpenRequest(this);
@@ -335,7 +337,7 @@ public class Login extends SherlockActivity {
 				fbLoginDialog.setMessage("Authenticating Facebook");
 				fbLoginDialog.show();
 				
-				Log.d("helal", session.getPermissions().size() + " " + session.getPermissions().get(0));
+				Log.d("helal", session.getPermissions().size()+"");
 				Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
 
 							public void onCompleted(GraphUser user,Response response) {
