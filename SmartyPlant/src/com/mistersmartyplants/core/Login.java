@@ -71,8 +71,11 @@ public class Login extends SherlockActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		BugSenseHandler.initAndStartSession(Login.this, "f2391cbb");
 		super.onCreate(savedInstanceState);
+		setTheme(R.style.Theme_Sherlock_Light);
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.login_new);
+		
 //		globalState.initActionBar(this, R.layout.login_new);
 		appInstance = (SmartyPlantApplication) getApplication();
 		jsonParser = new JsonParser();
@@ -166,10 +169,11 @@ public class Login extends SherlockActivity {
 								url, null, loginData, null);
 				if (response.getStatus() == 200) {
 					Log.d("smarty_uid", response.getStatus()+"");
-					Log.d("smarty_uid", response.getStr());
 					
 					JSONObject responsObj = response.getjObj();
 					String responseStatus = responsObj.optString("response");
+					Log.d("smarty_uid", responseStatus);
+					
 					if (responseStatus.equalsIgnoreCase("success")) {
 						String token = responsObj.optString("token");
 						String uid = responsObj.optString("uid");
@@ -199,7 +203,7 @@ public class Login extends SherlockActivity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-
+			Log.d("helal",result+"");
 			try {
 				dialog.dismiss();
 				dialog = null;
@@ -210,6 +214,7 @@ public class Login extends SherlockActivity {
 				String deviceModel = appInstance.getDeviceModel();
 				if(deviceModel == null || deviceModel.equals(""))
 					appInstance.setDeviceModel();
+				
 				Log.d("helal", appInstance.getDeviceModel());
 				finish();
 				startActivity(new Intent(mContext, HomeScreen.class));
@@ -265,12 +270,18 @@ public class Login extends SherlockActivity {
             if (session == null) {
                 session = new Session(this);
             }
+            
             Session.setActiveSession(session);
             if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
 				List<String> permissions = new ArrayList<String>();
 				permissions.add("email");
+				
+				OpenRequest openRequest = new Session.OpenRequest(this);
+				openRequest.setCallback(statusCallback);
+				openRequest.setPermissions(permissions);
 
-            	session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback).setPermissions(permissions));
+				openRequest.setLoginBehavior(SessionLoginBehavior.SUPPRESS_SSO);
+				session.openForRead(openRequest);
             }
         }
         Button fbLogin = (Button) findViewById(R.id.fb_login);
@@ -297,7 +308,13 @@ public class Login extends SherlockActivity {
         if (!session.isOpened() && !session.isClosed()) {
     		List<String> permissions = new ArrayList<String>();
 			permissions.add("email");
-            session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback).setPermissions(permissions));
+			OpenRequest openRequest = new Session.OpenRequest(this);
+			openRequest.setCallback(statusCallback);
+			openRequest.setPermissions(permissions);
+			openRequest.setLoginBehavior(SessionLoginBehavior.SUPPRESS_SSO);
+			session.openForRead(openRequest);
+			
+            
         } else {
             Session.openActiveSession(this, true, statusCallback);
         }
@@ -318,6 +335,7 @@ public class Login extends SherlockActivity {
 				fbLoginDialog.setMessage("Authenticating Facebook");
 				fbLoginDialog.show();
 				
+				Log.d("helal", session.getPermissions().size() + " " + session.getPermissions().get(0));
 				Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
 
 							public void onCompleted(GraphUser user,Response response) {
