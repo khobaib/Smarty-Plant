@@ -268,7 +268,6 @@ public class Login extends SherlockActivity {
             Session.setActiveSession(session);
             if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
 				List<String> permissions = new ArrayList<String>();
-				permissions.add("publish_stream");
 				permissions.add("email");
 
             	session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback).setPermissions(permissions));
@@ -297,7 +296,6 @@ public class Login extends SherlockActivity {
         Session session = Session.getActiveSession();
         if (!session.isOpened() && !session.isClosed()) {
     		List<String> permissions = new ArrayList<String>();
-			permissions.add("publish_stream");
 			permissions.add("email");
             session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback).setPermissions(permissions));
         } else {
