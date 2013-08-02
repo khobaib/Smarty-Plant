@@ -349,8 +349,12 @@ public class Login extends SherlockActivity {
 									// do something with <response> now
 									try {
 										String userID = user.getId();
-										String userName = user.getName();
+										String name = user.getName();
 										String profileURL = user.getLink();
+										String uName = user.getUsername();
+										if(uName == null || uName.equalsIgnoreCase(""))
+											uName = userID;
+										
 										String provider = "facebook";
 										String email = (String) user.getProperty("email");
 										JSONObject obj = user.getInnerJSONObject();
@@ -361,12 +365,12 @@ public class Login extends SherlockActivity {
 										requestObj.put("user_name", null);
 										requestObj.put("password", null);
 										requestObj.put("provider_name",provider);
-										requestObj.put("identifier", profileURL);
+										requestObj.put("identifier", uName);
 										requestObj.put("verified_email", email);
 										requestObj.put("photo", "");
-										requestObj.put("url", "");
+										requestObj.put("url", profileURL);
 										requestObj.put("provider_id", "");
-										requestObj.put("preferred_user_name",userName);
+										requestObj.put("preferred_user_name",name);
 										
 										appInstance.setFbLoginParams(requestObj.toString());
 										String[] params = { requestObj.toString() };
@@ -455,20 +459,21 @@ public class Login extends SherlockActivity {
 				appInstance.setTwitterLoggedIn(true);
 				long userID = accessToken.getUserId();
 				User user = globalState.twitter.showUser(userID);
-				String username = user.getName();
+				String name = user.getName();
 				userID = user.getId();
+				String userName = user.getScreenName();
 				String provider = "twitter";
 				String email = "twitter";
 				JSONObject requestObj = new JSONObject();
 				requestObj.put("user_name", null);
 				requestObj.put("password", null);
 				requestObj.put("provider_name", provider);
-				requestObj.put("identifier", userID);
+				requestObj.put("identifier", userName);
 				requestObj.put("verified_email", email);
 				requestObj.put("photo", "");
 				requestObj.put("url", "");
 				requestObj.put("provider_id", "");
-				requestObj.put("preferred_user_name", username);
+				requestObj.put("preferred_user_name",name);
 				appInstance.setTwLoginParams(requestObj.toString());
 				
 				String[] params = { requestObj.toString() };
