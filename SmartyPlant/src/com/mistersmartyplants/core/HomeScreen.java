@@ -87,8 +87,10 @@ public class HomeScreen extends SherlockActivity implements ActionBar.TabListene
     public void onCreate(Bundle savedInstanceState) {
         BugSenseHandler.initAndStartSession(mContext, "f2391cbb");
 
-        Log.d("<<<<<< SMARTY PLANT >>>>>>>", "onCreate");
-        
+        if(Constants.DEBUG){
+            Log.d("<<<<<< SMARTY PLANT >>>>>>>", "onCreate");
+        }
+
         setTheme(R.style.Theme_Smarty_plants_style);
         super.onCreate(savedInstanceState);
         //		BugSenseHandler.initAndStartSession(HomeScreen.this, "8e103589");
@@ -446,8 +448,10 @@ public class HomeScreen extends SherlockActivity implements ActionBar.TabListene
 
         File photoFile = new File(mainDir, photoFileName);
         imageUri = Uri.fromFile(photoFile);
-        Log.d(">>>>>>>>>>>>>", "path of photofolder = " + photoFile.getPath());
-        Log.d(">>>>>>>>>>>>>", "path of photofolder = " + imageUri.getPath());
+        if(Constants.DEBUG){
+            Log.d(">>>>>>>>>>>>>", "path of photofolder = " + photoFile.getPath());
+            Log.d(">>>>>>>>>>>>>", "path of photofolder = " + imageUri.getPath());
+        }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);    
         startActivityForResult(intent, CAMERA_REQ_CODE);  
 
@@ -474,15 +478,19 @@ public class HomeScreen extends SherlockActivity implements ActionBar.TabListene
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // setPhotoCaptureMode();
-        Log.d("<<<<<< SMARTY PLANT >>>>>>>", "on onActivityResult");
+        if(Constants.DEBUG){
+            Log.d("<<<<<< SMARTY PLANT >>>>>>>", "on onActivityResult");
+        }
         Button done = (Button) findViewById(R.id.done);
         Button upload = (Button) findViewById(R.id.upload_image);
         Button upload2 = (Button) findViewById(R.id.upload_image2);
         LinearLayout noteText = (LinearLayout)findViewById(R.id.note_text);
         gallery = (Gallery) findViewById(R.id.gallery_view);
-        Log.d("helal", "Gallery" + gallery);
+        if(Constants.DEBUG){
+            Log.d("helal", "Gallery" + gallery);
+            Log.d(">>>>><<<??????", "result code = " + resultCode);
+        }
 
-        Log.d(">>>>><<<??????", "result code = " + resultCode);
         switch (resultCode) {
             case 0:
                 if (GlobalState.getInstance().currentBitmaps.size() > 0) {
@@ -504,7 +512,9 @@ public class HomeScreen extends SherlockActivity implements ActionBar.TabListene
                 try {
                     if (requestCode == CAMERA_REQ_CODE) {
                         //			        GlobalState.getInstance().addBitmap(currentImagePath);
-                        Log.d(">>>>>>>>>>>>>", "imageUri.getPath() = " + imageUri.getPath());
+                        if(Constants.DEBUG){
+                            Log.d(">>>>>>>>>>>>>", "imageUri.getPath() = " + imageUri.getPath());
+                        }
                         GlobalState.getInstance().addBitmap(imageUri.getPath());
                         GalleryAdapter adapter = (GalleryAdapter) HomeScreen.this.gallery.getAdapter();
                         adapter.notifyDataSetChanged();
@@ -555,13 +565,13 @@ public class HomeScreen extends SherlockActivity implements ActionBar.TabListene
     }
 
 
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v,
-//            ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.upload_image_menu, menu);
-//    }
+    //    @Override
+    //    public void onCreateContextMenu(ContextMenu menu, View v,
+    //            ContextMenuInfo menuInfo) {
+    //        super.onCreateContextMenu(menu, v, menuInfo);
+    //        MenuInflater inflater = getMenuInflater();
+    //        inflater.inflate(R.menu.upload_image_menu, menu);
+    //    }
 
     //    @Override
     //    public boolean onContextItemSelected(MenuItem item) {
@@ -633,24 +643,24 @@ public class HomeScreen extends SherlockActivity implements ActionBar.TabListene
         BugSenseHandler.closeSession(HomeScreen.this);
 
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("<<<<<< SMARTY PLANT >>>>>>>", "onResume");
+        //        Log.d("<<<<<< SMARTY PLANT >>>>>>>", "onResume");
     }
-    
+
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("<<<<<< SMARTY PLANT >>>>>>>", "onPause");
+        //        Log.d("<<<<<< SMARTY PLANT >>>>>>>", "onPause");
     }
 
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d("<<<<<< SMARTY PLANT >>>>>>>", "onStop");
+        //        Log.d("<<<<<< SMARTY PLANT >>>>>>>", "onStop");
         BugSenseHandler.closeSession(HomeScreen.this);
     }
 }

@@ -43,8 +43,10 @@ public class JsonParser {
     }
 
     public ServerResponse retrieveServerData(int resposeType, int reqType, String url, List<NameValuePair> urlParams, String content, String appToken) {
-        Log.d(TAG, "in retrieveServerData method");
-        Log.d("APPTOKEN", "token = " + appToken);           // debug flag added, dont remove it.
+        if(Constants.DEBUG){
+            Log.d(TAG, "in retrieveServerData method");
+            Log.d("APPTOKEN", "token = " + appToken);           // debug flag added, dont remove it.
+        }
 
         int status = 0;
         StringBuilder sb = null;
@@ -54,8 +56,10 @@ public class JsonParser {
             String paramString = URLEncodedUtils.format(urlParams, "utf-8");
             url += "?" + paramString;            
         }
-        Log.d(TAG, "final url = " + url);
-        Log.d(TAG, "final content = " + content);
+        if(Constants.DEBUG){
+            Log.d(TAG, "final url = " + url);
+            Log.d(TAG, "final content = " + content);
+        }
 
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -88,7 +92,9 @@ public class JsonParser {
             }
 
             status = httpResponse.getStatusLine().getStatusCode();
-            Log.d(TAG, "STAUS = " + status);
+            if(Constants.DEBUG){
+                Log.d(TAG, "STAUS = " + status);
+            }
 
             HttpEntity httpEntity = httpResponse.getEntity();
             is = httpEntity.getContent();
@@ -101,7 +107,9 @@ public class JsonParser {
         }
 
         try {
-            Log.d(TAG, "trying to read input stream.");
+            if(Constants.DEBUG){
+                Log.d(TAG, "trying to read input stream.");
+            }
             BufferedReader reader = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
             sb = new StringBuilder();
             String line = null;
@@ -109,7 +117,9 @@ public class JsonParser {
                 sb.append(line + "\n");
             }
             is.close();
-            Log.d(TAG, "sb = " + sb.toString());
+            if(Constants.DEBUG){
+                Log.d(TAG, "sb = " + sb.toString());
+            }
             json = sb.toString();
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());

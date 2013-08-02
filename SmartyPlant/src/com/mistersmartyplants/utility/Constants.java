@@ -5,17 +5,25 @@ import java.io.File;
 import android.os.Environment;
 
 public class Constants {
-    
+
     public static final int REQUEST_TYPE_GET = 1;
     public static final int REQUEST_TYPE_POST = 2;
-    
+
     public static final String FIRST_TIME = "first_time_run";
     public static final String ACCESS_TOKEN = "access_token";
     public static final String USERNAME = "user_name";
     public static final String PASSWORD = "password";
     public static final String REMEMBER_ME = "remember_me";
-	public static final String PREFS_NAME = "MyPrefsFile";
-	
+    public static final String PREFS_NAME = "MyPrefsFile";
+
+    // Debug flag
+    public static final int LOG_LEVEL = 2;
+    public static boolean ASSERT = LOG_LEVEL < 4;
+    public static boolean ERROR = LOG_LEVEL < 3;
+    public static boolean WARN = LOG_LEVEL < 2;
+    public static boolean INFO = LOG_LEVEL < 1;
+    public static boolean DEBUG = LOG_LEVEL < 0;
+
     public static final File APP_DIRECTORY =
             new File(Environment.getExternalStorageDirectory(),"smarty_plant_uploads");
 
@@ -31,7 +39,7 @@ public class Constants {
     public static final int RESPONSE_STATUS_CODE_SUCCESS = 200;
     public static final String DEVICE_MODEL = "device_model";
 
-    
+
     //==== Twitter API =====
     public static String TWITTER_CONSUMER_KEY = "fKjCEIFtih9CgBQELuxD7A";
     public static String TWITTER_CONSUMER_SECRET = "e0mLYheNSTcREuq9VeqJ3Lp45TpEkoSuap5CtWiAgo";
@@ -45,10 +53,10 @@ public class Constants {
     public static final String URL_TWITTER_OAUTH_TOKEN = "oauth_token";
     public static final String TWITTER_IS_LOGGED_IN = "twitter_logged_in";
     public static final String TW_LOGIN_PARAMS = "tw_login_params";
-    
-    
+
+
     //==== Fb API ====
     public static final String FB_LOGIN_PARAMS = "fb_login_params";
-    
-    
+
+
 }
