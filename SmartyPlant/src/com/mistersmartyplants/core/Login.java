@@ -356,9 +356,14 @@ public class Login extends SherlockActivity {
 
                     public void onCompleted(GraphUser user,Response response) {
 
+                    	try{
                         fbLoginDialog.dismiss();
                         fbLoginDialog = null;
-
+                    	}
+                    	catch(Exception e)
+                    	{
+                    		
+                    	}
                         if (response != null) {
                             // do something with <response> now
                             try {
