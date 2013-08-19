@@ -131,9 +131,15 @@ public class Login extends SherlockActivity {
         forgotPass.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+            	try{
                 String url = "http://www.mistersmartyplants.com/Account/ChangePassword.aspx";
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
+            	}
+            	catch(Exception e)
+            	{
+            		Log.d(Constants.LOG_TAG, e.getMessage());
+            	}
             }
         });
 
@@ -171,13 +177,13 @@ public class Login extends SherlockActivity {
                                 url, null, loginData, null);
                 if (response.getStatus() == 200) {
                     if(Constants.DEBUG){
-                        Log.d("smarty_uid", response.getStatus()+"");
+                        Log.d(Constants.LOG_TAG, response.getStatus()+"");
                     }
 
                     JSONObject responsObj = response.getjObj();
                     String responseStatus = responsObj.optString("response");
                     if(Constants.DEBUG){
-                        Log.d("smarty_uid", responseStatus);
+                        Log.d(Constants.LOG_TAG, responseStatus);
                     }
 
                     if (responseStatus.equalsIgnoreCase("success")) {
@@ -185,7 +191,7 @@ public class Login extends SherlockActivity {
                         String uid = responsObj.optString("uid");
                         String uname = responsObj.optString("user_name");
                         if(Constants.DEBUG){
-                            Log.d("smarty_uid", "name : "+uname + " uid : "+uid + " response : "+responseStatus);
+                            Log.d(Constants.LOG_TAG, "name : "+uname + " uid : "+uid + " response : "+responseStatus);
                         }
 
                         appInstance.setAccessToken(token);
@@ -212,7 +218,7 @@ public class Login extends SherlockActivity {
         @Override
         protected void onPostExecute(Boolean result) {
             if(Constants.DEBUG){
-                Log.d("helal",result+"");
+                Log.d(Constants.LOG_TAG,result+"");
             }
             try {
                 dialog.dismiss();
@@ -226,7 +232,7 @@ public class Login extends SherlockActivity {
                     appInstance.setDeviceModel();
 
                 if(Constants.DEBUG){
-                    Log.d("helal", appInstance.getDeviceModel());
+                    Log.d(Constants.LOG_TAG, appInstance.getDeviceModel());
                 }
                 finish();
                 startActivity(new Intent(mContext, HomeScreen.class));
@@ -350,7 +356,7 @@ public class Login extends SherlockActivity {
                 fbLoginDialog.show();
 
                 if(Constants.DEBUG){
-                    Log.d("helal", session.getPermissions().size()+"");
+                    Log.d(Constants.LOG_TAG, session.getPermissions().size()+"");
                 }
                 Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
 

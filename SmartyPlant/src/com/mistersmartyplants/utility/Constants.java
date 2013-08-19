@@ -17,6 +17,7 @@ public class Constants {
     public static final String PREFS_NAME = "MyPrefsFile";
 
     // Debug flag
+    public static final String LOG_TAG = "<<<<<< SMARTY PLANT >>>>>>>";
     public static final int LOG_LEVEL = 2;
     public static boolean ASSERT = LOG_LEVEL < 4;
     public static boolean ERROR = LOG_LEVEL < 3;
